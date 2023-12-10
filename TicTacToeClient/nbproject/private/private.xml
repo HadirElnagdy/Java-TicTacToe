@@ -3,9 +3,14 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+<<<<<<< HEAD
             <file>file:/D:/CSIS/ITI-MAD44/Developing%20Application%20using%20Java%20SE/Project/Java-TicTacToe/TicTacToeClient/src/tictactoeclient/TicTacToeClient.java</file>
             <file>file:/D:/CSIS/ITI-MAD44/Developing%20Application%20using%20Java%20SE/Project/Java-TicTacToe/TicTacToeClient/src/tictactoe_bord_game/XOBordUI.java</file>
             <file>file:/D:/CSIS/ITI-MAD44/Developing%20Application%20using%20Java%20SE/Project/Java-TicTacToe/TicTacToeClient/src/tictactoeclient_computer_game/XOBordComputer.java</file>
+=======
+            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/tictactoeclient/TicTacToeClient.java</file>
+            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/tictactoe_bord_game/XOBordUI.java</file>
+>>>>>>> 6cc77e94e82ae8ff1f7ca2566d2098cf78a02572
         </group>
     </open-files>
 </project-private>

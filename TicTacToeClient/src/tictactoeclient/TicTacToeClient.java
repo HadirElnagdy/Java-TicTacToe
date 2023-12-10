@@ -30,14 +30,24 @@ public class TicTacToeClient extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        
         border = new XOBordUI();
         home = new ChooseAuth();
+
         computerBord = new XOBordComputer();
         scene = new Scene(home);
 
         // Handle button action in humanTohuman pane to switch to home
         border.getBack().setOnAction(e -> switchToPane(home));
         // Handle button action in ChooseAccountUI pane to switch to human border
+
+        scene = new Scene(home);
+
+        // Handle button action in Test pane to switch to ChooseAccountUI
+        border.getBack().setOnAction(e -> switchToPane(home));
+
+        // Handle button action in ChooseAccountUI pane to switch to Test
+        
         home.getSignUpBtn().setOnAction(e -> switchToPane(border));
        // Handle button action in ChooseAccountUI pane to switch to computer border
         home.getLoginBtn().setOnAction(e -> switchToPane(computerBord));
