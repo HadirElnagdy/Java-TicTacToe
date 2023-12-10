@@ -78,9 +78,11 @@ public class XOBordComputer extends Pane {
                 board[i][j] = cell;
             }
         }
+
         gridPane.setLayoutX(140);
         gridPane.setLayoutY(70);
         getChildren().add(gridPane);
+
     }
     
    
