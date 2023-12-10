@@ -27,15 +27,16 @@ public class TicTacToeClient extends Application {
     private ChooseAuth home;
     @Override
     public void start(Stage stage) throws Exception {
+        
         border = new XOBordUI();
         home = new ChooseAuth();
-
         scene = new Scene(home);
 
         // Handle button action in Test pane to switch to ChooseAccountUI
-        //border.getBack().setOnAction(e -> switchToPane(home));
+        border.getBack().setOnAction(e -> switchToPane(home));
 
         // Handle button action in ChooseAccountUI pane to switch to Test
+        
         home.getSignUpBtn().setOnAction(e -> switchToPane(border));
 
         stage.setScene(scene);
