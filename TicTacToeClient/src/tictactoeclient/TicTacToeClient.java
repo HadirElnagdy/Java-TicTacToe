@@ -5,24 +5,39 @@
  */
 package tictactoeclient;
 
+import client.tic.tac.toe.Choose_auth.ChooseAuth;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import tictactoe_bord_game.XOBordUI;
 
 /**
  *
  * @author Hp
  */
-public class TicTacToeClient extends Application {
+
     
+
+public class TicTacToeClient extends Application {
+    private Scene scene;
+    private XOBordUI border;
+    private ChooseAuth home;
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
-        Scene scene = new Scene(root);
-        
+        border = new XOBordUI();
+        home = new ChooseAuth();
+
+        scene = new Scene(home);
+
+        // Handle button action in Test pane to switch to ChooseAccountUI
+        //border.getBack().setOnAction(e -> switchToPane(home));
+
+        // Handle button action in ChooseAccountUI pane to switch to Test
+        home.getSignUpBtn().setOnAction(e -> switchToPane(border));
+
         stage.setScene(scene);
         stage.show();
     }
@@ -33,5 +48,7 @@ public class TicTacToeClient extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
+      private void switchToPane(Pane targetPane) {
+        scene.setRoot(targetPane);
+    }
 }
