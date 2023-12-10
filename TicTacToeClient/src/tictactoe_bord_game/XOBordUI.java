@@ -57,9 +57,9 @@ public class XOBordUI extends Pane {
         
         gridPane = new GridPane();
         initializeBoard();
-         gridPane.setLayoutX(140);
+        gridPane.setLayoutX(140);
         gridPane.setLayoutY(70);
-       getChildren().add(gridPane);
+        getChildren().add(gridPane);
 
     }
     
@@ -78,8 +78,6 @@ public class XOBordUI extends Pane {
                 }else{
                      cell.setText("O"); 
                 }
-            } else {
-                cell.setText("");
             }
             isX =! isX ; 
         });
@@ -96,7 +94,7 @@ public class XOBordUI extends Pane {
         }
     }
     
-     Button getBack(){
+     public Button getBack(){
         return backBtn;
     }
     

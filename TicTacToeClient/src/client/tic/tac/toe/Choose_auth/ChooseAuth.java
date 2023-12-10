@@ -105,4 +105,8 @@ public class ChooseAuth extends GridPane {
     public Button getSignUpBtn() {
         return signUpBtn;  
     }
+    
+    public Button getLoginBtn() {
+        return loginBtn;  
+    }
 }
