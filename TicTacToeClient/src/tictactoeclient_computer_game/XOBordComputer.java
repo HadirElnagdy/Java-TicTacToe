@@ -1,5 +1,6 @@
 package tictactoeclient_computer_game;
 
+import EasyHard.EasyHardBase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,9 +13,12 @@ import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.text.Font;
 import java.util.Random;
 import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import service.Navigator;
 import static tictactoe_bord_game.XOBordUI.player1Score;
 import static tictactoe_bord_game.XOBordUI.player2Score;
 import static tictactoe_bord_game.XOBordUI.winner;
@@ -65,6 +69,13 @@ public class XOBordComputer extends Pane {
         backBtn.setLayoutY(14.0);
         backBtn.setMnemonicParsing(false);
         backBtn.setText("Back");
+        backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Navigator.navigateTo(new EasyHardBase(),event);
+          
+                    }
+        });
 
        
 

@@ -1,5 +1,8 @@
 package SignUp;
 
+import SignIn.SignInBase;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
@@ -9,6 +12,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
+import service.Navigator;
 
 public class SignUPUIBase extends GridPane {
 
@@ -216,6 +220,13 @@ public class SignUPUIBase extends GridPane {
         GridPane.setColumnIndex(signInHyperLink, 1);
         signInHyperLink.setText("Sign in");
         GridPane.setMargin(signInHyperLink, new Insets(0.0, 0.0, 20.0, 0.0));
+        signInHyperLink.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Navigator.navigateTo(new SignInBase(),event);
+          
+                    }
+        });
 
         getColumnConstraints().add(columnConstraints);
         getColumnConstraints().add(columnConstraints0);

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tictactoeclient;
+package EasyHard;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,9 +14,9 @@ import javafx.scene.control.Label;
 
 /**
  *
- * @author Hp
+ * @author Compumarts
  */
-public class FXMLDocumentController implements Initializable {
+public class EasyHardController implements Initializable {
     
     @FXML
     private Label label;

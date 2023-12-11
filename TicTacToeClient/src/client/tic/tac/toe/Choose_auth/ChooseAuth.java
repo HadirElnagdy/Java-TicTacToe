@@ -1,5 +1,9 @@
 package client.tic.tac.toe.Choose_auth;
 
+import SignIn.SignInBase;
+import SignUp.SignUPUIBase;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -7,6 +11,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
+import service.Navigator;
 
 public class ChooseAuth extends GridPane {
 
@@ -71,6 +76,13 @@ public class ChooseAuth extends GridPane {
         signUpBtn.setMnemonicParsing(false);
         signUpBtn.setText("SignUp");
         borderPane.setBottom(signUpBtn);
+        signUpBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Navigator.navigateTo(new SignUPUIBase(),event);
+          
+                    }
+        });
 
         BorderPane.setAlignment(label, javafx.geometry.Pos.CENTER);
         label.setText("X");
@@ -86,6 +98,14 @@ public class ChooseAuth extends GridPane {
         loginBtn.setMnemonicParsing(false);
         loginBtn.setText("Login");
         borderPane0.setBottom(loginBtn);
+        loginBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Navigator.navigateTo(new SignInBase(),event);
+          
+                    }
+        });
+        
 
         BorderPane.setAlignment(label0, javafx.geometry.Pos.CENTER);
         label0.setText("O");

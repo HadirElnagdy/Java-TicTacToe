@@ -1,4 +1,8 @@
+package SignIn;
 
+import SignUp.SignUPUIBase;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
@@ -8,6 +12,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
+import service.Navigator;
 
 public class SignInBase extends GridPane {
 
@@ -132,6 +137,13 @@ public class SignInBase extends GridPane {
         GridPane.setColumnIndex(createAccountHyperLink, 1);
         createAccountHyperLink.setText("Create Account");
         GridPane.setMargin(createAccountHyperLink, new Insets(0.0, 0.0, 10.0, 0.0));
+        createAccountHyperLink.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Navigator.navigateTo(new SignUPUIBase(),event);
+          
+                    }
+        });
 
         GridPane.setColumnIndex(label1, 1);
         GridPane.setRowIndex(label1, 2);

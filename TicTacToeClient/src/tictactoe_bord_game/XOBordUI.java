@@ -1,10 +1,21 @@
 package tictactoe_bord_game;
 
+import AiHuman.AiBase;
+import WinnerScreen.WinnerScreenBase;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,6 +23,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Font;
+import service.Navigator;
 
 public class XOBordUI extends Pane {
 
@@ -55,6 +67,13 @@ public class XOBordUI extends Pane {
         backBtn.setLayoutY(14.0);
         backBtn.setMnemonicParsing(false);
         backBtn.setText("Back");
+        backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Navigator.navigateTo(new AiBase(),event);
+          
+                    }
+        });
 
        
 
@@ -103,12 +122,15 @@ public class XOBordUI extends Pane {
                     player1Score = -20;
                     player2Score = 20;
                 }
-                Alert alert = new Alert(Alert.AlertType.NONE);
-                alert.setTitle("Result");
-                alert.setContentText("Player"+winner+" wins!");
-                alert.getButtonTypes().setAll(javafx.scene.control.ButtonType.OK);
-                java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
-                resetBoard();
+            
+                Navigator.navigateTo(new WinnerScreenBase(),event);
+         
+//                Alert alert = new Alert(Alert.AlertType.NONE);
+//                alert.setTitle("Result");
+//                alert.setContentText("Player"+winner+" wins!");
+//                alert.getButtonTypes().setAll(javafx.scene.control.ButtonType.OK);
+//                java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
+//                resetBoard();
                 //navigate to score screen with winner equal to 1 for player 1 or 2 for player 2
             } else if (filledCells == 9) {
                 winner = 0;

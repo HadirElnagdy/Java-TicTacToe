@@ -32,10 +32,11 @@ public class WinnerController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
       //   public void initialize(URL location, ResourceBundle resources) {
-        
+        //System.out.println("aaaaaaaaaaaaaaa");
         String videoPath="win1.mp4";
-        Media media = new Media(WinnerScreen.JavaProject.class.getResource(videoPath).toExternalForm());
-      //  Media media =new Media(videoPath);
+        Media media = new Media(WinnerScreen.Home.class.getResource(videoPath).toExternalForm());
+      //Media media =new Media(videoPath);
+      
         MediaPlayer mediaPlayer=new MediaPlayer(media);
         mv.setMediaPlayer(mediaPlayer);
         mediaPlayer.play();
