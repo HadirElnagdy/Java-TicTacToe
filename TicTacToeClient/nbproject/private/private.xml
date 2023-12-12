@@ -4,15 +4,13 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/home/EasyHardBase.java</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/boardGamePkg/XOBoardGUI.fxml</file>
+            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/boardGamePkg/LocalSingleEasy.java</file>
             <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/home/OnlineOfflineScreen.java</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/home/HomeGUIController.java</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/home/TestingGui.java</file>
+            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/service/Navigator.java</file>
             <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/home/AiBase.java</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/home/HomeGUI.fxml</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/boardGamePkg/XOBoardGUIController.java</file>
+            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/boardGamePkg/GameBase.java</file>
             <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/boardGamePkg/LocalMultiMode.java</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/boardGamePkg/LocalSingleMode.java</file>
+            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/boardGamePkg/XOBoardGUIController.java</file>
         </group>
     </open-files>
 </project-private>

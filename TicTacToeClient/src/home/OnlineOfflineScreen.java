@@ -154,7 +154,7 @@ public class OnlineOfflineScreen extends GridPane {
         label1.setText("Teo");
         label1.setFont(new Font(64.0));
 
-        GridPane.setColumnIndex(onlineBtn, 1);
+        GridPane.setColumnIndex(onlineBtn, 3);
         GridPane.setRowIndex(onlineBtn, 7);
         onlineBtn.setMnemonicParsing(false);
         onlineBtn.setPrefHeight(52.0);
@@ -170,7 +170,7 @@ public class OnlineOfflineScreen extends GridPane {
         );
 
 
-        GridPane.setColumnIndex(offlineBtn, 3);
+        GridPane.setColumnIndex(offlineBtn, 1);
         GridPane.setRowIndex(offlineBtn, 7);
         offlineBtn.setMnemonicParsing(false);
         offlineBtn.setPrefHeight(80.0);

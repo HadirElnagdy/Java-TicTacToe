@@ -1,5 +1,6 @@
 package winnerScreenPkg;
 
+import boardGamePkg.GameBase;
 import home.OnlineOfflineScreen;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

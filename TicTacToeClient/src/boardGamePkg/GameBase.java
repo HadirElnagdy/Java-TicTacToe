@@ -55,9 +55,6 @@ public abstract class GameBase extends Pane {
         recordBtn = new ToggleButton();
         gridPane = new GridPane();
         
-        winner = 0;
-        player1Score = 0;
-        player2Score = 0;
         filledCells = 0;
         currentSymbol = "O";
 
@@ -102,9 +99,11 @@ public abstract class GameBase extends Pane {
       
         scoreP1.setLayoutX(175.0);
         scoreP1.setLayoutY(48.0);
+        scoreP1.setText(Integer.toString(player1Score));
 
         scoreP2.setLayoutX(344.0);
         scoreP2.setLayoutY(48.0);
+        scoreP2.setText(Integer.toString(player2Score));
 
         recordBtn.setLayoutX(14.0);
         recordBtn.setLayoutY(361.0);
@@ -125,6 +124,15 @@ public abstract class GameBase extends Pane {
         
         initializeBoard();
     }
+    static{
+        winner = 0;
+        player1Score = 0;
+        player2Score = 0;
+    }
+    public void setPlayersNames(String player1, String player2){
+        player1Name.setText(player1);
+        player2Name.setText(player2);
+    }
     private void initializeBoard() {
         for (int col = 0; col < 3; col++) {
             for (int row = 0; row < 3; row++) {
@@ -144,21 +152,21 @@ public abstract class GameBase extends Pane {
             if (checkWinner()) {
                 if(currentSymbol == "X"){
                     winner = 1;
-                    player1Score = 20;
-                    player2Score = -20;
+                    player1Score += 20;
+                    player2Score -= 20;
                 }
                 else{
                     winner = 2;
-                    player1Score = -20;
-                    player2Score = 20;
+                    player1Score -= 20;
+                    player2Score += 20;
                 }
             
                 Navigator.navigateTo(new WinnerScreenBase(),event);
          
             } else if (filledCells == 9) {
                 winner = 0;
-                player1Score = 10;
-                player2Score = 10;
+                player1Score += 10;
+                player2Score += 10;
                 resetBoard();
                 Navigator.navigateTo(new WinnerScreenBase(),event);
             }  
