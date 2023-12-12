@@ -1,23 +1,19 @@
 package home;
 
-import AiHuman.AiBase;
-import SignIn.SignInBase;
-import client.tic.tac.toe.Choose_auth.ChooseAuth;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import boardGamePkg.LocalMultiMode;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
+import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import service.Navigator;
 
-public class homeBase extends GridPane {
+public class AiBase extends GridPane {
 
     protected final ColumnConstraints columnConstraints;
     protected final ColumnConstraints columnConstraints0;
@@ -33,12 +29,12 @@ public class homeBase extends GridPane {
     protected final RowConstraints rowConstraints6;
     protected final Label label;
     protected final Label label0;
-    protected final ImageView imageView;
     protected final Label label1;
-    protected final Button onlineBtn;
-    protected final Button offlineBtn;
+    protected final Button hmnBtn;
+    protected final Button aiBtn;
+    protected final Button backBtn;
 
-    public homeBase() {
+    public AiBase() {
 
         columnConstraints = new ColumnConstraints();
         columnConstraints0 = new ColumnConstraints();
@@ -54,10 +50,10 @@ public class homeBase extends GridPane {
         rowConstraints6 = new RowConstraints();
         label = new Label();
         label0 = new Label();
-        imageView = new ImageView();
         label1 = new Label();
-        onlineBtn = new Button();
-        offlineBtn = new Button();
+        hmnBtn = new Button();
+        aiBtn = new Button();
+        backBtn = new Button();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -145,46 +141,50 @@ public class homeBase extends GridPane {
         label0.setTextOverrun(javafx.scene.control.OverrunStyle.CENTER_ELLIPSIS);
         label0.setFont(new Font(64.0));
 
-        imageView.setFitHeight(150.0);
-        imageView.setFitWidth(200.0);
-        imageView.setPickOnBounds(true);
-        imageView.setPreserveRatio(true);
-
         GridPane.setColumnIndex(label1, 3);
         GridPane.setRowIndex(label1, 3);
         label1.setText("Teo");
         label1.setFont(new Font(64.0));
 
-        GridPane.setColumnIndex(onlineBtn, 1);
-        GridPane.setRowIndex(onlineBtn, 7);
-        onlineBtn.setMnemonicParsing(false);
-        onlineBtn.setPrefHeight(52.0);
-        onlineBtn.setPrefWidth(215.0);
-        onlineBtn.setText("Online");
-        onlineBtn.setFont(new Font("System Bold Italic", 36.0));
-        onlineBtn.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
+        GridPane.setColumnIndex(hmnBtn, 1);
+        GridPane.setRowIndex(hmnBtn, 7);
+        hmnBtn.setMnemonicParsing(false);
+        hmnBtn.setPrefHeight(52.0);
+        hmnBtn.setPrefWidth(215.0);
+        hmnBtn.setText("Human");
+        hmnBtn.setFont(new Font("System Bold Italic", 36.0));
+        hmnBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Navigator.navigateTo(new ChooseAuth(),event);
- }
-        }
-        );
+                Navigator.navigateTo(new LocalMultiMode(),event);
+          
+                    }
+        });
 
-
-        GridPane.setColumnIndex(offlineBtn, 3);
-        GridPane.setRowIndex(offlineBtn, 7);
-        offlineBtn.setMnemonicParsing(false);
-        offlineBtn.setPrefHeight(80.0);
-        offlineBtn.setPrefWidth(194.0);
-        offlineBtn.setText("Offline");
-        offlineBtn.setFont(new Font("System Bold Italic", 36.0));
-        offlineBtn.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
+        GridPane.setColumnIndex(aiBtn, 3);
+        GridPane.setRowIndex(aiBtn, 7);
+        aiBtn.setMnemonicParsing(false);
+        aiBtn.setPrefHeight(80.0);
+        aiBtn.setPrefWidth(194.0);
+        aiBtn.setText("AI");
+        aiBtn.setFont(new Font("System Bold Italic", 36.0));
+        aiBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Navigator.navigateTo(new AiBase(),event);
- }
-        }
-        );
+                Navigator.navigateTo(new EasyHardBase(),event);
+          
+                    }
+        });
+
+        backBtn.setMnemonicParsing(false);
+        backBtn.setText("Back");
+        GridPane.setMargin(backBtn, new Insets(12.0, 0.0, 0.0, 13.5));
+         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                    Navigator.navigateTo(new OnlineOfflineScreen(),event);
+          }
+        });
 
         getColumnConstraints().add(columnConstraints);
         getColumnConstraints().add(columnConstraints0);
@@ -200,10 +200,10 @@ public class homeBase extends GridPane {
         getRowConstraints().add(rowConstraints6);
         getChildren().add(label);
         getChildren().add(label0);
-        getChildren().add(imageView);
         getChildren().add(label1);
-        getChildren().add(onlineBtn);
-        getChildren().add(offlineBtn);
+        getChildren().add(hmnBtn);
+        getChildren().add(aiBtn);
+        getChildren().add(backBtn);
 
     }
 }

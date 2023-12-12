@@ -1,49 +1,65 @@
-package tictactoe_bord_game;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package boardGamePkg;
 
-import AiHuman.AiBase;
-import WinnerScreen.WinnerScreenBase;
-import java.io.IOException;
-import java.net.URL;
+import home.AiBase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.shape.Line;
+import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.text.Font;
 import service.Navigator;
+import winnerScreenPkg.WinnerScreenBase;
 
-public class XOBordUI extends Pane {
-
-
+/**
+ *
+ * @author Hp
+ */
+public abstract class GameBase extends Pane {
+    
     protected final Label player1Name;
     protected final Label player2Name;
     protected final Button backBtn;
-    public static int winner = 0, player1Score = 0, player2Score = 0;
-  
+    protected final Label scoreP1;
+    protected final Label scoreP2;
+    protected final ToggleButton recordBtn;
     private final GridPane gridPane;
-    boolean isX = false ;
-    private int filledCells = 0;
+    public static int winner;
+    public static int player1Score;
+    public static int player2Score;
+    protected String currentSymbol;
+    protected int filledCells;
     
-    public XOBordUI() {
+    
+    public GameBase(GridPane backDestination) {
 
-       //we need to reset the game
+        
         player1Name = new Label();
         player2Name = new Label();
         backBtn = new Button();
-       
+        scoreP1 = new Label();
+        scoreP2 = new Label();
+        recordBtn = new ToggleButton();
+        gridPane = new GridPane();
+        
+        winner = 0;
+        player1Score = 0;
+        player2Score = 0;
+        filledCells = 0;
+        currentSymbol = "O";
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -70,49 +86,63 @@ public class XOBordUI extends Pane {
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Navigator.navigateTo(new AiBase(),event);
-          
-                    }
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation");
+                alert.setHeaderText(null);
+                alert.setContentText("Are you sure you want to quit?");
+                alert.getButtonTypes().setAll(
+                        javafx.scene.control.ButtonType.YES,
+                        javafx.scene.control.ButtonType.NO);
+                java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == javafx.scene.control.ButtonType.YES) 
+                    Navigator.navigateTo(backDestination,event); 
+            }
         });
 
-       
+      
+        scoreP1.setLayoutX(175.0);
+        scoreP1.setLayoutY(48.0);
 
-       
+        scoreP2.setLayoutX(344.0);
+        scoreP2.setLayoutY(48.0);
+
+        recordBtn.setLayoutX(14.0);
+        recordBtn.setLayoutY(361.0);
+        recordBtn.setMnemonicParsing(false);
+        recordBtn.setText("Record");
+        
+        gridPane.setLayoutX(140);
+        gridPane.setLayoutY(70);
+        gridPane.setAlignment(Pos.CENTER);
+        
         getChildren().add(player1Name);
         getChildren().add(player2Name);
         getChildren().add(backBtn);
-        
-        gridPane = new GridPane();
-        initializeBoard();
-        gridPane.setLayoutX(140);
-        gridPane.setLayoutY(70);
+        getChildren().add(scoreP1);
+        getChildren().add(scoreP2);
+        getChildren().add(recordBtn);
         getChildren().add(gridPane);
-
+        
+        initializeBoard();
     }
-    
-   
-    private Button createCell() {
+    private void initializeBoard() {
+        for (int col = 0; col < 3; col++) {
+            for (int row = 0; row < 3; row++) {
+                Button cell = createCell();
+                gridPane.add(cell, row, col);
+            }
+        }
+    }
+    protected Button createCell() {
         Button cell = new Button();
         cell.setMinSize(100, 100);
         cell.setAlignment(Pos.CENTER);
         cell.setFont(new Font(40.0));
        
         cell.setOnAction(event -> {
-            if (cell.getText().isEmpty()) {
-                isX =! isX ;
-                if(isX){
-                    cell.setText("X");
-                    
-                }else{
-                     cell.setText("O"); 
-                }
-
-                filledCells++;
-            } 
- 
-            
+            startPlaying(event);
             if (checkWinner()) {
-                if(isX){
+                if(currentSymbol == "X"){
                     winner = 1;
                     player1Score = 20;
                     player2Score = -20;
@@ -125,49 +155,20 @@ public class XOBordUI extends Pane {
             
                 Navigator.navigateTo(new WinnerScreenBase(),event);
          
-//                Alert alert = new Alert(Alert.AlertType.NONE);
-//                alert.setTitle("Result");
-//                alert.setContentText("Player"+winner+" wins!");
-//                alert.getButtonTypes().setAll(javafx.scene.control.ButtonType.OK);
-//                java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
-//                resetBoard();
-                //navigate to score screen with winner equal to 1 for player 1 or 2 for player 2
             } else if (filledCells == 9) {
                 winner = 0;
                 player1Score = 10;
                 player2Score = 10;
-                Alert alert = new Alert(Alert.AlertType.NONE);
-                alert.setTitle("Result");
-                alert.setContentText("It's a tie!");
-                alert.getButtonTypes().setAll(javafx.scene.control.ButtonType.OK);
-                java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
                 resetBoard();
-                //navigate to score screen with winner equal to 0
-            }
-            
+                Navigator.navigateTo(new WinnerScreenBase(),event);
+            }  
              
         });
 
         return cell;
     }
-
-    private void initializeBoard() {
-        for (int col = 0; col < 3; col++) {
-            for (int row = 0; row < 3; row++) {
-                Button cell = createCell();
-                gridPane.add(cell, row, col);
-            }
-        }
-    }
     
-    /**
-     *
-     * @return
-     */
-    public Button getBack(){
-        return backBtn;
-    }
-   private boolean checkWinner() {
+   protected boolean checkWinner() {
     // Check rows
     for (int row = 0; row < 3; row++) {
         if (checkLine(gridPane.getChildren().subList(row * 3, (row + 1) * 3))) {
@@ -197,21 +198,24 @@ public class XOBordUI extends Pane {
     return false;
 }
 
-private boolean checkLine(List<Node> nodes) {
-    String symbol = (isX? "X":"O"); //as getText returns a string not a char
-    for(Node node: nodes){
-        Button buttonNode = (Button)node;
-        if(!(buttonNode.getText().equals(symbol))) return false;
+    private boolean checkLine(List<Node> nodes) {
+        for(Node node: nodes){
+            Button buttonNode = (Button)node;
+            if(!(buttonNode.getText().equals(currentSymbol))) return false;
+        }
+        return true;
     }
-    return true;
-}
-private void resetBoard(){
-    filledCells = 0;
-    isX = false;
-    for(Node node: gridPane.getChildren()){
-        Button buttonNode = (Button)node;
-        buttonNode.setText("");
+    private void resetBoard(){
+        filledCells = 0;
+        currentSymbol = "X";
+        for(Node node: gridPane.getChildren()){
+            Button buttonNode = (Button)node;
+            buttonNode.setText("");
+        }
     }
+    protected void switchPlayer(){
+        currentSymbol = (currentSymbol == "X"?"O":"X");
+    }
+    protected abstract void startPlaying(ActionEvent e);
 }
 
-}

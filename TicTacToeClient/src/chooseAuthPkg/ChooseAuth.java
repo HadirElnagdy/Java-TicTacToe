@@ -1,7 +1,7 @@
-package client.tic.tac.toe.Choose_auth;
+package chooseAuthPkg;
 
-import SignIn.SignInBase;
-import SignUp.SignUPUIBase;
+import signInPkg.SignInBase;
+import signUpPkg.SignUPUIBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;

@@ -18,8 +18,10 @@ import javafx.stage.Stage;
  * @author Compumarts
  */
 public class Navigator {
+    
     private static Scene scene;
     private static Stage stage;
+    
     // navigate by event action parameter
     public static void navigateTo(Parent distinationRoot, ActionEvent event){
         scene = new Scene(distinationRoot);
@@ -33,19 +35,7 @@ public class Navigator {
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         showScene();
     }
-    // navigate by mouse event
-     public static void navigateTo(Parent distinationRoot, MouseEvent event){
-        scene = new Scene(distinationRoot);
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        showScene();
-    }
     
-    // navigate by stage parameter
-    public static void navigateTo(Parent distinationRoot, Stage currentStage){
-        scene = new Scene(distinationRoot);
-        stage = currentStage;
-        showScene();
-    }
      public static void navigateTo(Parent distinationRoot){
         scene = new Scene(distinationRoot);
         //stage = currentStage;

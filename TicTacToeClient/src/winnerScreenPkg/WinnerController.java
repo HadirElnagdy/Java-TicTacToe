@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package WinnerScreen;
+package winnerScreenPkg;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -34,7 +34,7 @@ public class WinnerController implements Initializable {
       //   public void initialize(URL location, ResourceBundle resources) {
         //System.out.println("aaaaaaaaaaaaaaa");
         String videoPath="win1.mp4";
-        Media media = new Media(WinnerScreen.Home.class.getResource(videoPath).toExternalForm());
+        Media media = new Media(winnerScreenPkg.Home.class.getResource(videoPath).toExternalForm());
       //Media media =new Media(videoPath);
       
         MediaPlayer mediaPlayer=new MediaPlayer(media);

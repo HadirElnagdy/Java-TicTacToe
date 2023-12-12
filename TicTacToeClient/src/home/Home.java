@@ -5,8 +5,6 @@
  */
 package home;
 
-import AiHuman.AiBase;
-import EasyHard.EasyHardBase;
 import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -25,7 +23,7 @@ public class Home extends Application {
     public void start(Stage stage) throws Exception {
         //ai=new AiBase();
         //eh=new EasyHardBase();
-        Parent root =new homeBase();
+        Parent root =new OnlineOfflineScreen();
         String resourcePath = "/WinnerScreen/WinnerScreen.fxml";
         URL location = getClass().getResource(resourcePath);
         FXMLLoader fxmlLoader = new FXMLLoader(location);

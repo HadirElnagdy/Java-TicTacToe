@@ -1,6 +1,7 @@
-package tictactoeclient_computer_game;
+package boardGamePkg;
 
-import EasyHard.EasyHardBase;
+import static boardGamePkg.LocalMultiMode.*;
+import home.EasyHardBase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -19,33 +20,36 @@ import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import service.Navigator;
-import static tictactoe_bord_game.XOBordUI.player1Score;
-import static tictactoe_bord_game.XOBordUI.player2Score;
-import static tictactoe_bord_game.XOBordUI.winner;
+import static boardGamePkg.LocalMultiMode.winner;
+import javafx.animation.PauseTransition;
+import winnerScreenPkg.WinnerScreenBase;
+import javafx.scene.control.ToggleButton;
+import javafx.util.Duration;
 
 /**
  *
  * @author Michael
  */
-public class XOBordComputer extends Pane {
+public class LocalSingleEasy extends Pane {
     
     protected final Label player1Name;
     protected final Label computer;
     protected final Button backBtn;
+    protected final ToggleButton recordBtn;
     private final GridPane gridPane;
     private char currentPlayer = 'X';
     private Button[][] board = new Button[3][3];
-    private boolean isX = true ;
+    private boolean isX = true;
     private int filledCells = 0;
-    public static int winner = 0, player1Score = 0, player2Score = 0;
+     //backDestination = new EasyHardBase();
     
-    public XOBordComputer() {
+    public LocalSingleEasy() {
 
        
         player1Name = new Label();
         computer = new Label();
         backBtn = new Button();
-       
+        recordBtn = new ToggleButton();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -72,22 +76,35 @@ public class XOBordComputer extends Pane {
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Navigator.navigateTo(new EasyHardBase(),event);
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation");
+                alert.setHeaderText(null);
+                alert.setContentText("Are you sure you want to quit?");
+                alert.getButtonTypes().setAll(
+                        javafx.scene.control.ButtonType.YES,
+                        javafx.scene.control.ButtonType.NO);
+                java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == javafx.scene.control.ButtonType.YES) 
+                    Navigator.navigateTo(new EasyHardBase(),event);
+          
           
                     }
         });
 
        
-
+        recordBtn.setLayoutX(14.0);
+        recordBtn.setLayoutY(361.0);
+        recordBtn.setMnemonicParsing(false);
+        recordBtn.setText("Record");
        
         getChildren().add(player1Name);
         getChildren().add(computer);
         getChildren().add(backBtn);
+        getChildren().add(recordBtn);
+        
         
         gridPane = new GridPane();
         gridPane.setAlignment(Pos.CENTER);
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
 
         for (int i = 0; i < 3; i++) {
             for (int j = 0; j < 3; j++) {
@@ -104,7 +121,7 @@ public class XOBordComputer extends Pane {
     }
     
    
-    private Button createCell() {
+ private Button createCell() {
         Button cell = new Button();
         cell.setMinSize(100, 100);
         cell.setAlignment(Pos.CENTER);
@@ -122,18 +139,15 @@ public class XOBordComputer extends Pane {
                     winner = 1;
                     player1Score = 20;
                     player2Score = -20;
-                }
-                else{
+                }else{
                     winner = 2;
                     player1Score = -20;
                     player2Score = 20;
+                   
                 }
-                Alert alert = new Alert(Alert.AlertType.NONE);
-                alert.setTitle("Result");
-                alert.setContentText("wins!");
-                alert.getButtonTypes().setAll(javafx.scene.control.ButtonType.OK);
-                java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
+                
                 clearBord();
+                Navigator.navigateTo(new WinnerScreenBase(),event);
                 //navigate to score screen with winner equal to 1 for player 1 or 2 for player 2
             } else if (filledCells == 9) {
                 winner = 0;

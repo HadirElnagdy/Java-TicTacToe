@@ -1,6 +1,6 @@
-package SignUp;
+package signUpPkg;
 
-import SignIn.SignInBase;
+import signInPkg.SignInBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;

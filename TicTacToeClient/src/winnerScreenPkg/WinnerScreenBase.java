@@ -1,5 +1,8 @@
-package WinnerScreen;
+package winnerScreenPkg;
 
+import home.OnlineOfflineScreen;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,8 +12,9 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Font;
+import service.Navigator;
 
-public class WinnerScreenBase1 extends BorderPane {
+public class WinnerScreenBase extends BorderPane {
 
     protected final MediaView mv;
     protected final GridPane gridPane;
@@ -23,8 +27,8 @@ public class WinnerScreenBase1 extends BorderPane {
     protected final RowConstraints rowConstraints;
     protected final RowConstraints rowConstraints0;
     protected final RowConstraints rowConstraints1;
-    protected final Button RecordButton;
-    protected final Button HomeButton;
+    protected final Button replayBtn;
+    protected final Button homeBtn;
     protected final GridPane gridPane0;
     protected final ColumnConstraints columnConstraints5;
     protected final ColumnConstraints columnConstraints6;
@@ -38,7 +42,7 @@ public class WinnerScreenBase1 extends BorderPane {
     protected final Label PlayerNameLabelWinner;
     protected final Label WinnerStatus;
 
-    public WinnerScreenBase1() {
+    public WinnerScreenBase() {
 
         mv = new MediaView();
         gridPane = new GridPane();
@@ -51,8 +55,8 @@ public class WinnerScreenBase1 extends BorderPane {
         rowConstraints = new RowConstraints();
         rowConstraints0 = new RowConstraints();
         rowConstraints1 = new RowConstraints();
-        RecordButton = new Button();
-        HomeButton = new Button();
+        replayBtn = new Button();
+        homeBtn = new Button();
         gridPane0 = new GridPane();
         columnConstraints5 = new ColumnConstraints();
         columnConstraints6 = new ColumnConstraints();
@@ -78,6 +82,13 @@ public class WinnerScreenBase1 extends BorderPane {
         mv.setFitWidth(400.0);
         BorderPane.setMargin(mv, new Insets(0.0));
         setCenter(mv);
+        /*
+        System.out.println("this is initializer");
+        String videoPath="win.mp4";
+        Media media =new Media(videoPath);
+        MediaPlayer mediaPlayer=new MediaPlayer(media);
+        mv.setMediaPlayer(mediaPlayer);
+        mediaPlayer.play();*/
 
         BorderPane.setAlignment(gridPane, javafx.geometry.Pos.CENTER);
         gridPane.setPrefHeight(50.0);
@@ -101,12 +112,12 @@ public class WinnerScreenBase1 extends BorderPane {
         columnConstraints2.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints2.setMaxWidth(464.0);
         columnConstraints2.setMinWidth(10.0);
-        columnConstraints2.setPrefWidth(395.0);
+        columnConstraints2.setPrefWidth(414.0);
 
         columnConstraints3.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints3.setMaxWidth(236.0);
         columnConstraints3.setMinWidth(10.0);
-        columnConstraints3.setPrefWidth(68.0);
+        columnConstraints3.setPrefWidth(55.0);
 
         columnConstraints4.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints4.setMaxWidth(117.0);
@@ -128,18 +139,26 @@ public class WinnerScreenBase1 extends BorderPane {
         rowConstraints1.setPrefHeight(13.0);
         rowConstraints1.setVgrow(javafx.scene.layout.Priority.SOMETIMES);
 
-        GridPane.setColumnIndex(RecordButton, 2);
-        GridPane.setRowIndex(RecordButton, 1);
-        RecordButton.setMnemonicParsing(false);
-        RecordButton.setText("Record");
+        GridPane.setColumnIndex(replayBtn, 2);
+        GridPane.setRowIndex(replayBtn, 1);
+        replayBtn.setMnemonicParsing(false);
+        replayBtn.setText("Replay");
+        
 
-        GridPane.setColumnIndex(HomeButton, 4);
-        GridPane.setRowIndex(HomeButton, 1);
-        HomeButton.setMnemonicParsing(false);
-        HomeButton.setPrefHeight(31.0);
-        HomeButton.setPrefWidth(62.0);
-        HomeButton.setText("Home");
+        GridPane.setColumnIndex(homeBtn, 4);
+        GridPane.setRowIndex(homeBtn, 1);
+        homeBtn.setMnemonicParsing(false);
+        homeBtn.setText("Home");
+        homeBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Navigator.navigateTo(new OnlineOfflineScreen(),event);
+          
+                    }
+        });
+        
         setBottom(gridPane);
+        
 
         BorderPane.setAlignment(gridPane0, javafx.geometry.Pos.CENTER);
 
@@ -212,8 +231,8 @@ public class WinnerScreenBase1 extends BorderPane {
         gridPane.getRowConstraints().add(rowConstraints);
         gridPane.getRowConstraints().add(rowConstraints0);
         gridPane.getRowConstraints().add(rowConstraints1);
-        gridPane.getChildren().add(RecordButton);
-        gridPane.getChildren().add(HomeButton);
+        gridPane.getChildren().add(replayBtn);
+        gridPane.getChildren().add(homeBtn);
         gridPane0.getColumnConstraints().add(columnConstraints5);
         gridPane0.getColumnConstraints().add(columnConstraints6);
         gridPane0.getColumnConstraints().add(columnConstraints7);

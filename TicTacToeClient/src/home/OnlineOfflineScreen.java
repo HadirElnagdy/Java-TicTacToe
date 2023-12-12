@@ -1,9 +1,12 @@
-package EasyHard;
+package home;
 
-import AiHuman.AiBase;
+import signInPkg.SignInBase;
+import chooseAuthPkg.ChooseAuth;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
-import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -12,9 +15,8 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import service.Navigator;
-import tictactoeclient_computer_game.XOBordComputer;
 
-public class EasyHardBase extends GridPane {
+public class OnlineOfflineScreen extends GridPane {
 
     protected final ColumnConstraints columnConstraints;
     protected final ColumnConstraints columnConstraints0;
@@ -31,12 +33,11 @@ public class EasyHardBase extends GridPane {
     protected final Label label;
     protected final Label label0;
     protected final ImageView imageView;
-    protected final Button backBtn;
     protected final Label label1;
-    protected final Button easyBtn;
-    protected final Button hardBtn;
+    protected final Button onlineBtn;
+    protected final Button offlineBtn;
 
-    public EasyHardBase() {
+    public OnlineOfflineScreen() {
 
         columnConstraints = new ColumnConstraints();
         columnConstraints0 = new ColumnConstraints();
@@ -53,10 +54,9 @@ public class EasyHardBase extends GridPane {
         label = new Label();
         label0 = new Label();
         imageView = new ImageView();
-        backBtn = new Button();
         label1 = new Label();
-        easyBtn = new Button();
-        hardBtn = new Button();
+        onlineBtn = new Button();
+        offlineBtn = new Button();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -68,22 +68,22 @@ public class EasyHardBase extends GridPane {
         columnConstraints.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints.setMaxWidth(422.0);
         columnConstraints.setMinWidth(10.0);
-        columnConstraints.setPrefWidth(42.0);
+        columnConstraints.setPrefWidth(58.0);
 
         columnConstraints0.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints0.setMaxWidth(422.0);
         columnConstraints0.setMinWidth(10.0);
-        columnConstraints0.setPrefWidth(219.0);
+        columnConstraints0.setPrefWidth(189.0);
 
         columnConstraints1.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints1.setMaxWidth(313.0);
         columnConstraints1.setMinWidth(10.0);
-        columnConstraints1.setPrefWidth(99.0);
+        columnConstraints1.setPrefWidth(97.0);
 
         columnConstraints2.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints2.setMaxWidth(313.0);
         columnConstraints2.setMinWidth(10.0);
-        columnConstraints2.setPrefWidth(240.0);
+        columnConstraints2.setPrefWidth(256.0);
 
         rowConstraints.setMaxHeight(104.0);
         rowConstraints.setMinHeight(10.0);
@@ -139,7 +139,7 @@ public class EasyHardBase extends GridPane {
         label0.setLayoutY(2.0);
         label0.setPrefHeight(93.0);
         label0.setPrefWidth(224.0);
-        label0.setText("        Tic");
+        label0.setText("      Tic");
         label0.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         label0.setTextOverrun(javafx.scene.control.OverrunStyle.CENTER_ELLIPSIS);
         label0.setFont(new Font(64.0));
@@ -149,48 +149,41 @@ public class EasyHardBase extends GridPane {
         imageView.setPickOnBounds(true);
         imageView.setPreserveRatio(true);
 
-        backBtn.setAlignment(javafx.geometry.Pos.TOP_LEFT);
-        backBtn.setContentDisplay(javafx.scene.control.ContentDisplay.TOP);
-        backBtn.setMnemonicParsing(false);
-        backBtn.setText("<-");
-        backBtn.setTextOverrun(javafx.scene.control.OverrunStyle.LEADING_ELLIPSIS);
-        backBtn.setFont(new Font(24.0));
-        backBtn.setPadding(new Insets(1.0));
-        backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Navigator.navigateTo(new AiBase(),event);
-          
-                    }
-        });
-
         GridPane.setColumnIndex(label1, 3);
         GridPane.setRowIndex(label1, 3);
         label1.setText("Teo");
         label1.setFont(new Font(64.0));
 
-        GridPane.setColumnIndex(easyBtn, 1);
-        GridPane.setRowIndex(easyBtn, 7);
-        easyBtn.setMnemonicParsing(false);
-        easyBtn.setPrefHeight(52.0);
-        easyBtn.setPrefWidth(215.0);
-        easyBtn.setText("Easy");
-        easyBtn.setFont(new Font("System Bold Italic", 36.0));
-        easyBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+        GridPane.setColumnIndex(onlineBtn, 1);
+        GridPane.setRowIndex(onlineBtn, 7);
+        onlineBtn.setMnemonicParsing(false);
+        onlineBtn.setPrefHeight(52.0);
+        onlineBtn.setPrefWidth(215.0);
+        onlineBtn.setText("Online");
+        onlineBtn.setFont(new Font("System Bold Italic", 36.0));
+        onlineBtn.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Navigator.navigateTo(new XOBordComputer(),event);
-          
-                    }
-        });
+                Navigator.navigateTo(new ChooseAuth(),event);
+ }
+        }
+        );
 
-        GridPane.setColumnIndex(hardBtn, 3);
-        GridPane.setRowIndex(hardBtn, 7);
-        hardBtn.setMnemonicParsing(false);
-        hardBtn.setPrefHeight(80.0);
-        hardBtn.setPrefWidth(212.0);
-        hardBtn.setText("Hard");
-        hardBtn.setFont(new Font("System Bold Italic", 36.0));
+
+        GridPane.setColumnIndex(offlineBtn, 3);
+        GridPane.setRowIndex(offlineBtn, 7);
+        offlineBtn.setMnemonicParsing(false);
+        offlineBtn.setPrefHeight(80.0);
+        offlineBtn.setPrefWidth(194.0);
+        offlineBtn.setText("Offline");
+        offlineBtn.setFont(new Font("System Bold Italic", 36.0));
+        offlineBtn.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Navigator.navigateTo(new AiBase(),event);
+ }
+        }
+        );
 
         getColumnConstraints().add(columnConstraints);
         getColumnConstraints().add(columnConstraints0);
@@ -207,10 +200,9 @@ public class EasyHardBase extends GridPane {
         getChildren().add(label);
         getChildren().add(label0);
         getChildren().add(imageView);
-        getChildren().add(backBtn);
         getChildren().add(label1);
-        getChildren().add(easyBtn);
-        getChildren().add(hardBtn);
+        getChildren().add(onlineBtn);
+        getChildren().add(offlineBtn);
 
     }
 }

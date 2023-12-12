@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package client.tic.tac.toe.Choose_auth;
+package signUpPkg;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -12,9 +12,9 @@ import javafx.fxml.Initializable;
 /**
  * FXML Controller class
  *
- * @author Michael
+ * @author Hp
  */
-public class ChooseAuthController implements Initializable {
+public class SignUPUIController implements Initializable {
 
     /**
      * Initializes the controller class.
