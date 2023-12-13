@@ -14,7 +14,7 @@ import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import service.Navigator;
 
-public class SignUPUIBase extends GridPane {
+public class SignUpBase extends GridPane {
 
     protected final ColumnConstraints columnConstraints;
     protected final ColumnConstraints columnConstraints0;
@@ -46,7 +46,7 @@ public class SignUPUIBase extends GridPane {
     protected final Label label4;
     protected final Hyperlink signInHyperLink;
 
-    public SignUPUIBase() {
+    public SignUpBase() {
 
         columnConstraints = new ColumnConstraints();
         columnConstraints0 = new ColumnConstraints();

@@ -1,12 +1,8 @@
 package boardGamePkg;
 
 import javafx.event.ActionEvent;
-import home.AiBase;
 import home.EasyHardBase;
-import java.util.Random;
 import javafx.scene.control.Button;
-import service.Navigator;
-import winnerScreenPkg.WinnerScreenBase;
 
 /**
  *
@@ -24,16 +20,14 @@ public class LocalSingleEasy extends GameBase {
         
         Button clickedButton = (Button) e.getSource();
         if (clickedButton.getText().isEmpty()) {
-            clickedButton.setText("X");
-            
+            switchPlayer();
+            clickedButton.setText("X"); 
             filledCells++;   
-            if (checkWinner()) {
-               // Navigator.navigateTo(new WinnerScreenBase(),e);
+            if (checkWinner()) 
                return;
-            } else if (filledCells == 9) {
-               // Navigator.navigateTo(new WinnerScreenBase(),e);
+            else if (filledCells >= 9)
                return;
-            } else {
+            else {
                 computerMove();
             }
         } 
@@ -52,15 +46,6 @@ public class LocalSingleEasy extends GameBase {
         computerCell.setText("O");
         
         filledCells++;
-
-        if (checkWinner()) {
-           // Navigator.navigateTo(new WinnerScreenBase());
-           return;
-        }else if (filledCells == 9) {
-           // Navigator.navigateTo(new WinnerScreenBase());
-           return;
-        }
-        
         switchPlayer();
     }
 }

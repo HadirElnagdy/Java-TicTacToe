@@ -165,8 +165,7 @@ public abstract class GameBase extends Pane {
                     winner = 1;
                     player1Score += 20;
                     player2Score -= 20;
-                }
-                else{
+                }else{
                     winner = 2;
                     player1Score -= 20;
                     player2Score += 20;
@@ -174,7 +173,7 @@ public abstract class GameBase extends Pane {
                // winner 1 , loser 2
                Navigator.navigateTo(new WinnerScreenBase(winner),event);
  
-            } else if (filledCells == 9) {
+            } else if (filledCells >= 9) {
                 winner = 0;
                 player1Score += 10;
                 player2Score += 10;

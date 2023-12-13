@@ -1,6 +1,6 @@
 package signInPkg;
 
-import signUpPkg.SignUPUIBase;
+import signUpPkg.SignUpBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -140,7 +140,7 @@ public class SignInBase extends GridPane {
         createAccountHyperLink.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Navigator.navigateTo(new SignUPUIBase(),event);
+                Navigator.navigateTo(new SignUpBase(),event);
           
                     }
         });
