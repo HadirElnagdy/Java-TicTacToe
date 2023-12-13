@@ -1,6 +1,8 @@
 package winnerScreenPkg;
 
 import boardGamePkg.GameBase;
+import boardGamePkg.LocalMultiMode;
+import boardGamePkg.LocalSingleEasy;
 import home.OnlineOfflineScreen;
 import java.io.IOException;
 import java.net.URL;
@@ -154,6 +156,16 @@ public class WinnerScreenBase extends BorderPane {
         GridPane.setRowIndex(replayBtn, 1);
         replayBtn.setMnemonicParsing(false);
         replayBtn.setText("Replay");
+        replayBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+              if(GameBase.playingMode == "LocalMulti"){
+                  Navigator.navigateTo(new LocalMultiMode(),event);
+              }else if(GameBase.playingMode == "LocalSingleEasy"){
+                  Navigator.navigateTo(new LocalSingleEasy(),event);
+              }
+            }
+        });
         
 
         GridPane.setColumnIndex(homeBtn, 4);
@@ -163,9 +175,10 @@ public class WinnerScreenBase extends BorderPane {
         homeBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                GameBase.resetAll();
                 Navigator.navigateTo(new OnlineOfflineScreen(),event);
           
-                    }
+                }
         });
         
       

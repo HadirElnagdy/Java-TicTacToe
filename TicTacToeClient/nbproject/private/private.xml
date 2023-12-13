@@ -6,14 +6,19 @@
             <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/home/EasyHardBase.java</file>
             <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/boardGamePkg/LocalSingleEasy.java</file>
             <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/home/OnlineOfflineScreen.java</file>
+            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/winnerScreenPkg/WinnerScreenBase1.java</file>
             <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/service/Navigator.java</file>
             <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/home/AiBase.java</file>
             <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/boardGamePkg/GameBase.java</file>
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
             <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/winnerScreenPkg/WinnerController.java</file>
             <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/winnerScreenPkg/WinnerScreenBase.java</file>
 >>>>>>> Stashed changes
+=======
+            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/winnerScreenPkg/WinnerScreenBase.java</file>
+>>>>>>> DataBase
             <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/boardGamePkg/LocalMultiMode.java</file>
             <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/boardGamePkg/XOBoardGUIController.java</file>
         </group>

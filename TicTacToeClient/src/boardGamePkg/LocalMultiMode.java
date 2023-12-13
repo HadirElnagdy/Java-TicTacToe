@@ -5,7 +5,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 
 public class LocalMultiMode extends GameBase{
-    
+
     public LocalMultiMode(){
         super(new AiBase() , "LocalMulti");
 
