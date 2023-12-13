@@ -74,7 +74,10 @@ public class ChooseAuth extends GridPane {
 
         BorderPane.setAlignment(signUpBtn, javafx.geometry.Pos.CENTER);
         signUpBtn.setMnemonicParsing(false);
+        signUpBtn.setPrefHeight(52.0);
+        signUpBtn.setPrefWidth(215.0);
         signUpBtn.setText("SignUp");
+        signUpBtn.setFont(new Font("System Bold Italic", 36.0));
         borderPane.setBottom(signUpBtn);
         signUpBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
@@ -96,7 +99,10 @@ public class ChooseAuth extends GridPane {
 
         BorderPane.setAlignment(loginBtn, javafx.geometry.Pos.CENTER);
         loginBtn.setMnemonicParsing(false);
+        loginBtn.setPrefHeight(52.0);
+        loginBtn.setPrefWidth(215.0);
         loginBtn.setText("Login");
+        loginBtn.setFont(new Font("System Bold Italic", 36.0));
         borderPane0.setBottom(loginBtn);
         loginBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override

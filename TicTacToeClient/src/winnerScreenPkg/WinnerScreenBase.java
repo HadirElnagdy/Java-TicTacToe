@@ -264,11 +264,13 @@ public class WinnerScreenBase extends BorderPane {
             setVideo("/winnerScreenPkg/draw1.mp4");
         }else if(winnerValue == 1){
              WinnerStatus.setText(" WINNER");
+             PlayerNameLabelWinner.setText("Winner");
              setVideo("/winnerScreenPkg/win1.mp4");
              
         }else if(winnerValue == 2){
             WinnerStatus.setText(" LOSSER");
-             setVideo("/winnerScreenPkg/lose1.mp4");
+            PlayerNameLabelWinner.setText("Losser");
+            setVideo("/winnerScreenPkg/lose1.mp4");
         }
           
     }
