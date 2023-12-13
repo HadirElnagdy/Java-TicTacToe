@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tictactoeclient;
+package home;
 
+import java.net.URL;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -13,16 +14,16 @@ import javafx.stage.Stage;
 
 /**
  *
- * @author Hp
+ * @author Compumarts
  */
-public class TicTacToeClient extends Application {
-    
+public class Home extends Application {
+    AiBase ai;
+    EasyHardBase eh;
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("FXMLDocument.fxml"));
-        
+       
+        Parent root =new OnlineOfflineScreen(); 
         Scene scene = new Scene(root);
-        
         stage.setScene(scene);
         stage.show();
     }
