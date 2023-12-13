@@ -158,7 +158,7 @@ public class EasyHardBase extends GridPane {
             public void handle(ActionEvent event) {
                 Navigator.navigateTo(new LocalSingleEasy(),event);
           
-                    }
+            }
         });
 
         GridPane.setColumnIndex(hardBtn, 3);

@@ -5,7 +5,6 @@
  */
 package boardGamePkg;
 
-import home.AiBase;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -36,17 +35,18 @@ public abstract class GameBase extends Pane {
     protected final Label scoreP1;
     protected final Label scoreP2;
     protected final ToggleButton recordBtn;
-    private final GridPane gridPane;
+    final GridPane gridPane;
     public static int winner;
     public static int player1Score;
     public static int player2Score;
     protected String currentSymbol;
     protected int filledCells;
+    protected String playingMode ;
     
     
-    public GameBase(GridPane backDestination) {
+    public GameBase(GridPane backDestination, String playingMode) {
 
-        
+        this.playingMode = playingMode; 
         player1Name = new Label();
         player2Name = new Label();
         backBtn = new Button();
@@ -160,16 +160,17 @@ public abstract class GameBase extends Pane {
                     player1Score -= 20;
                     player2Score += 20;
                 }
-            
-                Navigator.navigateTo(new WinnerScreenBase(),event);
-         
+               // winner 1 , loser 2
+               Navigator.navigateTo(new WinnerScreenBase(winner),event);
+ 
             } else if (filledCells == 9) {
                 winner = 0;
                 player1Score += 10;
                 player2Score += 10;
                 resetBoard();
-                Navigator.navigateTo(new WinnerScreenBase(),event);
-            }  
+                // draw 0
+                Navigator.navigateTo(new WinnerScreenBase(winner),event);
+             }  
              
         });
 

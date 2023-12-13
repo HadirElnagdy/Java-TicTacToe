@@ -16,11 +16,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 
-/**
- * FXML Controller class
- *
- * @author Shahy
- */
+
 public class WinnerController implements Initializable {
 
     
@@ -31,18 +27,5 @@ public class WinnerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-      //   public void initialize(URL location, ResourceBundle resources) {
-        //System.out.println("aaaaaaaaaaaaaaa");
-        String videoPath="win1.mp4";
-        Media media = new Media(winnerScreenPkg.Home.class.getResource(videoPath).toExternalForm());
-      //Media media =new Media(videoPath);
-      
-        MediaPlayer mediaPlayer=new MediaPlayer(media);
-        mv.setMediaPlayer(mediaPlayer);
-        mediaPlayer.play();
-        
-         
-       
-    }
-        // TODO
-    }
+    } 
+}

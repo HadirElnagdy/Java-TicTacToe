@@ -5,13 +5,18 @@
  */
 package service;
 
-import java.awt.event.MouseEvent;
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import winnerScreenPkg.WinnerController;
 
 /**
  *
@@ -47,5 +52,6 @@ public class Navigator {
         stage.show();
         stage.setResizable(false);
     }
+    
     
 }
