@@ -163,20 +163,16 @@ public abstract class GameBase extends Pane {
             if (checkWinner()) {
                 if(currentSymbol == "X"){
                     winner = 1;
-                    player1Score += 20;
-                    player2Score -= 20;
+                    player1Score += 1;
                 }else{
                     winner = 2;
-                    player1Score -= 20;
-                    player2Score += 20;
+                    player2Score += 1;
                 }
                // winner 1 , loser 2
                Navigator.navigateTo(new WinnerScreenBase(winner),event);
  
             } else if (filledCells >= 9) {
                 winner = 0;
-                player1Score += 10;
-                player2Score += 10;
                 resetBoard();
                 // draw 0
                 Navigator.navigateTo(new WinnerScreenBase(winner),event);

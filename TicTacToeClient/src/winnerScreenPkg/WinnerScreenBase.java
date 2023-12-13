@@ -224,16 +224,13 @@ public class WinnerScreenBase extends BorderPane {
         
          if(winnerValue == 0){
             resultLabel.setText("It's a Draw!");
-           // resultStatusLbl.setText("Draw!");
-            setVideo("/winnerScreenPkg/draw1.mp4");
+            setVideo("/winnerScreenPkg/draw.mp4");
         }else if(winnerValue == 2 && GameBase.playingMode == "LocalSingleEasy"){
             resultLabel.setText("You Lost!");
-            //resultStatusLbl.setText("Lost!");
             setVideo("/winnerScreenPkg/lose1.mp4");
         }else{
             String winnerName = (winnerValue == 1?GameBase.plyr1Name:GameBase.plyr2Name);
              resultLabel.setText(winnerName + " Wins!");
-             //resultStatusLbl.setText("Wins!");
              setVideo("/winnerScreenPkg/win1.mp4");
              
         }
