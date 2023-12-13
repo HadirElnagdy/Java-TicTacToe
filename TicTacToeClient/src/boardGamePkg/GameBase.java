@@ -5,16 +5,11 @@
  */
 package boardGamePkg;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -157,15 +152,16 @@ public abstract class GameBase extends Pane {
                     player1Score = -20;
                     player2Score = 20;
                 }
-
-                Navigator.navigateTo(new WinnerScreenBase(),event);
+               // winner 1 , loser 2
+               Navigator.navigateTo(new WinnerScreenBase(winner),event);
  
             } else if (filledCells == 9) {
                 winner = 0;
                 player1Score = 10;
                 player2Score = 10;
                 resetBoard();
-                Navigator.navigateTo(new WinnerScreenBase(),event);
+                // draw 0
+                Navigator.navigateTo(new WinnerScreenBase(winner),event);
              }  
              
         });

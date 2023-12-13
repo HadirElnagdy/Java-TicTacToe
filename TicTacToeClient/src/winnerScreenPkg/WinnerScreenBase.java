@@ -9,12 +9,15 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Font;
 import service.Navigator;
@@ -47,7 +50,7 @@ public class WinnerScreenBase extends BorderPane {
     protected final Label PlayerNameLabelWinner;
     protected final Label WinnerStatus;
 
-    public WinnerScreenBase() {
+    public WinnerScreenBase(int winnerValue) {
 
         mv = new MediaView();
         gridPane = new GridPane();
@@ -164,6 +167,9 @@ public class WinnerScreenBase extends BorderPane {
                     }
         });
         
+      
+        
+        
         setBottom(gridPane);
         
 
@@ -226,7 +232,7 @@ public class WinnerScreenBase extends BorderPane {
         WinnerStatus.setPrefHeight(58.0);
         WinnerStatus.setPrefWidth(158.0);
         WinnerStatus.setText(" Winner");
-        WinnerStatus.setFont(new Font("System Bold Italic", 40.0));
+        WinnerStatus.setFont(new Font("System Bold Italic", 35.0));
         setTop(gridPane0);
 
         gridPane.getColumnConstraints().add(columnConstraints);
@@ -252,5 +258,39 @@ public class WinnerScreenBase extends BorderPane {
         gridPane0.getChildren().add(PlayerNameLabelWinner);
         gridPane0.getChildren().add(WinnerStatus);
         
+        if(winnerValue == 0){
+            WinnerStatus.setText(" Draw");
+            PlayerNameLabelWinner.setText("Draw");
+            setVideo("/winnerScreenPkg/draw1.mp4");
+        }else if(winnerValue == 1){
+             WinnerStatus.setText(" WINNER");
+             setVideo("/winnerScreenPkg/win1.mp4");
+             
+        }else if(winnerValue == 2){
+            WinnerStatus.setText(" LOSSER");
+             setVideo("/winnerScreenPkg/lose1.mp4");
+        }
+          
     }
+    private void setVideo(String pathVideo){
+        
+        String resourcePath = "/winnerScreenPkg/WinnerScreen.fxml";
+        URL location = getClass().getResource(resourcePath);
+        FXMLLoader fxmlLoader = new FXMLLoader(location);
+
+        try {
+            // Load the FXML content and get the root node
+            fxmlLoader.load();
+        } catch (IOException ex) {
+            Logger.getLogger(WinnerScreenBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        System.out.println("WinnerController class loaded.");
+        String videoPath = pathVideo;
+        Media media = new Media(winnerScreenPkg.WinnerController.class.getResource(videoPath).toExternalForm());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mv.setMediaPlayer(mediaPlayer);
+        mediaPlayer.play();
+    }
+
 }

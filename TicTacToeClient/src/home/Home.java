@@ -22,12 +22,7 @@ public class Home extends Application {
     @Override
     public void start(Stage stage) throws Exception {
        
-        Parent root =new OnlineOfflineScreen();
-        String resourcePath = "/winnerScreenPkg/WinnerScreen.fxml";
-        URL location = getClass().getResource(resourcePath);
-        
-        FXMLLoader fxmlLoader = new FXMLLoader(location);
-        
+        Parent root =new OnlineOfflineScreen(); 
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

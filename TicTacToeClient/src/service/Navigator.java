@@ -6,6 +6,8 @@
 package service;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +16,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import winnerScreenPkg.WinnerController;
 
 /**
  *
@@ -42,18 +45,6 @@ public class Navigator {
         scene = new Scene(distinationRoot);
         //stage = currentStage;
         showScene();
-    }
-     
-     public static void navigateTo(BorderPane root, String fxmlPath, ActionEvent event) {
-        FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(fxmlPath));
-
-        try {
-            Parent newRoot = loader.load();
-            root.getChildren().setAll(newRoot);
-            // You might need to get the controller and perform additional actions here
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
    
     private static void showScene(){
