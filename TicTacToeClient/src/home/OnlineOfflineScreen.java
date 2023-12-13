@@ -1,12 +1,15 @@
 package home;
 
+
 import signInPkg.SignInBase;
+import boardGamePkg.RecordsBase;
 import chooseAuthPkg.ChooseAuth;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -35,6 +38,7 @@ public class OnlineOfflineScreen extends GridPane {
     protected final ImageView imageView;
     protected final Label label1;
     protected final Button onlineBtn;
+    protected final Button recordBtn;
     protected final Button offlineBtn;
 
     public OnlineOfflineScreen() {
@@ -57,6 +61,7 @@ public class OnlineOfflineScreen extends GridPane {
         label1 = new Label();
         onlineBtn = new Button();
         offlineBtn = new Button();
+        recordBtn =new Button();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -184,6 +189,15 @@ public class OnlineOfflineScreen extends GridPane {
  }
         }
         );
+        recordBtn.setMnemonicParsing(false);
+        recordBtn.setText("Rec");
+        GridPane.setMargin(recordBtn, new Insets(12.0, 0.0, 0.0, 13.5));
+        recordBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                    Navigator.navigateTo(new RecordsBase(),event);
+          }
+        });
 
         getColumnConstraints().add(columnConstraints);
         getColumnConstraints().add(columnConstraints0);
@@ -203,6 +217,7 @@ public class OnlineOfflineScreen extends GridPane {
         getChildren().add(label1);
         getChildren().add(onlineBtn);
         getChildren().add(offlineBtn);
+        getChildren().add(recordBtn);
 
     }
 }
