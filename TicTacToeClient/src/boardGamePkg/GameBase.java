@@ -148,6 +148,7 @@ public abstract class GameBase extends Pane {
         player1Name.setText(player1);
         player2Name.setText(player2);
     }
+
     private void initializeBoard() {
         for (int col = 0; col < 3; col++) {
             for (int row = 0; row < 3; row++) {
