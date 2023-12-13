@@ -21,12 +21,13 @@ public class Home extends Application {
     EasyHardBase eh;
     @Override
     public void start(Stage stage) throws Exception {
-        //ai=new AiBase();
-        //eh=new EasyHardBase();
+       
         Parent root =new OnlineOfflineScreen();
-        String resourcePath = "/WinnerScreen/WinnerScreen.fxml";
+        String resourcePath = "/winnerScreenPkg/WinnerScreen.fxml";
         URL location = getClass().getResource(resourcePath);
+        
         FXMLLoader fxmlLoader = new FXMLLoader(location);
+        
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();

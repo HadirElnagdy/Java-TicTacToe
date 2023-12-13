@@ -5,12 +5,14 @@
  */
 package service;
 
-import java.awt.event.MouseEvent;
+import java.io.IOException;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 /**
@@ -41,11 +43,24 @@ public class Navigator {
         //stage = currentStage;
         showScene();
     }
+     
+     public static void navigateTo(BorderPane root, String fxmlPath, ActionEvent event) {
+        FXMLLoader loader = new FXMLLoader(Navigator.class.getResource(fxmlPath));
+
+        try {
+            Parent newRoot = loader.load();
+            root.getChildren().setAll(newRoot);
+            // You might need to get the controller and perform additional actions here
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
    
     private static void showScene(){
         stage.setScene(scene);
         stage.show();
         stage.setResizable(false);
     }
+    
     
 }

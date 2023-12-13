@@ -1,9 +1,16 @@
 package winnerScreenPkg;
 
 import boardGamePkg.GameBase;
+import boardGamePkg.LocalMultiMode;
+import boardGamePkg.LocalSingleEasy;
 import home.OnlineOfflineScreen;
+import java.io.IOException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -71,6 +78,7 @@ public class WinnerScreenBase extends BorderPane {
         PlayerNameLabelWinner = new Label();
         WinnerStatus = new Label();
 
+        
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
@@ -91,6 +99,7 @@ public class WinnerScreenBase extends BorderPane {
         mv.setMediaPlayer(mediaPlayer);
         mediaPlayer.play();*/
 
+        
         BorderPane.setAlignment(gridPane, javafx.geometry.Pos.CENTER);
         gridPane.setPrefHeight(50.0);
         gridPane.setPrefWidth(591.0);
@@ -144,6 +153,16 @@ public class WinnerScreenBase extends BorderPane {
         GridPane.setRowIndex(replayBtn, 1);
         replayBtn.setMnemonicParsing(false);
         replayBtn.setText("Replay");
+        replayBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+              if(GameBase.playingMode == "LocalMulti"){
+                  Navigator.navigateTo(new LocalMultiMode(),event);
+              }else if(GameBase.playingMode == "LocalSingleEasy"){
+                  Navigator.navigateTo(new LocalSingleEasy(),event);
+              }
+            }
+        });
         
 
         GridPane.setColumnIndex(homeBtn, 4);
@@ -153,9 +172,10 @@ public class WinnerScreenBase extends BorderPane {
         homeBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
+                GameBase.resetAll();
                 Navigator.navigateTo(new OnlineOfflineScreen(),event);
           
-                    }
+                }
         });
         
         setBottom(gridPane);
@@ -245,6 +265,6 @@ public class WinnerScreenBase extends BorderPane {
         gridPane0.getRowConstraints().add(rowConstraints4);
         gridPane0.getChildren().add(PlayerNameLabelWinner);
         gridPane0.getChildren().add(WinnerStatus);
-
+        
     }
 }

@@ -16,11 +16,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 
-/**
- * FXML Controller class
- *
- * @author Shahy
- */
+
 public class WinnerController implements Initializable {
 
     
@@ -31,18 +27,30 @@ public class WinnerController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         
-      //   public void initialize(URL location, ResourceBundle resources) {
-        //System.out.println("aaaaaaaaaaaaaaa");
-        String videoPath="win1.mp4";
-        Media media = new Media(winnerScreenPkg.Home.class.getResource(videoPath).toExternalForm());
-      //Media media =new Media(videoPath);
-      
+        System.out.println("aaaaaaaaaaa");
+        String videoPath="/winnerScreenPkg/win1.mp4";
+        Media media = new Media(home.Home.class.getResource(videoPath).toExternalForm());
         MediaPlayer mediaPlayer=new MediaPlayer(media);
         mv.setMediaPlayer(mediaPlayer);
-        mediaPlayer.play();
-        
-         
+        mediaPlayer.setAutoPlay(true);  
        
     }
-        // TODO
-    }
+ 
+}
+/*
+String resourcePath = "/winnerScreenPkg/WinnerScreen.fxml";
+URL location = getClass().getResource(resourcePath);
+
+FXMLLoader fxmlLoader = new FXMLLoader(location);
+
+// Load the FXML content and get the root node
+Parent root = fxmlLoader.load();
+
+// Now, you can use 'root' as the root of your scene or add it to your existing layout.
+// For example:
+Scene scene = new Scene(root);
+Stage stage = new Stage();
+stage.setScene(scene);
+stage.show();
+
+*/

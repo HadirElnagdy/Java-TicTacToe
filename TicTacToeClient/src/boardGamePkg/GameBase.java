@@ -5,12 +5,16 @@
  */
 package boardGamePkg;
 
-import home.AiBase;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -36,17 +40,20 @@ public abstract class GameBase extends Pane {
     protected final Label scoreP1;
     protected final Label scoreP2;
     protected final ToggleButton recordBtn;
-    private final GridPane gridPane;
+    final GridPane gridPane;
     public static int winner;
     public static int player1Score;
     public static int player2Score;
+    public static String plyr1Name;
+    public static String plyr2Name;
     protected String currentSymbol;
     protected int filledCells;
+    public static String playingMode;
     
     
-    public GameBase(GridPane backDestination) {
+    public GameBase(GridPane backDestination, String playingMode) {
 
-        
+        this.playingMode = playingMode; 
         player1Name = new Label();
         player2Name = new Label();
         backBtn = new Button();
@@ -70,11 +77,14 @@ public abstract class GameBase extends Pane {
         player1Name.setLayoutY(14.0);
         player1Name.setText("Player 1");
         player1Name.setFont(new Font("System Bold Italic", 23.0));
+        player1Name.setText(plyr1Name);
+        
 
         player2Name.setLayoutX(313.0);
         player2Name.setLayoutY(14.0);
         player2Name.setText("Player 2");
         player2Name.setFont(new Font("System Bold Italic", 23.0));
+        player2Name.setText(plyr2Name);
 
         backBtn.setLayoutX(14.0);
         backBtn.setLayoutY(14.0);
@@ -91,8 +101,10 @@ public abstract class GameBase extends Pane {
                         javafx.scene.control.ButtonType.YES,
                         javafx.scene.control.ButtonType.NO);
                 java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
-                if (result.isPresent() && result.get() == javafx.scene.control.ButtonType.YES) 
+                if (result.isPresent() && result.get() == javafx.scene.control.ButtonType.YES){ 
+                    GameBase.resetAll();
                     Navigator.navigateTo(backDestination,event); 
+                }
             }
         });
 
@@ -128,8 +140,11 @@ public abstract class GameBase extends Pane {
         winner = 0;
         player1Score = 0;
         player2Score = 0;
+        playingMode = "";
     }
     public void setPlayersNames(String player1, String player2){
+        plyr1Name = player1;
+        plyr2Name = player2;
         player1Name.setText(player1);
         player2Name.setText(player2);
     }
@@ -160,16 +175,16 @@ public abstract class GameBase extends Pane {
                     player1Score -= 20;
                     player2Score += 20;
                 }
-            
+
                 Navigator.navigateTo(new WinnerScreenBase(),event);
-         
+ 
             } else if (filledCells == 9) {
                 winner = 0;
                 player1Score += 10;
                 player2Score += 10;
                 resetBoard();
                 Navigator.navigateTo(new WinnerScreenBase(),event);
-            }  
+             }  
              
         });
 
@@ -223,6 +238,11 @@ public abstract class GameBase extends Pane {
     }
     protected void switchPlayer(){
         currentSymbol = (currentSymbol == "X"?"O":"X");
+    }
+    public static void resetAll(){
+        player1Score = 0;
+        player2Score = 0;
+        
     }
     protected abstract void startPlaying(ActionEvent e);
 }
