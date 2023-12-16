@@ -159,40 +159,11 @@ public class EasyHardBase extends GridPane {
         easyBtn.setPrefWidth(215.0);
         easyBtn.setText("Easy");
         easyBtn.setFont(new Font("System Bold Italic", 36.0));
-//        easyBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-//            @Override
-//            public void handle(ActionEvent event) {
-//                Navigator.navigateTo(new LocalSingleEasy(),event);
-//          
-//            }
-//        });
         easyBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                GridPane gridPane = new GridPane();
-                gridPane.setHgap(10);
-                gridPane.setVgap(10);
+                 PlayersNamesAlert.onePlayerNameAlert(event);
 
-                // Add labels and text fields
-                TextField player1TextField = new TextField();
-                TextField player2TextField = new TextField();
-
-                gridPane.add(new Label("Player  Name:"), 0, 0);
-                gridPane.add(player1TextField, 1, 0);
-              // gridPane.add(new Label("Player 2 Name:"), 0, 1);
-               //gridPane.add(player2TextField, 1, 1);
-
-                // Create the alert
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Player Names");
-                alert.setHeaderText("Enter Player Names");
-                alert.getDialogPane().setContent(gridPane);
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.isPresent() && result.get() == ButtonType.OK) {
-                    GameBase destination = new LocalSingleEasy();
-                    destination.setPlayersNames(player1TextField.getText() , "Computer");
-                    Navigator.navigateTo(destination,event);
-                }
                     }
         });
 
