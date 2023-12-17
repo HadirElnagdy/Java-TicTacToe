@@ -5,9 +5,14 @@
  */
 package boardGamePkg;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
@@ -44,10 +49,20 @@ public abstract class GameBase extends Pane {
     protected String currentSymbol;
     protected int filledCells;
     public static String playingMode;
+    private final List<String> moves;
+    private final List<String> rMoves;
+    BufferedWriter writer;
     
     
     public GameBase(GridPane backDestination, String playingMode) {
 
+        try {
+            writer = new BufferedWriter(new FileWriter("Record History.txt",true));
+                    } catch (IOException ex) {
+            Logger.getLogger(GameBase.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        
         this.playingMode = playingMode; 
         player1Name = new Label();
         player2Name = new Label();
@@ -56,6 +71,8 @@ public abstract class GameBase extends Pane {
         scoreP2 = new Label();
         recordBtn = new ToggleButton();
         gridPane = new GridPane();
+        moves = new ArrayList<>();
+         rMoves = new ArrayList<>();
         
         filledCells = 0;
         currentSymbol = "O";
@@ -116,6 +133,12 @@ public abstract class GameBase extends Pane {
         recordBtn.setLayoutY(361.0);
         recordBtn.setMnemonicParsing(false);
         recordBtn.setText("Record");
+                recordBtn.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                recordMovesToFile();
+            }
+        });
         
         gridPane.setLayoutX(140);
         gridPane.setLayoutY(70);
@@ -131,6 +154,7 @@ public abstract class GameBase extends Pane {
         
         initializeBoard();
     }
+    
     static{
         winner = 0;
         player1Score = 0;
@@ -158,27 +182,54 @@ public abstract class GameBase extends Pane {
         cell.setAlignment(Pos.CENTER);
         cell.setFont(new Font(40.0));
        
-        cell.setOnAction(event -> {
+           cell.setOnAction(event -> {
             startPlaying(event);
+            recordMove(cell);
             if (checkWinner()) {
                 if(currentSymbol == "X"){
                     winner = 1;
-                    player1Score += 1;
+                    player1Score += 20;
+                    player2Score -= 20;
+                    recordMovesToFile();
+                    try {
+                        writer.flush();
+                    } catch (IOException ex) {
+                        Logger.getLogger(GameBase.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
                 }else{
                     winner = 2;
-                    player2Score += 1;
+                    player1Score -= 20;
+                    player2Score += 20;
+                    recordMovesToFile();
+                    try {
+                        writer.flush();
+                    } catch (IOException ex) {
+                        Logger.getLogger(GameBase.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
                 }
                // winner 1 , loser 2
                Navigator.navigateTo(new WinnerScreenBase(winner),event);
  
             } else if (filledCells >= 9) {
                 winner = 0;
-                resetBoard();
+                player1Score += 10;
+                player2Score += 10;
+                recordMovesToFile();
+                try {
+                    writer.flush();
+                } catch (IOException ex) {
+                    Logger.getLogger(GameBase.class.getName()).log(Level.SEVERE, null, ex);
+                }
+//                recordMovesToFile();
+//                resetBoard();
                 // draw 0
                 Navigator.navigateTo(new WinnerScreenBase(winner),event);
              }  
              
         });
+
 
         return cell;
     }
@@ -237,5 +288,32 @@ public abstract class GameBase extends Pane {
         
     }
     protected abstract void startPlaying(ActionEvent e);
+    // writing the record in text file
+    private void recordMovesToFile() {
+        try  {
+            writer = new BufferedWriter(new FileWriter("Record History.txt",true));
+            for (int i = 0 ; i<moves.size();i++) {
+                writer.write(moves.get(i));
+                writer.write("#");
+                System.out.println("writer writed move");
+                if(i==moves.size()-1)
+                {  
+                    writer.newLine();
+                    writer.write("&");
+                    writer.newLine();
+                    System.out.println("writer finished");
+                }
+            }
+            moves.clear();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+     private void recordMove(Button btn) {
+        int row = gridPane.getRowIndex(btn);
+        int col = gridPane.getColumnIndex(btn);
+        String move = String.format("%s,%s,%s", currentSymbol, row, col);
+        moves.add(move);
+    }
 }
 
