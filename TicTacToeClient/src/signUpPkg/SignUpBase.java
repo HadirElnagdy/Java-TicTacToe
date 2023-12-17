@@ -1,5 +1,13 @@
 package signUpPkg;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import dto.player.DTOPlayer;
+import home.ChooseAuth;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import signInPkg.SignInBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,6 +20,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
+import network.connection.NetworkConnection;
 import service.Navigator;
 
 public class SignUpBase extends GridPane {
@@ -45,6 +54,8 @@ public class SignUpBase extends GridPane {
     protected final RowConstraints rowConstraints6;
     protected final Label label4;
     protected final Hyperlink signInHyperLink;
+    protected final Button backBtn;
+    NetworkConnection network;
 
     public SignUpBase() {
 
@@ -85,6 +96,15 @@ public class SignUpBase extends GridPane {
         setPrefHeight(401.0);
         setPrefWidth(597.0);
 
+         backBtn = new Button("Back");
+
+        GridPane.setMargin(backBtn, new Insets(8.0, 0.0, 0.0, 10.5));
+        backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+                Navigator.navigateTo(new ChooseAuth(),event);
+            }
+        });
         columnConstraints.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints.setMaxWidth(294.0);
         columnConstraints.setMinWidth(10.0);
@@ -257,6 +277,43 @@ public class SignUpBase extends GridPane {
         gridPane0.getChildren().add(label4);
         gridPane0.getChildren().add(signInHyperLink);
         getChildren().add(gridPane0);
+        getChildren().add(backBtn);
+        
+        createAccountBtn.addEventFilter(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Gson gson = new GsonBuilder().create();
+                DTOPlayer player = new DTOPlayer(
+                        nameTxtFld.getText(),
+                        uNameTxtFld.getText(),
+                        emailTxtFld.getText(),
+                        passwordTxtFld.getText(),
+                        0,
+                        "offline");
 
+                JsonObject jsonPayload = new JsonObject();
+
+                // Add specific fields to the payload
+                jsonPayload.addProperty("action", "signUp");
+                jsonPayload.add("data", gson.toJsonTree(player));
+
+                // Convert JsonObject to JSON string
+                String jsonString = gson.toJson(jsonPayload);
+
+                try {
+                    // Assuming 'network' is an instance of NetworkConnection
+                    network = new NetworkConnection("127.0.0.1");
+                    network.sendMessage(jsonString);
+
+                } catch (IOException ex) {
+                    Logger.getLogger(SignUpBase.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                System.out.println("Data sent to server");
+        
+            }
+        });
+        
+        
     }
 }

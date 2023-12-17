@@ -1,5 +1,12 @@
 package signInPkg;
 
+import home.ChooseAuth;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import signUpPkg.SignUpBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -12,6 +19,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
+import network.connection.NetworkConnection;
 import service.Navigator;
 
 public class SignInBase extends GridPane {
@@ -36,7 +44,8 @@ public class SignInBase extends GridPane {
     protected final Button signInBtn;
     protected final TextField uNameTxtFld;
     protected final TextField passwordTxtFld;
-
+    protected final Button backBtn;
+     
     public SignInBase() {
 
         columnConstraints = new ColumnConstraints();
@@ -171,6 +180,17 @@ public class SignInBase extends GridPane {
         GridPane.setRowIndex(passwordTxtFld, 3);
         passwordTxtFld.setPrefWidth(338.0);
 
+        backBtn = new Button("Back");
+
+       
+        GridPane.setMargin(backBtn, new Insets(12.0, 0.0, 0.0, 13.5));
+        backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+                Navigator.navigateTo(new ChooseAuth(),event);
+            }
+        });
+        
         getColumnConstraints().add(columnConstraints);
         getColumnConstraints().add(columnConstraints0);
         getColumnConstraints().add(columnConstraints1);
@@ -191,6 +211,17 @@ public class SignInBase extends GridPane {
         getChildren().add(signInBtn);
         getChildren().add(uNameTxtFld);
         getChildren().add(passwordTxtFld);
+        getChildren().add(backBtn);
+        signInBtn.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+              /// logic Sign In
+            }
+        });
+           
+        
+      
+        
 
     }
 }

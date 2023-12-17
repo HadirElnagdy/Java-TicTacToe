@@ -225,7 +225,7 @@ public class WinnerScreenBase extends BorderPane {
          if(winnerValue == 0){
             resultLabel.setText("It's a Draw!");
            // resultStatusLbl.setText("Draw!");
-            setVideo("/winnerScreenPkg/draw1.mp4");
+            setVideo("/winnerScreenPkg/draw.mp4");
         }else if(winnerValue == 2 && GameBase.playingMode == "LocalSingleEasy"){
             resultLabel.setText("You Lost!");
             //resultStatusLbl.setText("Lost!");

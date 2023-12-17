@@ -1,11 +1,11 @@
-package chooseAuthPkg;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package home;
 
-import home.OnlineOfflineScreen;
-import signInPkg.SignInBase;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -17,10 +17,13 @@ import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import service.Navigator;
-import signUpPkg.SignUpBase;
 
-public class ChooseAuth extends GridPane {
-
+/**
+ *
+ * @author Michael
+ */
+public class HomeBase extends GridPane {
+    
     protected final ColumnConstraints columnConstraints;
     protected final ColumnConstraints columnConstraints0;
     protected final ColumnConstraints columnConstraints1;
@@ -37,12 +40,26 @@ public class ChooseAuth extends GridPane {
     protected final Label label0;
     protected final ImageView imageView;
     protected final Label label1;
-    protected final Button signInBtn;
-    protected final Button signUpBtn;
+    protected Button rightBtn;
+    protected Button leftBtn;
     protected final Button backBtn;
+    
+    public HomeBase(Button right, Button left,String rightBtnName , String leftBtnName ,boolean hasBackBtn ,GridPane gridPane){
+        backBtn = new Button("Back");
 
-    public ChooseAuth(){
-
+        if(hasBackBtn == true){
+            GridPane.setMargin(backBtn, new Insets(12.0, 0.0, 0.0, 13.5));
+            backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                    Navigator.navigateTo(gridPane,event);
+                }
+            });
+        }else{
+            backBtn.setVisible(false);
+           
+        }
+                
         columnConstraints = new ColumnConstraints();
         columnConstraints0 = new ColumnConstraints();
         columnConstraints1 = new ColumnConstraints();
@@ -59,11 +76,12 @@ public class ChooseAuth extends GridPane {
         label0 = new Label();
         imageView = new ImageView();
         label1 = new Label();
-        signInBtn = new Button();
-        signUpBtn = new Button();
-        backBtn = new Button();
-
-        setMaxHeight(USE_PREF_SIZE);
+        rightBtn = new Button();
+        leftBtn = new Button();
+        rightBtn = right;
+        leftBtn = left;
+        
+         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
         setMinWidth(USE_PREF_SIZE);
@@ -129,16 +147,6 @@ public class ChooseAuth extends GridPane {
         rowConstraints6.setMinHeight(10.0);
         rowConstraints6.setPrefHeight(219.0);
         rowConstraints6.setVgrow(javafx.scene.layout.Priority.SOMETIMES);
-        
-        backBtn.setMnemonicParsing(false);
-        backBtn.setText("Back");
-        GridPane.setMargin(backBtn, new Insets(12.0, 0.0, 0.0, 13.5));
-        backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                    Navigator.navigateTo(new OnlineOfflineScreen(),event);
-          }
-        });
 
         GridPane.setColumnIndex(label, 2);
         GridPane.setRowIndex(label, 2);
@@ -169,36 +177,24 @@ public class ChooseAuth extends GridPane {
         label1.setText("Teo");
         label1.setFont(new Font(64.0));
 
-        GridPane.setColumnIndex(signInBtn, 3);
-        GridPane.setRowIndex(signInBtn, 7);
-        signInBtn.setMnemonicParsing(false);
-        signInBtn.setPrefHeight(52.0);
-        signInBtn.setPrefWidth(215.0);
-        signInBtn.setText("Sign in");
-        signInBtn.setFont(new Font("System Bold Italic", 36.0));
-        signInBtn.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Navigator.navigateTo(new SignInBase(),event);
- }
-        }
-        );
+        GridPane.setColumnIndex(rightBtn, 3);
+        GridPane.setRowIndex(rightBtn, 7);
+        rightBtn.setMnemonicParsing(false);
+        rightBtn.setPrefHeight(52.0);
+        rightBtn.setPrefWidth(215.0);
+        rightBtn.setText(rightBtnName);
+        rightBtn.setFont(new Font("System Bold Italic", 36.0));
+        
 
 
-        GridPane.setColumnIndex(signUpBtn, 1);
-        GridPane.setRowIndex(signUpBtn, 7);
-        signUpBtn.setMnemonicParsing(false);
-        signUpBtn.setPrefHeight(80.0);
-        signUpBtn.setPrefWidth(194.0);
-        signUpBtn.setText("Sign up");
-        signUpBtn.setFont(new Font("System Bold Italic", 36.0));
-        signUpBtn.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Navigator.navigateTo(new SignUpBase(),event);
- }
-        }
-        );
+        GridPane.setColumnIndex(leftBtn, 1);
+        GridPane.setRowIndex(leftBtn, 7);
+        leftBtn.setMnemonicParsing(false);
+        leftBtn.setPrefHeight(80.0);
+        leftBtn.setPrefWidth(194.0);
+        leftBtn.setText(leftBtnName);
+        leftBtn.setFont(new Font("System Bold Italic", 36.0));
+        
 
         getColumnConstraints().add(columnConstraints);
         getColumnConstraints().add(columnConstraints0);
@@ -216,9 +212,11 @@ public class ChooseAuth extends GridPane {
         getChildren().add(label0);
         getChildren().add(imageView);
         getChildren().add(label1);
-        getChildren().add(signInBtn);
-        getChildren().add(signUpBtn);
-        getChildren().add(backBtn);
-
+        getChildren().add(rightBtn);
+        getChildren().add(leftBtn);
+         getChildren().add(backBtn);
+        
     }
+
+    
 }
