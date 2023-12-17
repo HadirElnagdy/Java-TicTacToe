@@ -52,28 +52,29 @@ public class DataAccessLayer {
                 System.out.println("Insert successed");
             }
         }catch(SQLException ex){
-            System.out.println("database erroooooooooor!!!!!!!!"); 
-            closeConnection();
+                System.out.println("Database error: " + ex.getMessage());
+                ex.printStackTrace();
+                closeConnection();
         }
     }
     
-    public boolean checkIfUserExist(String userName) throws SQLException {
-        String sql = " SELECT ROOT.player Where USERNAEM = ? ";
+        public boolean checkIfUserExist(String userName) throws SQLException {
+           String sql = "SELECT * FROM ROOT.player WHERE USERNAME = ?";
 
-        PreparedStatement pst = connection.prepareStatement(sql);
-        pst.setString(1, userName);
-        ResultSet rs = pst.executeQuery();
-        boolean found = false;
+           try (PreparedStatement pst = connection.prepareStatement(sql)) {
+               pst.setString(1, userName);
+               try (ResultSet rs = pst.executeQuery()) {
+                   if (rs.next()) {
+                       System.out.println("User exists");
+                       return true;
+                   } else {
+                       System.out.println("User does not exist");
+                       return false;
+                   }
+               }
+           }
+       }
 
-        while (rs.next()) {
-            if (userName.equals(rs.getString("username"))) {
-                System.out.println("user is exsit");
-                found = true;
-                return found;
-            }
-        }
-        return found;
-    }
     
     public void closeConnection() {
         try {

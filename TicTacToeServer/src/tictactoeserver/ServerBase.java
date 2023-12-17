@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -31,7 +32,7 @@ public class ServerBase extends BorderPane {
     private boolean isServerRunning = false;
     ServerHandler server ;
     ServerSocket serverSocket;
-    Socket socket ;
+    Socket socket;
     public ServerBase() {
 
         pane = new Pane();
@@ -132,14 +133,18 @@ public class ServerBase extends BorderPane {
  
                     new Thread(()->{
                         try {
-                            socket = serverSocket.accept();   
-                            server = new ServerHandler(socket);
-                            System.out.println(socket.getInetAddress());
+                             while (isServerRunning) {
+                                socket = serverSocket.accept();   
+                                server = new ServerHandler(socket);
+                                System.out.println(socket.getInetAddress());
+                            }
                         } catch (IOException ex) {
+                            showAlert("Server Stoooop!!!!!!!");
                             Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
                         }
                     }).start();
                 } catch (IOException ex) {
+                    showAlert("Server Stoooop");
                     ex.printStackTrace();
                 }
         });
@@ -147,10 +152,26 @@ public class ServerBase extends BorderPane {
         offBtn.setOnAction(e->{
             onBtn.setDisable(false);
             isServerRunning = false;
-            if (server != null) {
-                server.closeResources();
+            if (serverSocket != null && !serverSocket.isClosed()) {
+                try {
+                    serverSocket.close();
+                } catch (IOException ex) {
+                    showAlert("Server Stop");
+                    Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         });
 
     }
+    
+     void showAlert(String message){
+        Alert informationAlert = new Alert(Alert.AlertType.ERROR);
+
+        informationAlert.setTitle("");
+
+        informationAlert.setContentText(message);
+
+        informationAlert.showAndWait();
+    }
+    
 }

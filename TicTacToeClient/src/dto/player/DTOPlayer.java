@@ -23,8 +23,9 @@ public class DTOPlayer {
         this.UserName = UserName;
         this.password = password;
         this.email = email;
-        this.status = status;
         this.score = score;
+        this.status = status;
+        
 
     }
 

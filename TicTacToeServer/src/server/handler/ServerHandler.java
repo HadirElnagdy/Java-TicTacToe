@@ -11,6 +11,7 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert;
 import network.operation.NetworkOperation;
 
 public class ServerHandler extends Thread {
@@ -26,7 +27,12 @@ public class ServerHandler extends Thread {
             printStream = new PrintStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
             networkOperation = new NetworkOperation();
+            
+            String mess = dataInputStream.readLine();
+            System.out.println(mess);
+            handleClientMessage(mess);
         } catch (IOException ex) {
+             showAlert("Server Handle Stoooop!!!!!!!!!");
             Logger.getLogger(ServerHandler.class.getName()).log(Level.SEVERE, null, ex);
             closeResources();
         }
@@ -35,13 +41,13 @@ public class ServerHandler extends Thread {
     @Override
     public void run() {
         try {
+             
             while (isClientConnected && (message = dataInputStream.readLine()) != null) {
                 System.out.println("Client says: " + message);
                 
                 // Handle client message
                 handleClientMessage(message);
-
-                printStream.println("Server received: " + message);
+               
             }
 
         } catch (IOException ex) {
@@ -55,6 +61,7 @@ public class ServerHandler extends Thread {
                 printStream.close();
                 Logger.getLogger(ServerHandler.class.getName()).log(Level.SEVERE, null, ex);
             } catch (IOException ex1) {
+                 showAlert("Server Handle Stop");
                 Logger.getLogger(ServerHandler.class.getName()).log(Level.SEVERE, null, ex1);
             }
         } finally {
@@ -74,6 +81,7 @@ public class ServerHandler extends Thread {
             }
             
         } catch (IOException ex) {
+            showAlert("Server Handle Stoooop");
             Logger.getLogger(ServerHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -86,4 +94,15 @@ public class ServerHandler extends Thread {
         networkOperation.signUp(json);
         System.out.println("Message processed: " + json);
     }
+    
+    void showAlert(String message){
+        Alert informationAlert = new Alert(Alert.AlertType.ERROR);
+
+        informationAlert.setTitle("");
+
+        informationAlert.setContentText(message);
+
+        informationAlert.showAndWait();
+    }
+    
 }

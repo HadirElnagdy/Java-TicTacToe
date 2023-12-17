@@ -12,9 +12,12 @@ import signInPkg.SignInBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
@@ -37,7 +40,7 @@ public class SignUpBase extends GridPane {
     protected final Label label;
     protected final Label label0;
     protected final TextField emailTxtFld;
-    protected final TextField passwordTxtFld;
+    protected final PasswordField passwordTxtFld;
     protected final GridPane gridPane;
     protected final ColumnConstraints columnConstraints2;
     protected final ColumnConstraints columnConstraints3;
@@ -71,7 +74,7 @@ public class SignUpBase extends GridPane {
         label = new Label();
         label0 = new Label();
         emailTxtFld = new TextField();
-        passwordTxtFld = new TextField();
+        passwordTxtFld = new PasswordField();
         gridPane = new GridPane();
         columnConstraints2 = new ColumnConstraints();
         columnConstraints3 = new ColumnConstraints();
@@ -169,7 +172,7 @@ public class SignUpBase extends GridPane {
         GridPane.setColumnIndex(passwordTxtFld, 1);
         GridPane.setRowIndex(passwordTxtFld, 4);
         GridPane.setMargin(passwordTxtFld, new Insets(0.0, 5.0, 0.0, 5.0));
-
+        passwordTxtFld.setPromptText("Password");
         GridPane.setColumnIndex(gridPane, 1);
         GridPane.setRowIndex(gridPane, 2);
         gridPane.setPrefHeight(47.0);
@@ -237,6 +240,10 @@ public class SignUpBase extends GridPane {
         label4.setText("Already a member?");
         GridPane.setMargin(label4, new Insets(0.0, 0.0, 20.0, 5.0));
 
+        uNameTxtFld.setPromptText("Enter User Name");
+        emailTxtFld.setPromptText("Enter Email");
+        nameTxtFld.setPromptText("Enter Full Name");
+
         GridPane.setColumnIndex(signInHyperLink, 1);
         signInHyperLink.setText("Sign in");
         GridPane.setMargin(signInHyperLink, new Insets(0.0, 0.0, 20.0, 0.0));
@@ -283,37 +290,74 @@ public class SignUpBase extends GridPane {
             @Override
             public void handle(ActionEvent event) {
                 Gson gson = new GsonBuilder().create();
-                DTOPlayer player = new DTOPlayer(
-                        nameTxtFld.getText(),
-                        uNameTxtFld.getText(),
-                        emailTxtFld.getText(),
-                        passwordTxtFld.getText(),
-                        0,
-                        "offline");
+                
+            if ((!uNameTxtFld.getText().equals("")) && 
+                    (!passwordTxtFld.getText().equals("")) &&
+                    (!nameTxtFld.getText().equals("")) &&
+                    (!emailTxtFld.getText().equals(""))) {
 
-                JsonObject jsonPayload = new JsonObject();
 
-                // Add specific fields to the payload
-                jsonPayload.addProperty("action", "signUp");
-                jsonPayload.add("data", gson.toJsonTree(player));
+                    DTOPlayer player = new DTOPlayer(
 
-                // Convert JsonObject to JSON string
-                String jsonString = gson.toJson(jsonPayload);
+                            uNameTxtFld.getText(),
+                            nameTxtFld.getText(),
+                            passwordTxtFld.getText(),
+                            emailTxtFld.getText(),
+                            0,
+                            "offline");
+                    JsonObject setJson = new JsonObject();
 
-                try {
-                    // Assuming 'network' is an instance of NetworkConnection
-                    network = new NetworkConnection("127.0.0.1");
-                    network.sendMessage(jsonString);
+                    // Add specific fields to the payload
 
-                } catch (IOException ex) {
-                    Logger.getLogger(SignUpBase.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                    setJson.addProperty("UserName", player.getUserName());
+                    setJson.addProperty("fullName", player.getFullName());
+                    setJson.addProperty("password", player.getPassword());
+                    setJson.addProperty("email", player.getEmail());
+                    setJson.addProperty("score", player.getScore());
+                    setJson.addProperty("status", player.getStatus());
 
-                System.out.println("Data sent to server");
-        
+                    // Convert JsonObject to JSON string
+                    String jsonString = gson.toJson(setJson);
+
+                    try {
+                        // Assuming 'network' is an instance of NetworkConnection
+                        network = new NetworkConnection("127.0.0.1");
+                        network.sendMessage(jsonString);
+
+                    } catch (IOException ex) {
+                        Logger.getLogger(SignUpBase.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                    showAlert("Account has be created :)");
+                    System.out.println("Data sent to server");
+                    clearFld();
+            }else{
+               showAlert("There are some data not found, please be sure to compelte your data");
             }
-        });
+        }
+            
+            
+            
+   });
         
         
+    }
+    
+    void showAlert(String message){
+        Alert informationAlert = new Alert(AlertType.INFORMATION);
+
+        informationAlert.setTitle("Information");
+
+        informationAlert.setContentText(message);
+
+        informationAlert.showAndWait();
+      
+    }
+    
+    void clearFld(){
+        uNameTxtFld.clear();
+        nameTxtFld.clear();
+        passwordTxtFld.clear();
+        emailTxtFld.clear();
     }
 }

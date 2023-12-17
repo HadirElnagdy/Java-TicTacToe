@@ -6,6 +6,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert;
 
 public class NetworkConnection {
 
@@ -42,7 +43,18 @@ public class NetworkConnection {
                 socket.close();
             }
         } catch (IOException ex) {
+             showAlert("client  Stoooop");
             Logger.getLogger(NetworkConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    void showAlert(String message){
+        Alert informationAlert = new Alert(Alert.AlertType.ERROR);
+
+        informationAlert.setTitle("");
+
+        informationAlert.setContentText(message);
+
+        informationAlert.showAndWait();
     }
 }

@@ -21,15 +21,16 @@ public class NetworkOperation {
         boolean found = false ;
 
         try {  
-             if (json.has("UserName") && json.has("fullName") && json.has("password")
+             if (json.has("fullName")&&json.has("UserName") &&json.has("password")
                     && json.has("email") && json.has("score") && json.has("status")) {
 
-                String username = json.get("UserName").getAsString();
                 String name = json.get("fullName").getAsString();
+                String username = json.get("UserName").getAsString();
                 String password = json.get("password").getAsString();
                 String email = json.get("email").getAsString();
                 int score = json.get("score").getAsInt();
                 String status = json.get("status").getAsString();
+                
                 DtoPlayer player = new DtoPlayer(username, name, email, password, score, status);
 
                 System.out.println("Done with signUp");
@@ -39,14 +40,16 @@ public class NetworkOperation {
                 found = dataAccessLayer.checkIfUserExist(player.getUserName());
 
                 if (found) {
-                       found = true;
+                    found = true;
                 } else {
                     dataAccessLayer.signUp(player);
-                   found = false;
+                    found = false;
                 }
 
             }else {
                 System.out.println("Incomplete or malformed JSON payload for signup");
+                System.out.println("Received JSON payload: " + json.toString());
+
             }
             
             
