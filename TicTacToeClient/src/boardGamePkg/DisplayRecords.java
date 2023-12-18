@@ -120,7 +120,6 @@ public class DisplayRecords extends Pane {
         recordBtn.setLayoutY(361.0);
         recordBtn.setMnemonicParsing(false);
         recordBtn.setText("Record");
-
 //        viewBtn.setLayoutX(14.0);
 //        viewBtn.setLayoutY(300.0);
 //        viewBtn.setMnemonicParsing(false);
@@ -193,7 +192,23 @@ public class DisplayRecords extends Pane {
     }
 
     private void displayMovesOnBoard() {
-
+        String str1=rMoves.get(0);
+        int mod =str1.indexOf('%');
+        String s1 = str1.substring(0, mod);
+        player1Name.setText(s1);
+                
+        str1=str1.substring(str1.indexOf("%")+1);
+        String s2 = str1.substring(0, str1.indexOf("%"));
+        player2Name.setText(s2);
+        
+        str1=str1.substring(str1.indexOf("%")+1);
+        String s3=str1.substring(0, str1.indexOf("%"));
+        scoreP1.setText(s3);
+        
+        str1=str1.substring(str1.indexOf("%")+1);
+        String s4=str1.substring(0, str1.indexOf("%"));
+        scoreP2.setText(s4);
+        
         String str = rMoves.get(0) + "#";
         while (!str.isEmpty()) {
             int hashtagIndex = str.indexOf('#');

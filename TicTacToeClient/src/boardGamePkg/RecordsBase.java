@@ -83,53 +83,7 @@ public class RecordsBase extends AnchorPane {
     private void recordMove(Button cell) {
         int row = GridPane.getRowIndex(cell);
         int col = GridPane.getColumnIndex(cell);
-        //String move = String.format("%s,%s,%s", currentSymbol, row, col);
-       // rMoves.add(move);
+      
     }
-//    private void readMovesFromFile() {
-//    try (BufferedReader reader = new BufferedReader(new FileReader("Record History.txt"))) {
-//        String line;
-//        while ((line = reader.readLine()) != null) {
-//            String[] movesArray = line.split("&");
-//            for (String move : movesArray)
-//            {
-//                System.out.println(move);
-//                if (move.equals("#")) {
-//                    // Do something when reaching the end of a game
-//                    
-//                } else {
-//                    rMoves.add(move);
-//                }
-//            }
-//        }
-//    } catch (IOException e) {
-//        e.printStackTrace();
-//    }
-//    }
-//}
-
-     
-     
-     /*
-     private void loadMovesFromFile() {
-        try (BufferedReader reader = new BufferedReader(new FileReader("Record History.txt"))) {
-            String line;
-            StringBuilder record = new StringBuilder();
-             rMoves.clear();
-            while ((line = reader.readLine()) != null) {
-                if (line.equals("&")) {
-                   
-                    rMoves.add(record.toString());
-                    record.setLength(0); // Clear StringBuilder for the next record
-                } else {
-                    record.append(line).append("\n");
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-     
-     */
 }
 
