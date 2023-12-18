@@ -12,13 +12,13 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Alert;
-import network.operation.NetworkOperation;
+import access.network.AccessNetwork;
 
 public class ServerHandler extends Thread {
 
     private DataInputStream dataInputStream;
     private PrintStream printStream;
-    private NetworkOperation networkOperation;
+    private AccessNetwork networkOperation;
 
     private String message; 
     private boolean isClientConnected = true;
@@ -26,7 +26,7 @@ public class ServerHandler extends Thread {
         try {
             printStream = new PrintStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
-            networkOperation = new NetworkOperation();
+            networkOperation = new AccessNetwork();
             
             String mess = dataInputStream.readLine();
             System.out.println(mess);

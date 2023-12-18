@@ -308,7 +308,6 @@ public class SignUpBase extends GridPane {
                     JsonObject setJson = new JsonObject();
 
                     // Add specific fields to the payload
-
                     setJson.addProperty("UserName", player.getUserName());
                     setJson.addProperty("fullName", player.getFullName());
                     setJson.addProperty("password", player.getPassword());
@@ -320,7 +319,7 @@ public class SignUpBase extends GridPane {
                     String jsonString = gson.toJson(setJson);
 
                     try {
-                        // Assuming 'network' is an instance of NetworkConnection
+                        // Assuming network is an instance of NetworkConnection
                         network = new NetworkConnection("127.0.0.1");
                         network.sendMessage(jsonString);
 

@@ -1,6 +1,6 @@
 
 
-package network.operation;
+package access.network;
 
 import com.google.gson.JsonObject;
 import dataAccessLayer.DataAccessLayer;
@@ -10,10 +10,10 @@ import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class NetworkOperation {
+public class AccessNetwork {
     DataAccessLayer dataAccessLayer;
 
-    public NetworkOperation() {
+    public AccessNetwork() {
         dataAccessLayer = new DataAccessLayer();
     }
 
@@ -54,7 +54,7 @@ public class NetworkOperation {
             
             
         } catch (SQLException ex) {
-            Logger.getLogger(NetworkOperation.class.getName()).log(Level.SEVERE, "Error during signUp", ex);
+            Logger.getLogger(AccessNetwork.class.getName()).log(Level.SEVERE, "Error during signUp", ex);
         } finally {
             dataAccessLayer.closeConnection();
         }

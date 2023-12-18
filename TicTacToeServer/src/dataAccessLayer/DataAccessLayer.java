@@ -58,21 +58,33 @@ public class DataAccessLayer {
         }
     }
     
-        public boolean checkIfUserExist(String userName) throws SQLException {
+        public boolean checkIfUserExist(String userName){
            String sql = "SELECT * FROM ROOT.player WHERE USERNAME = ?";
-
-           try (PreparedStatement pst = connection.prepareStatement(sql)) {
+           boolean found = false ;
+           try {
+               PreparedStatement pst = connection.prepareStatement(sql);
                pst.setString(1, userName);
-               try (ResultSet rs = pst.executeQuery()) {
+               try {
+                   ResultSet rs = pst.executeQuery();
                    if (rs.next()) {
                        System.out.println("User exists");
-                       return true;
+                       found = true;
                    } else {
                        System.out.println("User does not exist");
-                       return false;
+                       found = false;
                    }
                }
+               catch(SQLException ex){
+                System.out.println("Databasecheck error: " + ex.getMessage());
+                ex.printStackTrace();
+                closeConnection();
+               }
+           }catch(SQLException ex){
+               System.out.println("Databasecheck error: " + ex.getMessage());
+               ex.printStackTrace();
+               closeConnection();
            }
+           return found ;
        }
 
     
