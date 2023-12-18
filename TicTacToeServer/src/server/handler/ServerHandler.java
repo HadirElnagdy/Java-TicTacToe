@@ -31,6 +31,14 @@ public class ServerHandler extends Thread {
             String mess = dataInputStream.readLine();
             System.out.println(mess);
             handleClientMessage(mess);
+            
+            if(handleServerMessage(mess)){
+                printStream.println("user is exist");
+            }else{
+                 printStream.println("new user");
+            }
+            
+            
         } catch (IOException ex) {
              showAlert("Server Handle Stoooop!!!!!!!!!");
             Logger.getLogger(ServerHandler.class.getName()).log(Level.SEVERE, null, ex);
@@ -86,14 +94,23 @@ public class ServerHandler extends Thread {
         }
     }
 
+    private boolean handleServerMessage(String mess) {
+        JsonParser parser = new JsonParser();
+        JsonObject json = parser.parse(new StringReader(mess)).getAsJsonObject();
+
+        // Pass JsonObject to NetworkOperation
+         System.out.println("Message processed: " + json);
+         return networkOperation.checkSignUp(json);
+    }
     private void handleClientMessage(String message) {
         JsonParser parser = new JsonParser();
         JsonObject json = parser.parse(new StringReader(message)).getAsJsonObject();
 
         // Pass JsonObject to NetworkOperation
-        networkOperation.signUp(json);
-        System.out.println("Message processed: " + json);
+         System.out.println("Message processed: " + json);
+         networkOperation.checkSignUp(json);
     }
+    
     
     void showAlert(String message){
         Alert informationAlert = new Alert(Alert.AlertType.ERROR);

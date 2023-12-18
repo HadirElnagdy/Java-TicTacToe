@@ -30,6 +30,16 @@ public class NetworkConnection {
         printStream.println(message);
         System.out.println(message);
     }
+    public String retriveMessage() {
+        String message = null;
+        try {
+            message = dataInputStream.readLine();
+            System.out.println(message);
+        } catch (IOException ex) {
+            Logger.getLogger(NetworkConnection.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return message;    
+    }
 
     public void closeConnection() {
         try {

@@ -22,7 +22,7 @@ import org.apache.derby.jdbc.ClientDriver;
 public class DataAccessLayer {
    
     private Connection connection;
-      
+    boolean found ;
     public DataAccessLayer() {
         try {
             DriverManager.registerDriver(new ClientDriver());
@@ -36,53 +36,62 @@ public class DataAccessLayer {
     
     public void signUp(DtoPlayer player) throws SQLException {
         try{
-            String sqlStatment = "INSERT INTO ROOT.PLAYER (USERNAME, FULL_NAME, PASSWORD, EMAIL, SCORE, STATUS) VALUES (?, ?, ?, ?, ?, ?)";
-            PreparedStatement pst = connection.prepareStatement(sqlStatment);
-            pst.setString(1, player.getUserName());
-            pst.setString(2, player.getFullName());
-            pst.setString(3, player.getPassword());
-            pst.setString(4, player.getEmail());
-            pst.setInt(5, player.getScore());
-            pst.setString(6, player.getStatus());
+            if (connection != null && !connection.isClosed()) {
+                    String sqlStatment = "INSERT INTO ROOT.PLAYER (USERNAME, FULL_NAME, PASSWORD, EMAIL, SCORE, STATUS) VALUES (?, ?, ?, ?, ?, ?)";
+                    PreparedStatement pst = connection.prepareStatement(sqlStatment);
+                    pst.setString(1, player.getUserName());
+                    pst.setString(2, player.getFullName());
+                    pst.setString(3, player.getPassword());
+                    pst.setString(4, player.getEmail());
+                    pst.setInt(5, player.getScore());
+                    pst.setString(6, player.getStatus());
 
-            int rs = pst.executeUpdate();
-            if (rs == 0) {
-                System.out.println("something wrong !!!");
-            } else {
-                System.out.println("Insert successed");
+                    int rs = pst.executeUpdate();
+                    if (rs == 0) {
+                        System.out.println("something wrong !!!");
+                    } else {
+                        System.out.println("Insert successed");
+                    }
+                 }
+            else{
+                System.out.println("No valid database connection.");
+
             }
         }catch(SQLException ex){
                 System.out.println("Database error: " + ex.getMessage());
                 ex.printStackTrace();
-                closeConnection();
         }
     }
     
         public boolean checkIfUserExist(String userName){
-           String sql = "SELECT * FROM ROOT.player WHERE USERNAME = ?";
-           boolean found = false ;
+           
+          
            try {
-               PreparedStatement pst = connection.prepareStatement(sql);
-               pst.setString(1, userName);
-               try {
-                   ResultSet rs = pst.executeQuery();
-                   if (rs.next()) {
-                       System.out.println("User exists");
-                       found = true;
-                   } else {
-                       System.out.println("User does not exist");
-                       found = false;
-                   }
+                if (connection != null && !connection.isClosed()) {
+                String sql = "SELECT * FROM ROOT.player WHERE USERNAME = ?";
+                PreparedStatement pst = connection.prepareStatement(sql);
+                pst.setString(1, userName);
+                try {
+                    ResultSet rs = pst.executeQuery();
+                    if (rs.next()) {
+                        System.out.println("User exists");
+                        found = true;
+                    } else {
+                        System.out.println("User does not exist");
+                        //found = false;
+                    }
+                }
+                catch(SQLException ex){
+                 System.out.println("Databasecheck error: " + ex.getMessage());
+                 ex.printStackTrace();
+                }
                }
-               catch(SQLException ex){
-                System.out.println("Databasecheck error: " + ex.getMessage());
-                ex.printStackTrace();
-                closeConnection();
-               }
+                else{
+                System.out.println("No valid database connection.");
+            }
            }catch(SQLException ex){
                System.out.println("Databasecheck error: " + ex.getMessage());
                ex.printStackTrace();
-               closeConnection();
            }
            return found ;
        }

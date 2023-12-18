@@ -291,6 +291,9 @@ public class SignUpBase extends GridPane {
             public void handle(ActionEvent event) {
                 Gson gson = new GsonBuilder().create();
                 
+                
+                
+                
             if ((!uNameTxtFld.getText().equals("")) && 
                     (!passwordTxtFld.getText().equals("")) &&
                     (!nameTxtFld.getText().equals("")) &&
@@ -327,9 +330,19 @@ public class SignUpBase extends GridPane {
                         Logger.getLogger(SignUpBase.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
-                    showAlert("Account has be created :)");
-                    System.out.println("Data sent to server");
-                    clearFld();
+                  String message = network.retriveMessage();
+
+                    if ("user is exist".equals(message)) {
+                        showAlert("Account is Exist :)");
+                        System.out.println("Data sent to server");
+                        clearFld();
+                    } else  {
+                        showAlert("Account has be created :)");
+                        System.out.println("Data sent to server");
+                        clearFld();
+                    }
+
+                    
             }else{
                showAlert("There are some data not found, please be sure to compelte your data");
             }
