@@ -1,30 +1,35 @@
 package home;
 
-import boardGamePkg.GameBase;
-import boardGamePkg.LocalSingleEasy;
+import boardGamePkg.RecordsBase;
 import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import network.connection.NetworkConnection;
 import service.Navigator;
+
 
 public class OnlineOfflineScreen extends HomeBase {
 
+    protected final Button recordBtn;
     protected final Button offlineBtn;
     protected final Button onlineBtn;
 
     public OnlineOfflineScreen() {
         super(new Button(), new Button(), "Online", "Offline" ,false ,null);
 
+
         onlineBtn = (Button) this.rightBtn;
         offlineBtn = (Button) this.leftBtn;
 
+        recordBtn =new Button();
+
+    
         onlineBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -61,8 +66,18 @@ public class OnlineOfflineScreen extends HomeBase {
         offlineBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Navigator.navigateTo(new AiBase(), event);
+                Navigator.navigateTo(new AiBase(),event);
             }
         });
+        recordBtn.setMnemonicParsing(false);
+        recordBtn.setText("Rec");
+        GridPane.setMargin(recordBtn, new Insets(12.0, 0.0, 0.0, 13.5));
+        recordBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                    Navigator.navigateTo(new RecordsBase(),event);
+          }
+        });
+
     }
 }
