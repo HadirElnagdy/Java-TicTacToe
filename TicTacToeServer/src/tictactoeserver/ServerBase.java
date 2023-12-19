@@ -7,9 +7,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
-import javafx.geometry.Point3D;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
@@ -20,7 +18,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 import server.handler.ServerHandler;
 
 public class ServerBase extends BorderPane {
@@ -254,8 +251,9 @@ public class ServerBase extends BorderPane {
             new PieChart.Data("Busy", busyNumValue)
         );
             
+      
         setCustomColors();
-
+        traverseSceneGraph(chart, Color.WHITE);
         chart.setLegendVisible(false);
         BorderPane.setAlignment(chart, Pos.CENTER);
         chart.setFocusTraversable(true);
@@ -270,13 +268,15 @@ public class ServerBase extends BorderPane {
         chart.setOpaqueInsets(new Insets(0.0));
         setCenter(chart);
 
-
-        
+     
+        chart.setVisible(false);
         serverBtn.setOnAction(e->{
             
             if(isClicked){
                 isServerRunning = true ;
                 serverBtn.setText("OFF");
+                chart.setVisible(true);
+                //svgPath.setVisible(false);
                         try {
                            serverSocket = new ServerSocket(5005);
                            System.out.println("open");
@@ -301,6 +301,8 @@ public class ServerBase extends BorderPane {
             }else{
                 serverBtn.setText("ON");
                 isServerRunning = false ;
+                chart.setVisible(false);
+                //svgPath.setVisible(true);
                 if (serverSocket != null && !serverSocket.isClosed()) {
                     try {
                         System.out.println("stoooooooooooop");
@@ -317,7 +319,7 @@ public class ServerBase extends BorderPane {
             }
             isClicked =! isClicked ;
         });
-        
+       
     }
     
     void showAlert(String message){
@@ -349,5 +351,11 @@ public class ServerBase extends BorderPane {
             System.out.println("Style applied for " + dataSlice.getName() + ": " + style);
         }
     }
-    
+    private void traverseSceneGraph(PieChart chart, Color color) {
+        for (javafx.scene.Node node : chart.lookupAll(".text.chart-pie-label")) {
+            if (node instanceof javafx.scene.text.Text) {
+                ((javafx.scene.text.Text) node).setFill(color);
+            }
+        }
+    }
 }
