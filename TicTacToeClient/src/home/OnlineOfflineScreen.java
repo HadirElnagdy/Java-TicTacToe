@@ -79,5 +79,6 @@ public class OnlineOfflineScreen extends HomeBase {
           }
         });
 
+        getChildren().add(recordBtn);
     }
 }

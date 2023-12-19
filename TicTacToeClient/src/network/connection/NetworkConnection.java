@@ -30,6 +30,7 @@ public class NetworkConnection {
         printStream.println(message);
         System.out.println(message);
     }
+    
     public String retriveMessage() {
         String message = null;
         try {

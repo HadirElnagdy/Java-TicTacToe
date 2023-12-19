@@ -18,7 +18,7 @@ public class ServerHandler extends Thread {
 
     private DataInputStream dataInputStream;
     private PrintStream printStream;
-    private AccessNetwork networkOperation;
+    private AccessNetwork accessNetwork;
 
     private String message; 
     private boolean isClientConnected = true;
@@ -26,7 +26,7 @@ public class ServerHandler extends Thread {
         try {
             printStream = new PrintStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
-            networkOperation = new AccessNetwork();
+            accessNetwork = new AccessNetwork();
             
             String mess = dataInputStream.readLine();
             System.out.println(mess);
@@ -34,13 +34,15 @@ public class ServerHandler extends Thread {
             
             if(handleServerMessage(mess)){
                 printStream.println("user is exist");
+                
             }else{
                  printStream.println("new user");
+                 
             }
             
             
         } catch (IOException ex) {
-             showAlert("Server Handle Stoooop!!!!!!!!!");
+            showAlert("Server Handle Stoooop!!!!!!!!!");
             Logger.getLogger(ServerHandler.class.getName()).log(Level.SEVERE, null, ex);
             closeResources();
         }
@@ -100,7 +102,7 @@ public class ServerHandler extends Thread {
 
         // Pass JsonObject to NetworkOperation
          System.out.println("Message processed: " + json);
-         return networkOperation.checkSignUp(json);
+         return accessNetwork.checkSignUp(json);
     }
     private void handleClientMessage(String message) {
         JsonParser parser = new JsonParser();
@@ -108,7 +110,7 @@ public class ServerHandler extends Thread {
 
         // Pass JsonObject to NetworkOperation
          System.out.println("Message processed: " + json);
-         networkOperation.checkSignUp(json);
+         accessNetwork.checkSignUp(json);
     }
     
     

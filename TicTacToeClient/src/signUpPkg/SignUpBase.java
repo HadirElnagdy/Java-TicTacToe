@@ -290,10 +290,7 @@ public class SignUpBase extends GridPane {
             @Override
             public void handle(ActionEvent event) {
                 Gson gson = new GsonBuilder().create();
-                
-                
-                
-                
+
             if ((!uNameTxtFld.getText().equals("")) && 
                     (!passwordTxtFld.getText().equals("")) &&
                     (!nameTxtFld.getText().equals("")) &&

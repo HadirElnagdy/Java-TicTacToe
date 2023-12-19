@@ -2,6 +2,9 @@ package home;
 
 import home.HomeBase;
 import home.OnlineOfflineScreen;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import signInPkg.SignInBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -35,8 +38,7 @@ public class ChooseAuth extends HomeBase {
                 Navigator.navigateTo(new SignInBase(),event);
                 }
             });
-//            networkConnection = new NetworkConnection(ipAddress);
-//            networkConnection.start(); 
+        
             
 
     }
