@@ -78,7 +78,7 @@ public class DataAccessLayer {
                         found = true;
                     } else {
                         System.out.println("User does not exist");
-                        //found = false;
+                        found = false;
                     }
                 }
                 catch(SQLException ex){

@@ -14,7 +14,7 @@ import java.util.logging.Logger;
 import javafx.scene.control.Alert;
 import access.network.AccessNetwork;
 
-public class ServerHandler extends Thread {
+public class ServerHandler {
 
     private DataInputStream dataInputStream;
     private PrintStream printStream;
@@ -30,7 +30,7 @@ public class ServerHandler extends Thread {
             
             String mess = dataInputStream.readLine();
             System.out.println(mess);
-            handleClientMessage(mess);
+            handleServerMessage(mess);
             
             if(handleServerMessage(mess)){
                 printStream.println("user is exist");
@@ -48,36 +48,7 @@ public class ServerHandler extends Thread {
         }
     }    
 
-    @Override
-    public void run() {
-        try {
-             
-            while (isClientConnected && (message = dataInputStream.readLine()) != null) {
-                System.out.println("Client says: " + message);
-                
-                // Handle client message
-                handleClientMessage(message);
-               
-            }
-
-        } catch (IOException ex) {
-            System.out.println("Client disconnected");
-
-            try {
-                System.out.println("Client disconnected");
-                isClientConnected = false;
  
-                dataInputStream.close();
-                printStream.close();
-                Logger.getLogger(ServerHandler.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (IOException ex1) {
-                 showAlert("Server Handle Stop");
-                Logger.getLogger(ServerHandler.class.getName()).log(Level.SEVERE, null, ex1);
-            }
-        } finally {
-            closeResources();
-        }
-    }
 
     public void closeResources() {
         try {
@@ -104,14 +75,7 @@ public class ServerHandler extends Thread {
          System.out.println("Message processed: " + json);
          return accessNetwork.checkSignUp(json);
     }
-    private void handleClientMessage(String message) {
-        JsonParser parser = new JsonParser();
-        JsonObject json = parser.parse(new StringReader(message)).getAsJsonObject();
-
-        // Pass JsonObject to NetworkOperation
-         System.out.println("Message processed: " + json);
-         accessNetwork.checkSignUp(json);
-    }
+    
     
     
     void showAlert(String message){
