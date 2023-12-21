@@ -17,6 +17,11 @@ public class DTOPlayer {
     public static int score;
     public String status;
 
+    public DTOPlayer(String UserName, String password) {
+        this.UserName = UserName;
+        this.password = password;
+    }
+
    
     public DTOPlayer(String UserName,String fullName,  String password, String email, int score ,String status) {
         this.fullName = fullName;

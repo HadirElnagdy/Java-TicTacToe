@@ -1,5 +1,9 @@
 package signInPkg;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import dto.player.DTOPlayer;
 import home.ChooseAuth;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -11,6 +15,7 @@ import signUpPkg.SignUpBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -45,6 +50,7 @@ public class SignInBase extends GridPane {
     protected final TextField uNameTxtFld;
     protected final TextField passwordTxtFld;
     protected final Button backBtn;
+    NetworkConnection network;
      
     public SignInBase() {
 
@@ -216,7 +222,29 @@ public class SignInBase extends GridPane {
             @Override
             public void handle(ActionEvent event) {
               /// logic Sign In
-            }
+                Gson gson = new GsonBuilder().create();
+
+          //  if (isInputValid()) {
+                DTOPlayer player = new DTOPlayer(            
+                            uNameTxtFld.getText(),
+                            passwordTxtFld.getText()
+                            );
+                    JsonObject setJson = new JsonObject();
+
+                    // Add specific fields to the payload
+                    setJson.addProperty("key", "signin");
+                    setJson.addProperty("UserName", player.getUserName());
+                    setJson.addProperty("password", player.getPassword());
+                    String jsonString = gson.toJson(setJson);
+
+                    try {
+                        network = new NetworkConnection("127.0.0.1");
+                        network.sendMessage(jsonString);
+                        clearFld();
+                    } catch (IOException ex) {
+                        Logger.getLogger(SignUpBase.class.getName()).log(Level.SEVERE, null, ex);
+                    }                    
+            }    
         });
            
         
@@ -224,4 +252,53 @@ public class SignInBase extends GridPane {
         
 
     }
+    
+        /*   private boolean isInputValid() {
+            
+            // empty validation
+            if (uNameTxtFld.getText().isEmpty() ||
+                passwordTxtFld.getText().isEmpty()
+                ) {
+                return false;
+            }
+
+            // validate password length
+            if (passwordTxtFld.getText().length() < 8) {
+                showAlert("Password must be at least 8 characters long.");
+                return false;
+            }
+
+            // validate username
+            String userNameRegex = "^[a-zA-Z0-9_-]{3,16}$";
+            if (!uNameTxtFld.getText().matches(userNameRegex)) {
+                showAlert("Invalid username format. It should contain 3-16 characters and only letters, numbers, underscores, or hyphens.");
+                return false;
+            }
+
+            // validate email
+            String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$";
+            if (!emailTxtFld.getText().matches(emailRegex)) {
+                showAlert("Invalid email format.");
+                return false;
+            }
+
+            return true;
+        }*/
+    
+    void showAlert(String message){
+        Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
+
+        informationAlert.setTitle("Information");
+
+        informationAlert.setContentText(message);
+
+        informationAlert.showAndWait();
+      
+    }
+    
+    void clearFld(){
+        uNameTxtFld.clear();
+        passwordTxtFld.clear();
+    }
 }
+
