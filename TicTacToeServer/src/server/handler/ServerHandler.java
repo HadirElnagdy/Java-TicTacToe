@@ -16,6 +16,7 @@ import access.network.AccessNetwork;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
+import dataAccessLayer.DataAccessLayer;
 import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +34,13 @@ public class ServerHandler {
             printStream = new PrintStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
             accessNetwork = new AccessNetwork();
+
             System.out.println(dataInputStream.readLine());
+            // send all player online
+            DataAccessLayer dbLayer = new DataAccessLayer();
+            message = dbLayer.getOnlinePlayers();
+            sendMessage(message);
+            
             readMessages();
             
         } catch (IOException ex) {
@@ -61,6 +68,10 @@ public class ServerHandler {
                         JsonObject json = parser.parse(new StringReader(message)).getAsJsonObject();
                         JsonPrimitive keyPrimitive = json.getAsJsonPrimitive("key");
                         
+                        
+                            
+                        
+                                
                         if (keyPrimitive != null && keyPrimitive.getAsString().equals("signup")) {
                             
                             String operationValue = json.get("key").getAsString();
