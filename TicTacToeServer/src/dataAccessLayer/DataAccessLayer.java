@@ -5,12 +5,18 @@
  */
 package dataAccessLayer;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
 import dtoPlayer.DtoPlayer;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.derby.jdbc.ClientDriver;
@@ -62,7 +68,50 @@ public class DataAccessLayer {
                 ex.printStackTrace();
         }
     }
-    
+    public String getOnlinePlayers() {
+        System.out.println("getOnlinePlayers");
+            List<DtoPlayer> onlinePlayers = null;
+
+            try {
+                if (connection != null && !connection.isClosed()) {
+                    onlinePlayers = new ArrayList<>();
+                    String sqlSelect = "SELECT * FROM ROOT.PLAYER WHERE STATUS = 'online'";
+                    try (PreparedStatement selectOnline = connection.prepareStatement(sqlSelect);
+                         ResultSet rs = selectOnline.executeQuery()) {
+
+                        while (rs.next()) {
+                            String fullName = rs.getString("FULL_NAME");
+                            String password = rs.getString("PASSWORD");
+                            int score = rs.getInt("SCORE");
+                            String status = rs.getString("STATUS");
+                            String username = rs.getString("USERNAME");
+                            String email = rs.getString("EMAIL");
+
+                            System.out.println(status);
+                            DtoPlayer player = new DtoPlayer(username, fullName, password, email, score, status);
+                            onlinePlayers.add(player);
+                        }
+                    }
+                } else {
+                    System.out.println("No valid database connection.");
+                }
+            } catch (SQLException ex) {
+                System.out.println("Database online error: " + ex.getMessage());
+                ex.printStackTrace();
+            }
+            
+            Gson gson = new GsonBuilder().create();
+            JsonObject setJson =new JsonObject();
+            setJson.addProperty("key","onlinePlayers");
+            JsonArray playersArray = gson.toJsonTree(onlinePlayers).getAsJsonArray();
+            setJson.add("onlinePlayers", playersArray);
+
+            String jsonString = gson.toJson(setJson);
+            
+            System.out.println("Result: " + jsonString);
+            return jsonString;
+        }
+
         public boolean checkIfUserExist(String userName){
            
           
