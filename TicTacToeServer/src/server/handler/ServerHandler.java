@@ -33,8 +33,8 @@ public class ServerHandler {
             printStream = new PrintStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
             accessNetwork = new AccessNetwork();
-         
-             readMessages();
+            System.out.println(dataInputStream.readLine());
+            readMessages();
             
         } catch (IOException ex) {
             showAlert("Server Handle Stoooop!!!!!!!!!");
