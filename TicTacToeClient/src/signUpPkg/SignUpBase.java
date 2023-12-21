@@ -251,8 +251,7 @@ public class SignUpBase extends GridPane {
             @Override
             public void handle(ActionEvent event) {
                 Navigator.navigateTo(new SignInBase(),event);
-          
-                    }
+            }
         });
 
         getColumnConstraints().add(columnConstraints);
@@ -291,14 +290,8 @@ public class SignUpBase extends GridPane {
             public void handle(ActionEvent event) {
                 Gson gson = new GsonBuilder().create();
 
-            if ((!uNameTxtFld.getText().equals("")) && 
-                    (!passwordTxtFld.getText().equals("")) &&
-                    (!nameTxtFld.getText().equals("")) &&
-                    (!emailTxtFld.getText().equals(""))) {
-
-
-                    DTOPlayer player = new DTOPlayer(
-
+            if (isInputValid()) {
+                DTOPlayer player = new DTOPlayer(            
                             uNameTxtFld.getText(),
                             nameTxtFld.getText(),
                             passwordTxtFld.getText(),
@@ -308,6 +301,7 @@ public class SignUpBase extends GridPane {
                     JsonObject setJson = new JsonObject();
 
                     // Add specific fields to the payload
+                    setJson.addProperty("key", "signup");
                     setJson.addProperty("UserName", player.getUserName());
                     setJson.addProperty("fullName", player.getFullName());
                     setJson.addProperty("password", player.getPassword());
@@ -315,42 +309,54 @@ public class SignUpBase extends GridPane {
                     setJson.addProperty("score", player.getScore());
                     setJson.addProperty("status", player.getStatus());
 
-                    // Convert JsonObject to JSON string
                     String jsonString = gson.toJson(setJson);
 
                     try {
-                        // Assuming network is an instance of NetworkConnection
                         network = new NetworkConnection("127.0.0.1");
                         network.sendMessage(jsonString);
-
+                        clearFld();
                     } catch (IOException ex) {
                         Logger.getLogger(SignUpBase.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                    
-                  String message = network.retriveMessage();
-
-                    if ("user is exist".equals(message)) {
-                        showAlert("Account is Exist :)");
-                        System.out.println("Data sent to server");
-                        clearFld();
-                    } else  {
-                        showAlert("Account has be created :)");
-                        System.out.println("Data sent to server");
-                        clearFld();
-                    }
-
-                    
-            }else{
-               showAlert("There are some data not found, please be sure to compelte your data");
+                    }                    
             }
         }
-            
-            
-            
    });
         
         
     }
+
+        private boolean isInputValid() {
+            
+            // empty validation
+            if (uNameTxtFld.getText().isEmpty() ||
+                nameTxtFld.getText().isEmpty() ||
+                passwordTxtFld.getText().isEmpty() ||
+                emailTxtFld.getText().isEmpty()) {
+                return false;
+            }
+
+            // validate password length
+            if (passwordTxtFld.getText().length() < 8) {
+                showAlert("Password must be at least 8 characters long.");
+                return false;
+            }
+
+            // validate username
+            String userNameRegex = "^[a-zA-Z0-9_-]{3,16}$";
+            if (!uNameTxtFld.getText().matches(userNameRegex)) {
+                showAlert("Invalid username format. It should contain 3-16 characters and only letters, numbers, underscores, or hyphens.");
+                return false;
+            }
+
+            // validate email
+            String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$";
+            if (!emailTxtFld.getText().matches(emailRegex)) {
+                showAlert("Invalid email format.");
+                return false;
+            }
+
+            return true;
+        }
     
     void showAlert(String message){
         Alert informationAlert = new Alert(AlertType.INFORMATION);

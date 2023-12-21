@@ -3,6 +3,7 @@ package tictactoeserver;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Insets;
@@ -280,38 +281,44 @@ public class ServerBase extends BorderPane {
                         try {
                            serverSocket = new ServerSocket(5005);
                            System.out.println("open");
-                           new Thread(()->{
+                            new Thread(()->{
                                try {
                                     while (isServerRunning) {
                                        socket = serverSocket.accept();   
                                        server = new ServerHandler(socket);
                                        System.out.println(socket.getInetAddress());
                                    }
-                               } catch (IOException ex) {
-
+                               }catch(SocketException ex){
+                                   System.out.println("Server Stoooop");
+                                }  
+                               catch (IOException ex) {
+                                   isServerRunning = false;
                                    System.out.println("Stop");
                                    //showAlert("server has stoped");
                                    Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
                                }
+                              
                            }).start();
-                       } catch (IOException ex) {
-                           showAlert("Server Stoooop");
+                       }catch(SocketException ex){
+                            showAlert("Server Stoooop");
+                       } 
+                        catch (IOException ex) {
                            ex.printStackTrace();
                        }
             }else{
                 serverBtn.setText("ON");
-                isServerRunning = false ;
+                 
                 chart.setVisible(false);
                 //svgPath.setVisible(true);
                 if (serverSocket != null && !serverSocket.isClosed()) {
                     try {
                         System.out.println("stoooooooooooop");
-
+                        isServerRunning = false;
                         serverSocket.close();
 
                     } catch (IOException ex) {
                         showAlert("Server Stop");
-
+                        
                         System.out.println("stoooooooooooop");
                         Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
                     }
