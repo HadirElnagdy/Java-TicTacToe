@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 import javafx.scene.control.Alert;
 import access.network.AccessNetwork;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import dataAccessLayer.DataAccessLayer;
@@ -35,9 +36,6 @@ public class ServerHandler {
             dataInputStream = new DataInputStream(socket.getInputStream());
             accessNetwork = new AccessNetwork();
             // send all player online
-            DataAccessLayer dbLayer = new DataAccessLayer();
-            message = dbLayer.getOnlinePlayers();
-            sendMessage(message);
             
             readMessages();
             
@@ -85,8 +83,17 @@ public class ServerHandler {
 
                             message = new Gson().toJson(map);
                             sendMessage(message);
-                         }
-                         else{
+                         }else if (keyPrimitive != null && keyPrimitive.getAsString().equals("onlinePlayers")) {
+                            System.out.println("get onlineplayers");
+                            Gson gson = new GsonBuilder().create();
+                            JsonObject setJson = new JsonObject();
+                            setJson.addProperty("key", "onlinePlayers");
+                            DataAccessLayer dbLayer = new DataAccessLayer();
+                            setJson.addProperty("playersOnline", dbLayer.getOnlinePlayers());
+                            message = gson.toJson(setJson);
+
+                            sendMessage(message);
+                         }else{
                              System.out.println("Wrong json");
                          }
                     }

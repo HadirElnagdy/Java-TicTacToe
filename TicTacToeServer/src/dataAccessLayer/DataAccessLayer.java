@@ -108,7 +108,7 @@ public class DataAccessLayer {
 
             String jsonString = gson.toJson(setJson);
             
-            System.out.println("Result: " + jsonString);
+            System.out.println("Result: " + setJson);
             return jsonString;
         }
 

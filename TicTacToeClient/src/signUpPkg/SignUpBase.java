@@ -1,5 +1,6 @@
 package signUpPkg;
 
+import chooseopponent.ChooseOpponentBase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -311,13 +312,10 @@ public class SignUpBase extends GridPane {
 
                     String jsonString = gson.toJson(setJson);
 
-                    try {
-                        network = new NetworkConnection("127.0.0.1");
-                        network.sendMessage(jsonString);
-                        clearFld();
-                    } catch (IOException ex) {
-                        Logger.getLogger(SignUpBase.class.getName()).log(Level.SEVERE, null, ex);
-                    }                    
+                network = NetworkConnection.getInstance();
+                network.sendMessage(jsonString);
+                clearFld();  
+                Navigator.navigateTo(new ChooseOpponentBase());
             }
         }
    });

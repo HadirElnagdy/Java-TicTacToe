@@ -1,5 +1,6 @@
 package signInPkg;
 
+import chooseopponent.ChooseOpponentBase;
 import home.ChooseAuth;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -216,6 +217,7 @@ public class SignInBase extends GridPane {
             @Override
             public void handle(ActionEvent event) {
               /// logic Sign In
+              Navigator.navigateTo(new ChooseOpponentBase(),event);
             }
         });
            
