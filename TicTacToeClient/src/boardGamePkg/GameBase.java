@@ -5,8 +5,10 @@
  */
 package boardGamePkg;
 
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import home.Alerts;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -105,18 +107,9 @@ public abstract class GameBase extends Pane {
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmation");
-                alert.setHeaderText(null);
-                alert.setContentText("Are you sure you want to quit?");
-                alert.getButtonTypes().setAll(
-                        javafx.scene.control.ButtonType.YES,
-                        javafx.scene.control.ButtonType.NO);
-                java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
-                if (result.isPresent() && result.get() == javafx.scene.control.ButtonType.YES){ 
+          if(Alerts.showConfirmationAlert("Do you want to Quit?")) 
                     GameBase.resetAll();
                     Navigator.navigateTo(backDestination,event); 
-                }
             }
         });
 
