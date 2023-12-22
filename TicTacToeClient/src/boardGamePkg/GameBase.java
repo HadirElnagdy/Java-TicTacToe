@@ -94,7 +94,9 @@ public abstract class GameBase extends Pane {
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                ShowAlerts.showAlert(backDestination, event);
+          if(ShowAlerts.showConfirmationAlert("Do you want to Quit")) 
+                               GameBase.resetAll();
+                    Navigator.navigateTo(backDestination,event); 
             }
         });
 

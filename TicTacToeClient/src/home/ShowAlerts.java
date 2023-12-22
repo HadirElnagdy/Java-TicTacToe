@@ -15,6 +15,7 @@ import javafx.event.Event;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -26,7 +27,42 @@ import service.Navigator;
  */
 public class ShowAlerts {
    
-    public static Alert showPlayersAlert(Event event,String... s){ 
+    public static String[] showInputAlert(String title, String header, String... inputTypes) {
+        Dialog<String[]> dialog = new Dialog<>();
+        dialog.setTitle(title);
+        dialog.setHeaderText(header);
+
+        // Set the button types
+        dialog.getDialogPane().getButtonTypes().addAll(ButtonType.OK, ButtonType.CANCEL);
+
+        // Create and add text fields based on inputTypes
+        GridPane gridPane = new GridPane();
+        int row = 0;
+        for (String inputType : inputTypes) {
+            TextField textField = new TextField();
+            gridPane.add(new Label(inputType), 0, row);
+            gridPane.add(textField, 1, row);
+            row++;
+        }
+
+        dialog.getDialogPane().setContent(gridPane);
+
+        // Convert the result to an array of strings when the OK button is clicked
+        dialog.setResultConverter(buttonType -> {
+            if (buttonType == ButtonType.OK) {
+                String[] results = new String[inputTypes.length];
+                for (int i = 0; i < inputTypes.length; i++) {
+                    results[i] = ((TextField) gridPane.getChildren().get(i * 2 + 1)).getText();
+                }
+                return results;
+            }
+            return null;
+        });
+
+        Optional<String[]> result = dialog.showAndWait();
+        return result.orElse(null);
+    }
+   /* public static Alert showPlayersAlert(Event event,String... s){ 
                 GridPane gridPane = new GridPane();
                 gridPane.setHgap(10);
                 gridPane.setVgap(10);
@@ -79,7 +115,14 @@ public class ShowAlerts {
                     Navigator.navigateTo(backDestination,event); 
                 }
                 return alert;
-   }
+   }*/
+    public static boolean showConfirmationAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setContentText(message);
+
+        Optional<ButtonType> result = alert.showAndWait();
+        return result.isPresent() && result.get() == ButtonType.OK;
+    }
    
    public static void showErrorAlert(String message) {
     Alert alert = new Alert(AlertType.ERROR);
