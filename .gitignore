@@ -1,2 +1,11 @@
+<<<<<<< OURS
 /TicTacToeClient/dist/
 /TicTacToeClient/build/
+/TicTacToeServer/nbproject/private/
+/TicTacToeClient/nbproject/private/
+=======
+/TicTacToeClient/dist/
+/TicTacToeClient/build/
+/TicTacToeServer/build/
+/TicTacToeServer/dist/
+>>>>>>> THEIRS

@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package dtoPlayer;
+package dto.player;
 
 /**
  *
- * @author Hp
+ * @author Michael
  */
-public class DtoPlayer {
+public class DTOPlayer {
     private String fullName;
     private String UserName;
     private String password;
@@ -17,16 +17,21 @@ public class DtoPlayer {
     public static int score;
     public String status;
 
-    public DtoPlayer() {
+    public DTOPlayer(String UserName, String password) {
+        this.UserName = UserName;
+        this.password = password;
     }
 
-    public DtoPlayer(String UserName,String fullName,  String password, String email, int score ,String status) {
+   
+    public DTOPlayer(String UserName,String fullName,  String password, String email, int score ,String status) {
         this.fullName = fullName;
         this.UserName = UserName;
         this.password = password;
         this.email = email;
-        this.status = status;
         this.score = score;
+        this.status = status;
+        
+
     }
 
     public void setFullName(String fullName) {
@@ -48,9 +53,6 @@ public class DtoPlayer {
     public void setStatus(String status) {
         this.status = status;
     }
-    public void setScore(int score) {
-        this.score = score;
-    }
 
     public String getFullName() {
         return fullName;
@@ -71,10 +73,12 @@ public class DtoPlayer {
     public String getStatus() {
         return status;
     }
+     public void setScore(int score) {
+        this.score = score;
+    }
     public int getScore() {
         return score;
     }
-     
     
     
 }

@@ -1,17 +1,29 @@
 package signUpPkg;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import dto.player.DTOPlayer;
+import home.ChooseAuth;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import signInPkg.SignInBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
+import network.connection.NetworkConnection;
 import service.Navigator;
 
 public class SignUpBase extends GridPane {
@@ -28,7 +40,7 @@ public class SignUpBase extends GridPane {
     protected final Label label;
     protected final Label label0;
     protected final TextField emailTxtFld;
-    protected final TextField passwordTxtFld;
+    protected final PasswordField passwordTxtFld;
     protected final GridPane gridPane;
     protected final ColumnConstraints columnConstraints2;
     protected final ColumnConstraints columnConstraints3;
@@ -45,6 +57,8 @@ public class SignUpBase extends GridPane {
     protected final RowConstraints rowConstraints6;
     protected final Label label4;
     protected final Hyperlink signInHyperLink;
+    protected final Button backBtn;
+    NetworkConnection network;
 
     public SignUpBase() {
 
@@ -60,7 +74,7 @@ public class SignUpBase extends GridPane {
         label = new Label();
         label0 = new Label();
         emailTxtFld = new TextField();
-        passwordTxtFld = new TextField();
+        passwordTxtFld = new PasswordField();
         gridPane = new GridPane();
         columnConstraints2 = new ColumnConstraints();
         columnConstraints3 = new ColumnConstraints();
@@ -85,6 +99,15 @@ public class SignUpBase extends GridPane {
         setPrefHeight(401.0);
         setPrefWidth(597.0);
 
+         backBtn = new Button("Back");
+
+        GridPane.setMargin(backBtn, new Insets(8.0, 0.0, 0.0, 10.5));
+        backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+                Navigator.navigateTo(new ChooseAuth(),event);
+            }
+        });
         columnConstraints.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints.setMaxWidth(294.0);
         columnConstraints.setMinWidth(10.0);
@@ -149,7 +172,7 @@ public class SignUpBase extends GridPane {
         GridPane.setColumnIndex(passwordTxtFld, 1);
         GridPane.setRowIndex(passwordTxtFld, 4);
         GridPane.setMargin(passwordTxtFld, new Insets(0.0, 5.0, 0.0, 5.0));
-
+        passwordTxtFld.setPromptText("Password");
         GridPane.setColumnIndex(gridPane, 1);
         GridPane.setRowIndex(gridPane, 2);
         gridPane.setPrefHeight(47.0);
@@ -217,6 +240,10 @@ public class SignUpBase extends GridPane {
         label4.setText("Already a member?");
         GridPane.setMargin(label4, new Insets(0.0, 0.0, 20.0, 5.0));
 
+        uNameTxtFld.setPromptText("Enter User Name");
+        emailTxtFld.setPromptText("Enter Email");
+        nameTxtFld.setPromptText("Enter Full Name");
+
         GridPane.setColumnIndex(signInHyperLink, 1);
         signInHyperLink.setText("Sign in");
         GridPane.setMargin(signInHyperLink, new Insets(0.0, 0.0, 20.0, 0.0));
@@ -224,8 +251,7 @@ public class SignUpBase extends GridPane {
             @Override
             public void handle(ActionEvent event) {
                 Navigator.navigateTo(new SignInBase(),event);
-          
-                    }
+            }
         });
 
         getColumnConstraints().add(columnConstraints);
@@ -257,6 +283,96 @@ public class SignUpBase extends GridPane {
         gridPane0.getChildren().add(label4);
         gridPane0.getChildren().add(signInHyperLink);
         getChildren().add(gridPane0);
+        getChildren().add(backBtn);
+        
+        createAccountBtn.addEventFilter(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Gson gson = new GsonBuilder().create();
 
+            if (isInputValid()) {
+                DTOPlayer player = new DTOPlayer(            
+                            uNameTxtFld.getText(),
+                            nameTxtFld.getText(),
+                            passwordTxtFld.getText(),
+                            emailTxtFld.getText(),
+                            0,
+                            "offline");
+                    JsonObject setJson = new JsonObject();
+
+                    // Add specific fields to the payload
+                    setJson.addProperty("key", "signup");
+                    setJson.addProperty("UserName", player.getUserName());
+                    setJson.addProperty("fullName", player.getFullName());
+                    setJson.addProperty("password", player.getPassword());
+                    setJson.addProperty("email", player.getEmail());
+                    setJson.addProperty("score", player.getScore());
+                    setJson.addProperty("status", player.getStatus());
+
+                    String jsonString = gson.toJson(setJson);
+
+                    try {
+                        network = new NetworkConnection("127.0.0.1");
+                        network.sendMessage(jsonString);
+                        clearFld();
+                    } catch (IOException ex) {
+                        Logger.getLogger(SignUpBase.class.getName()).log(Level.SEVERE, null, ex);
+                    }                    
+            }
+        }
+   });
+        
+        
+    }
+
+        private boolean isInputValid() {
+            
+            // empty validation
+            if (uNameTxtFld.getText().isEmpty() ||
+                nameTxtFld.getText().isEmpty() ||
+                passwordTxtFld.getText().isEmpty() ||
+                emailTxtFld.getText().isEmpty()) {
+                return false;
+            }
+
+            // validate password length
+            if (passwordTxtFld.getText().length() < 8) {
+                showAlert("Password must be at least 8 characters long.");
+                return false;
+            }
+
+            // validate username
+            String userNameRegex = "^[a-zA-Z0-9_-]{3,16}$";
+            if (!uNameTxtFld.getText().matches(userNameRegex)) {
+                showAlert("Invalid username format. It should contain 3-16 characters and only letters, numbers, underscores, or hyphens.");
+                return false;
+            }
+
+            // validate email
+            String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$";
+            if (!emailTxtFld.getText().matches(emailRegex)) {
+                showAlert("Invalid email format.");
+                return false;
+            }
+
+            return true;
+        }
+    
+    void showAlert(String message){
+        Alert informationAlert = new Alert(AlertType.INFORMATION);
+
+        informationAlert.setTitle("Information");
+
+        informationAlert.setContentText(message);
+
+        informationAlert.showAndWait();
+      
+    }
+    
+    void clearFld(){
+        uNameTxtFld.clear();
+        nameTxtFld.clear();
+        passwordTxtFld.clear();
+        emailTxtFld.clear();
     }
 }

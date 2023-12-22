@@ -1,9 +1,21 @@
 package signInPkg;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import dto.player.DTOPlayer;
+import home.ChooseAuth;
+import java.io.DataInputStream;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.net.Socket;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import signUpPkg.SignUpBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -12,6 +24,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
+import network.connection.NetworkConnection;
 import service.Navigator;
 
 public class SignInBase extends GridPane {
@@ -36,7 +49,9 @@ public class SignInBase extends GridPane {
     protected final Button signInBtn;
     protected final TextField uNameTxtFld;
     protected final TextField passwordTxtFld;
-
+    protected final Button backBtn;
+    NetworkConnection network;
+     
     public SignInBase() {
 
         columnConstraints = new ColumnConstraints();
@@ -171,6 +186,17 @@ public class SignInBase extends GridPane {
         GridPane.setRowIndex(passwordTxtFld, 3);
         passwordTxtFld.setPrefWidth(338.0);
 
+        backBtn = new Button("Back");
+
+       
+        GridPane.setMargin(backBtn, new Insets(12.0, 0.0, 0.0, 13.5));
+        backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+                Navigator.navigateTo(new ChooseAuth(),event);
+            }
+        });
+        
         getColumnConstraints().add(columnConstraints);
         getColumnConstraints().add(columnConstraints0);
         getColumnConstraints().add(columnConstraints1);
@@ -191,6 +217,88 @@ public class SignInBase extends GridPane {
         getChildren().add(signInBtn);
         getChildren().add(uNameTxtFld);
         getChildren().add(passwordTxtFld);
+        getChildren().add(backBtn);
+        signInBtn.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+              /// logic Sign In
+                Gson gson = new GsonBuilder().create();
+
+          //  if (isInputValid()) {
+                DTOPlayer player = new DTOPlayer(            
+                            uNameTxtFld.getText(),
+                            passwordTxtFld.getText()
+                            );
+                    JsonObject setJson = new JsonObject();
+
+                    // Add specific fields to the payload
+                    setJson.addProperty("key", "signin");
+                    setJson.addProperty("UserName", player.getUserName());
+                    setJson.addProperty("password", player.getPassword());
+                    String jsonString = gson.toJson(setJson);
+
+                    try {
+                        network = new NetworkConnection("127.0.0.1");
+                        network.sendMessage(jsonString);
+                        clearFld();
+                    } catch (IOException ex) {
+                        Logger.getLogger(SignUpBase.class.getName()).log(Level.SEVERE, null, ex);
+                    }                    
+            }    
+        });
+           
+        
+      
+        
 
     }
+    
+        /*   private boolean isInputValid() {
+            
+            // empty validation
+            if (uNameTxtFld.getText().isEmpty() ||
+                passwordTxtFld.getText().isEmpty()
+                ) {
+                return false;
+            }
+
+            // validate password length
+            if (passwordTxtFld.getText().length() < 8) {
+                showAlert("Password must be at least 8 characters long.");
+                return false;
+            }
+
+            // validate username
+            String userNameRegex = "^[a-zA-Z0-9_-]{3,16}$";
+            if (!uNameTxtFld.getText().matches(userNameRegex)) {
+                showAlert("Invalid username format. It should contain 3-16 characters and only letters, numbers, underscores, or hyphens.");
+                return false;
+            }
+
+            // validate email
+            String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$";
+            if (!emailTxtFld.getText().matches(emailRegex)) {
+                showAlert("Invalid email format.");
+                return false;
+            }
+
+            return true;
+        }*/
+    
+    void showAlert(String message){
+        Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
+
+        informationAlert.setTitle("Information");
+
+        informationAlert.setContentText(message);
+
+        informationAlert.showAndWait();
+      
+    }
+    
+    void clearFld(){
+        uNameTxtFld.clear();
+        passwordTxtFld.clear();
+    }
 }
+
