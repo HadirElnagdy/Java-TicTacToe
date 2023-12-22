@@ -60,8 +60,8 @@ public class ProfileUIBase extends ScrollPane {
     protected final Label label6;
     protected final ImageView imageView;
     protected final ListView historyList;
-//     @FXML
-//        ObservableList<listViewRowBase> items;
+     @FXML
+       ObservableList<listViewRowBase> items;
 
     public ProfileUIBase() {
 
@@ -315,12 +315,12 @@ public class ProfileUIBase extends ScrollPane {
         BorderPane.setAlignment(historyList, javafx.geometry.Pos.CENTER);
         historyList.setPrefHeight(200.0);
         historyList.setPrefWidth(200.0);
-//        ObservableList<listViewRowBase> cellList = FXCollections.observableArrayList();
-//        for(int i=0;i<10;i++){
-//        cellList.add(new listViewRowBase() );
-//        
-//        }
-//        historyList.setItems(cellList);
+       ObservableList<listViewRowBase> cellList = FXCollections.observableArrayList();
+        for(int i=0;i<10;i++){
+        cellList.add(new listViewRowBase() );
+        
+        }
+       historyList.setItems(cellList);
 
         borderPane.setCenter(historyList);
         setContent(borderPane);
