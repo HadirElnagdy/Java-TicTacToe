@@ -7,27 +7,26 @@ package dto.player;
 
 /**
  *
- * @author Michael
+ * @author Shahy
  */
-public class DTOPlayer {
+public class DTOPlayerOnline {
     private String fullName;
     private String UserName;
     private String password;
     private String email;
-    private int score;
-    private String status;
+    public static int score;
+    public String status;
 
-    public DTOPlayer(){}
-    public DTOPlayer(String UserName,String fullName,  String password, String email, int score ,String status) {
+
+
+public DTOPlayerOnline(String UserName,String fullName,  String password, String email, int score ,String status) {
         this.fullName = fullName;
         this.UserName = UserName;
         this.password = password;
         this.email = email;
         this.score = score;
         this.status = status;
-        
-
-    }
+}
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
@@ -77,3 +76,4 @@ public class DTOPlayer {
     
     
 }
+

@@ -11,7 +11,6 @@ import dto.player.DTOPlayer;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.StringReader;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -66,7 +65,7 @@ public class NetworkConnection {
                     while (socket.isConnected() && !socket.isClosed()) {
 
                         message = dataInputStream.readLine();
-
+                        String newJson = message.replace("\\", ""); 
                         if (message == null) {
                             System.out.println(".runnnnnnnnnnn()");
                             socket.close();
@@ -74,19 +73,22 @@ public class NetworkConnection {
                         }
 
                         System.out.println("message in network connection" + message);
-
+                        
                         try {
                             JsonParser jsonParser = new JsonParser();
                             JsonObject json = jsonParser.parse(message).getAsJsonObject();
+                            
+                            System.out.println("hema mar3y hena :"+newJson);
+                            JsonObject modifiedJson = jsonParser.parse(newJson).getAsJsonObject();
 
-                            if (json.has("playersOnline")) {
-                                JsonElement playersElement = json.get("playersOnline");
+                            if (modifiedJson.has("onlinePlayers")) {
+                                JsonElement playersElement = modifiedJson.get("onlinePlayers");
 
                                 if (playersElement.isJsonArray()) {
                                     JsonArray playersArray = playersElement.getAsJsonArray();
                                     
                                     List<DTOPlayer> onlinePlayers = new ArrayList<>();
-                                    onlinePlayers.clear();
+                                   // onlinePlayers.clear();
                                     for (JsonElement playerElement : playersArray) {
                                         DTOPlayer player = new Gson().fromJson(playerElement, DTOPlayer.class);
                                         //  if (player.getFullName().equals("My name") == false) {
@@ -109,7 +111,7 @@ public class NetworkConnection {
                                         System.out.println("Sign Up succeeded");
                                         Platform.runLater(() -> {
                                             showAlert(Alert.AlertType.CONFIRMATION, "Sign Up succeeded");
-                                            Navigator.navigateTo(new ChooseOpponentBase());//navigate to sign in
+                                            Navigator.navigateTo(new SignInBase());//navigate to sign in
                                         });
                                     } else {
                                         Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "User name already Exist"));

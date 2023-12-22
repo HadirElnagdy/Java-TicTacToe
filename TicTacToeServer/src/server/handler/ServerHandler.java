@@ -85,13 +85,13 @@ public class ServerHandler {
                             sendMessage(message);
                          }else if (keyPrimitive != null && keyPrimitive.getAsString().equals("onlinePlayers")) {
                             System.out.println("get onlineplayers");
-                            Gson gson = new GsonBuilder().create();
-                            JsonObject setJson = new JsonObject();
-                            setJson.addProperty("key", "onlinePlayers");
+//                            Gson gson = new GsonBuilder().create();
+//                            JsonObject setJson = new JsonObject();
+//                            setJson.addProperty("key", "onlinePlayers");
                             DataAccessLayer dbLayer = new DataAccessLayer();
-                            setJson.addProperty("playersOnline", dbLayer.getOnlinePlayers());
-                            message = gson.toJson(setJson);
-
+//                            setJson.addProperty("onlineplayers", dbLayer.getOnlinePlayers());
+                            message = dbLayer.getOnlinePlayers();
+                            System.out.println("michael hena"+message);
                             sendMessage(message);
                          }else{
                              System.out.println("Wrong json");
