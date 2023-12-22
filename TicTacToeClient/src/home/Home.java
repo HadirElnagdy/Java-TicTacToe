@@ -5,9 +5,7 @@
  */
 package home;
 
-import java.net.URL;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -17,10 +15,9 @@ import javafx.stage.Stage;
  * @author Compumarts
  */
 public class Home extends Application {
-    AiBase ai;
-    EasyHardBase eh;
+   
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
        
         Parent root =new OnlineOfflineScreen(); 
         Scene scene = new Scene(root);
