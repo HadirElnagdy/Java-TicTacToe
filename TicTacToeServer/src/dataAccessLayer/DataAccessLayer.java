@@ -144,8 +144,56 @@ public class DataAccessLayer {
            }
            return found ;
        }
+    public boolean signIn(String userName,String password) throws SQLException {
+       
+        try{
+            if (connection != null && !connection.isClosed()) {
+                    String sqlStatment = "SELECT * FROM ROOT.PLAYER WHERE USERNAME=? AND PASSWORD=?";
+                    PreparedStatement pst = connection.prepareStatement(sqlStatment);
+                    pst.setString(1,userName);
+                    pst.setString(2,password);
 
-    
+                     ResultSet rs = pst.executeQuery();
+                    if (rs.next()) {
+                        System.out.println("User exists");
+                        found = true;
+                    } else {
+                        System.out.println("User does not exist");
+                        found = false;
+                    }
+                 }
+            else{
+                System.out.println("No valid database connection.");
+
+            }
+        }catch(SQLException ex){
+                System.out.println("something wrong in sign in : " + ex.getMessage());
+                ex.printStackTrace();
+        }
+        return found; 
+    }
+      public void UpdateStatus(String s) throws SQLException {
+        try{
+            if (connection != null && !connection.isClosed()) {
+                    String sqlStatment = "UPDATE ROOT.PLAYER SET STATUS ='ONLINE' WHERE USERNAME=s";
+                    PreparedStatement pst = connection.prepareStatement(sqlStatment);
+                  
+                    int rs = pst.executeUpdate();
+                    if (rs == 0) {
+                        System.out.println("something wrong !!!");
+                    } else {
+                        System.out.println("SIGN IN successed");
+                    }
+                 }
+            else{
+                System.out.println("No valid database connection.");
+
+            }
+        }catch(SQLException ex){
+                System.out.println("something wrong in sign in : " + ex.getMessage());
+                ex.printStackTrace();
+        }
+    }
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {

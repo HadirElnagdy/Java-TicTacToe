@@ -64,6 +64,50 @@ public class AccessNetwork {
         
         return found;
     }
+     public boolean checkSignIn(JsonObject json) {
+        boolean found = false ;
+
+        try {  
+             if (json.has("UserName") &&json.has("password")
+                    ) {
+
+                String username = json.get("UserName").getAsString();
+                String password = json.get("password").getAsString();
+                
+                DtoPlayer player = new DtoPlayer(username, password);
+
+                System.out.println("recived");
+                
+                System.out.println( "  " + username +"  "+ password);
+
+                found = dataAccessLayer.signIn(player.getUserName(),player.getPassword());
+
+                if (found) {
+                    found = true;
+                    System.out.println("USER FOUND");
+                    dataAccessLayer.UpdateStatus(username);
+                    
+                } else {
+                    //dataAccessLayer.signIn(player);
+                    found = false; 
+                }
+                    
+            }else {
+                System.out.println("Incomplete or malformed JSON payload for signin");
+                System.out.println("Received JSON payload: " + json.toString());
+
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AccessNetwork.class.getName()).log(Level.SEVERE, "Error during signIn", ex);
+        } finally {
+            dataAccessLayer.closeConnection();
+        }
+        
+        
+        return found;
+    }
     
    
 }
