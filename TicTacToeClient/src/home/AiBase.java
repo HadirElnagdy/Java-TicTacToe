@@ -162,9 +162,8 @@ public class AiBase extends GridPane {
         hmnBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                PlayersNamesAlert.playersNamesAlert(event);
-
-                    }
+                String[] s={"Player 1 Name:","Player 2 Name:"};
+            ShowAlerts.showPlayersAlert(event,s); }
         });
 
         GridPane.setColumnIndex(aiBtn, 3);

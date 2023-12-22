@@ -162,8 +162,8 @@ public class EasyHardBase extends GridPane {
         easyBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                 PlayersNamesAlert.onePlayerNameAlert(event);
-
+                String[] s={"Player Name"};         
+                ShowAlerts.showPlayersAlert(event,s);
                     }
         });
 
