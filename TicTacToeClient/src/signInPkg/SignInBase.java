@@ -1,9 +1,11 @@
 package signInPkg;
 
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import dto.player.DTOPlayer;
+import chooseopponent.ChooseOpponentBase;
 import home.ChooseAuth;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -221,7 +223,7 @@ public class SignInBase extends GridPane {
         signInBtn.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-              /// logic Sign In
+       
                 Gson gson = new GsonBuilder().create();
 
           //  if (isInputValid()) {
@@ -237,20 +239,17 @@ public class SignInBase extends GridPane {
                     setJson.addProperty("password", player.getPassword());
                     String jsonString = gson.toJson(setJson);
 
-                    try {
-                        network = new NetworkConnection("127.0.0.1");
-                        network.sendMessage(jsonString);
-                        clearFld();
-                    } catch (IOException ex) {
-                        Logger.getLogger(SignUpBase.class.getName()).log(Level.SEVERE, null, ex);
-                    }                    
-            }    
-        });
+                    
+                    network = NetworkConnection.getInstance();
+                    network.sendMessage(jsonString);
+                    clearFld();
+               
+              Navigator.navigateTo(new ChooseOpponentBase(),event);
            
+            }
         
+        });
       
-        
-
     }
     
         /*   private boolean isInputValid() {

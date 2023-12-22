@@ -87,9 +87,10 @@ public class DataAccessLayer {
                             String username = rs.getString("USERNAME");
                             String email = rs.getString("EMAIL");
 
-                            System.out.println(status);
+                            System.out.println(score);
                             DtoPlayer player = new DtoPlayer(username, fullName, password, email, score, status);
                             onlinePlayers.add(player);
+//                            System.out.println("&&&&&&&&&&&&&&&&&&&&"+onlinePlayers.get(0).score);
                         }
                     }
                 } else {
@@ -108,7 +109,7 @@ public class DataAccessLayer {
 
             String jsonString = gson.toJson(setJson);
             
-            System.out.println("Result: " + jsonString);
+            System.out.println("Result: " + setJson);
             return jsonString;
         }
 
