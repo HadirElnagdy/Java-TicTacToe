@@ -32,7 +32,7 @@ public class AccessNetwork {
                 int score = json.get("score").getAsInt();
                 String status = json.get("status").getAsString();
                 
-                DtoPlayer player = new DtoPlayer(username, name, email, password, score, status);
+                DtoPlayer player = new DtoPlayer(username, name, password, email, score, status);
 
                 System.out.println("recived");
                 
