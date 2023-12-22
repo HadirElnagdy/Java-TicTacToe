@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.geometry.Point3D?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #232429;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <PieChart fx:id="chart" disable="true" focusTraversable="true" nodeOrientation="LEFT_TO_RIGHT" opacity="0.0" pickOnBounds="false" prefHeight="271.0" prefWidth="335.0" rotate="180.0" startAngle="141.0" style="-fx-background-color: #ffffff;" BorderPane.alignment="CENTER">
+         <rotationAxis>
+            <Point3D />
+         </rotationAxis>
+         <opaqueInsets>
+            <Insets />
+         </opaqueInsets></PieChart>
+   </center>
+   <left>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <ToggleButton fx:id="serverBtn" layoutX="33.0" layoutY="152.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="96.0" style="-fx-background-color: #1577FF; -fx-text-fill: #FFFFFF;" text="ON" textAlignment="CENTER" AnchorPane.leftAnchor="33.0" AnchorPane.topAnchor="152.0">
+               <font>
+                  <Font name="Aharoni Bold" size="20.0" />
+               </font>
+            </ToggleButton>
+            <Label fx:id="onlineNum1" layoutX="52.0" layoutY="31.0" text="X" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="60.0" />
+               </font>
+            </Label>
+            <Label fx:id="onlineNum11" layoutX="72.0" layoutY="44.0" text="o" textFill="#1577ff">
+               <font>
+                  <Font name="System Bold" size="60.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </left>
+   <bottom>
+      <AnchorPane prefHeight="67.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Pane prefHeight="62.0" prefWidth="600.0">
+               <children>
+                  <Label fx:id="busyLabel" layoutX="482.0" layoutY="21.0" prefHeight="17.0" prefWidth="56.0" text="Offline" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold Italic" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="offlineLabel" layoutX="342.0" layoutY="21.0" prefHeight="17.0" prefWidth="56.0" text="Busy" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold Italic" size="15.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="onlineLabel" contentDisplay="CENTER" layoutX="189.0" layoutY="21.0" prefHeight="17.0" prefWidth="56.0" style="-fx-font-style: regular;" text="Online" textAlignment="CENTER" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold Italic" size="15.0" />
+                     </font>
+                  </Label>
+                  <Rectangle arcWidth="5.0" fill="#1577ff" height="12.0" layoutX="168.0" layoutY="26.0" stroke="#1577ff" strokeType="INSIDE" width="13.0" />
+                  <Rectangle arcWidth="5.0" fill="#879db7" height="12.0" layoutX="321.0" layoutY="25.0" stroke="#879db7" strokeType="INSIDE" width="13.0" />
+                  <Rectangle arcWidth="5.0" fill="#525461" height="12.0" layoutX="459.0" layoutY="26.0" stroke="#525461" strokeType="INSIDE" width="13.0" />
+               </children>
+            </Pane>
+         </children>
+      </AnchorPane>
+   </bottom>
+   <top>
+      <AnchorPane prefHeight="83.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="174.0" layoutY="33.0" text="Online : " textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="313.0" layoutY="33.0" text="busy : " textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <Label layoutX="455.0" layoutY="33.0" text="Offline : " textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="onlineNum" layoutX="231.0" layoutY="33.0" text="10" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="busyNum" layoutX="359.0" layoutY="33.0" text="10" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+            <Label fx:id="offlineNum" layoutX="516.0" layoutY="33.0" text="10" textFill="WHITE">
+               <font>
+                  <Font name="System Bold" size="15.0" />
+               </font>
+            </Label>
+         </children>
+      </AnchorPane>
+   </top>
+</BorderPane>

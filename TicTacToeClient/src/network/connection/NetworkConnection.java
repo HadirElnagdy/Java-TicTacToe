@@ -1,14 +1,20 @@
 package network.connection;
 
+import chooseopponent.ChooseOpponentBase;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+import dto.player.DTOPlayer;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.io.StringReader;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
@@ -17,16 +23,17 @@ import javafx.scene.control.Alert.AlertType;
 import service.Navigator;
 import signInPkg.SignInBase;
 
-
 public class NetworkConnection {
 
+    private static NetworkConnection single_instance = null;
     private Socket socket;
     private DataInputStream dataInputStream;
     private PrintStream printStream;
     private String ipAddress;
-
+    public ChooseOpponentBase opponentBase;
     String message;
-    public NetworkConnection(String ipAddress) throws IOException {
+
+    private NetworkConnection(String ipAddress) throws IOException {
         this.ipAddress = ipAddress;
         socket = new Socket(ipAddress, 5005);
         dataInputStream = new DataInputStream(socket.getInputStream());
@@ -34,80 +41,116 @@ public class NetworkConnection {
         readMessages();
     }
 
+    public static synchronized NetworkConnection getInstance() {
+        if (single_instance == null) {
+            try {
+                single_instance = new NetworkConnection("127.0.0.1");
+            } catch (IOException ex) {
+                Logger.getLogger(NetworkConnection.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return single_instance;
+    }
+
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
-    
-     public void readMessages() {
+
+    public void readMessages() {
         new Thread() {
             @Override
             public void run() {
-                
-                try {
-                    while (socket.isConnected() && !socket.isClosed()) {
 
-                        message = dataInputStream.readLine();
+                    try {
+                        while (socket.isConnected() && !socket.isClosed()) {
 
-                        if (message == null) {
-                            System.out.println(".runnnnnnnnnnn()");
-                            socket.close();
-                            break;
-                        }
-                        
-                        System.out.println("message in network connection" + message);
+                            message = dataInputStream.readLine();
+                            String newJson = message.replace("\\", ""); 
+                            if (message == null) {
+                                System.out.println(".runnnnnnnnnnn()");
+                                socket.close();
+                                break;
+                            }
 
-                        try {
-                            JsonParser jsonParser = new JsonParser();
-                            JsonObject json = jsonParser.parse(message).getAsJsonObject();
-                             if (json.has("key") && !json.get("key").isJsonNull()) {
-                                String keyValue = json.get("key").getAsString();
-                                System.out.println("key value: " + keyValue);
+                            System.out.println("message in network connection" + message);
 
-                                if ("signup".equals(keyValue)) {
-                                    String str = json.get("message").getAsString();
-                                    if ("new user".equals(str)) {
-                                        System.out.println("Sign Up succeeded");
-                                        Platform.runLater(() -> {
-                                            showAlert(Alert.AlertType.CONFIRMATION, "Sign Up succeeded");
-                                            Navigator.navigateTo(new SignInBase());//navigate to sign in
-                                        });
+                            try {
+                                JsonParser jsonParser = new JsonParser();
+                                JsonObject json = jsonParser.parse(message).getAsJsonObject();
+                                 if (json.has("key") && !json.get("key").isJsonNull()) {
+
+                                System.out.println("hema mar3y hena :"+newJson);
+                                JsonObject modifiedJson = jsonParser.parse(newJson).getAsJsonObject();
+
+                                if (modifiedJson.has("onlinePlayers")) {
+                                    JsonElement playersElement = modifiedJson.get("onlinePlayers");
+
+                                    if (playersElement.isJsonArray()) {
+                                        JsonArray playersArray = playersElement.getAsJsonArray();
+
+                                        List<DTOPlayer> onlinePlayers = new ArrayList<>();
+                                        for (JsonElement playerElement : playersArray) {
+                                            DTOPlayer player = new Gson().fromJson(playerElement, DTOPlayer.class);
+
+                                            onlinePlayers.add(player);
+                                        }
+
+                                        opponentBase.receiveOnlinePlayers(onlinePlayers);
+
+                                        Navigator.navigateTo(new ChooseOpponentBase());
+                                    }
+                                } else if (json.has("key") && !json.get("key").isJsonNull()) {
+                                    String keyValue = json.get("key").getAsString();
+                                    System.out.println("key value: " + keyValue);
+
+                                    if ("signup".equals(keyValue)) {
+                                        String str = json.get("message").getAsString();
+                                        if ("new user".equals(str)) {
+                                            System.out.println("Sign Up succeeded");
+                                            Platform.runLater(() -> {
+                                                showAlert(Alert.AlertType.CONFIRMATION, "Sign Up succeeded");
+                                                Navigator.navigateTo(new SignInBase());//navigate to sign in
+
+                                            });
+                                        } else {
+                                            Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "User name already Exist"));
+                                        }
+                                    }
+                                    else if ("signin".equals(keyValue)) {
+                                        String str = json.get("message").getAsString();
+                                        if ("user is exist".equals(str)) {
+                                            System.out.println("Sign IN succeeded");
+                                            Platform.runLater(() -> {
+                                                showAlert(Alert.AlertType.CONFIRMATION, "Sign IN succeeded");
+                                                Navigator.navigateTo(new ChooseOpponentBase());//navigate to chooseOpponent
+                                            });
+                                        } else if("not found".equals(str)) {
+                                            Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "User Name or Password may be Incorrect "));
+                                        }
                                     } else {
-                                        Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "User name already Exist"));
+                                        System.out.println("Unexpected 'key' value: " + keyValue);
                                     }
-                                }
-                                else if ("signin".equals(keyValue)) {
-                                    String str = json.get("message").getAsString();
-                                    if ("user is exist".equals(str)) {
-                                        System.out.println("Sign IN succeeded");
-                                        Platform.runLater(() -> {
-                                            showAlert(Alert.AlertType.CONFIRMATION, "Sign IN succeeded");
-                                           //Navigator.navigateTo(new SignInBase());//navigate to sign in
-                                        });
-                                    } else if("not found".equals(str)) {
-                                        Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "User Name or Password may be Incorrect "));
-                                    }
-                                } else {
-                                    System.out.println("Unexpected 'key' value: " + keyValue);
-                                }
-                             
-                       
-                        } }
-                        catch (JsonParseException e) {
-                           System.out.println("Invalid JSON format: " + message);
+                                } 
+                            }else {
+                                System.out.println("Invalid JSON format: 'operation' field is missing or null");
+                                System.out.println("Actual JSON content: " + json);
+                            }
+                        }catch (JsonParseException e) {
+                             System.out.println("Invalid JSON format: " + message);
                         }
                     }
-                }
-                catch (SocketException ex) {
-                     System.out.println("Socket EX");
-                } catch (IOException ex) {
+                }catch (SocketException ex) {
+                    System.out.println("Socket EX");
+                }catch (IOException ex) {
                     System.out.println("IO EX");
                     ex.printStackTrace();
                 }
             }
-        }.start();
-     }
+         }.start();
+    }
     
-     public void sendMessage(String message) {
+
+    public void sendMessage(String message) {
         new Thread() {
             @Override
             public void run() {
@@ -116,9 +159,7 @@ public class NetworkConnection {
             }
         }.start();
     }
-    
-    
-    
+
     public void closeConnection() {
         try {
             if (dataInputStream != null) {
@@ -131,12 +172,12 @@ public class NetworkConnection {
                 socket.close();
             }
         } catch (IOException ex) {
-             showAlert(Alert.AlertType.ERROR, "client  Stoooop");
+            showAlert(Alert.AlertType.ERROR, "client  Stoooop");
             Logger.getLogger(NetworkConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-    void showAlert(AlertType type,String message){
+
+    void showAlert(AlertType type, String message) {
         Alert informationAlert = new Alert(type);
 
         informationAlert.setTitle("");

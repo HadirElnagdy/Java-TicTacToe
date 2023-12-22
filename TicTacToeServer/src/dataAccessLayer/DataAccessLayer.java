@@ -87,9 +87,10 @@ public class DataAccessLayer {
                             String username = rs.getString("USERNAME");
                             String email = rs.getString("EMAIL");
 
-                            System.out.println(status);
+                            System.out.println(score);
                             DtoPlayer player = new DtoPlayer(username, fullName, password, email, score, status);
                             onlinePlayers.add(player);
+//                            System.out.println("&&&&&&&&&&&&&&&&&&&&"+onlinePlayers.get(0).score);
                         }
                     }
                 } else {
@@ -108,7 +109,7 @@ public class DataAccessLayer {
 
             String jsonString = gson.toJson(setJson);
             
-            System.out.println("Result: " + jsonString);
+            System.out.println("Result: " + setJson);
             return jsonString;
         }
 
@@ -172,12 +173,12 @@ public class DataAccessLayer {
         }
         return found; 
     }
-      public void UpdateStatus(String s) throws SQLException {
+      public void UpdateStatus(String username) throws SQLException {
         try{
             if (connection != null && !connection.isClosed()) {
-                    String sqlStatment = "UPDATE ROOT.PLAYER SET STATUS ='ONLINE' WHERE USERNAME=s";
+                    String sqlStatment = "UPDATE ROOT.PLAYER SET STATUS ='online' WHERE USERNAME= ?";
                     PreparedStatement pst = connection.prepareStatement(sqlStatment);
-                  
+                    pst.setString(1, username);
                     int rs = pst.executeUpdate();
                     if (rs == 0) {
                         System.out.println("something wrong !!!");

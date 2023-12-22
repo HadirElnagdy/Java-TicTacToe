@@ -5,8 +5,10 @@
  */
 package boardGamePkg;
 
+
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import home.Alerts;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,6 +54,7 @@ public abstract class GameBase extends Pane {
     private final List<String> moves;
     private final List<String> rMoves;
     BufferedWriter writer;
+    boolean isRecord=false;
     
     
     public GameBase(GridPane backDestination, String playingMode) {
@@ -105,18 +108,9 @@ public abstract class GameBase extends Pane {
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmation");
-                alert.setHeaderText(null);
-                alert.setContentText("Are you sure you want to quit?");
-                alert.getButtonTypes().setAll(
-                        javafx.scene.control.ButtonType.YES,
-                        javafx.scene.control.ButtonType.NO);
-                java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
-                if (result.isPresent() && result.get() == javafx.scene.control.ButtonType.YES){ 
+          if(Alerts.showConfirmationAlert("Do you want to Quit?")) 
                     GameBase.resetAll();
                     Navigator.navigateTo(backDestination,event); 
-                }
             }
         });
 
@@ -136,7 +130,9 @@ public abstract class GameBase extends Pane {
                 recordBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                recordMovesToFile();
+               //
+               isRecord =true;
+               
             }
         });
         
@@ -190,7 +186,7 @@ public abstract class GameBase extends Pane {
                     winner = 1;
                     player1Score += 20;
                     player2Score -= 20;
-                    recordMovesToFile();
+                    if(isRecord)recordMovesToFile();
                     try {
                         writer.flush();
                     } catch (IOException ex) {
@@ -201,7 +197,7 @@ public abstract class GameBase extends Pane {
                     winner = 2;
                     player1Score -= 20;
                     player2Score += 20;
-                    recordMovesToFile();
+                    if(isRecord)recordMovesToFile();
                     try {
                         writer.flush();
                     } catch (IOException ex) {
@@ -216,14 +212,14 @@ public abstract class GameBase extends Pane {
                 winner = 0;
                 player1Score += 10;
                 player2Score += 10;
-                recordMovesToFile();
+                if(isRecord)recordMovesToFile();
                 try {
                     writer.flush();
                 } catch (IOException ex) {
                     Logger.getLogger(GameBase.class.getName()).log(Level.SEVERE, null, ex);
                 }
-//                recordMovesToFile();
-//                resetBoard();
+                  if(isRecord)recordMovesToFile();
+               resetBoard();
                 // draw 0
                 Navigator.navigateTo(new WinnerScreenBase(winner),event);
              }  
@@ -289,9 +285,10 @@ public abstract class GameBase extends Pane {
     }
     protected abstract void startPlaying(ActionEvent e);
     // writing the record in text file
-    private void recordMovesToFile() {
+    protected void recordMovesToFile() {
         try  {
             writer = new BufferedWriter(new FileWriter("Record History.txt",true));
+           writer.write(player1Name.getText()+"%"+player2Name.getText()+"%"+scoreP1.getText()+"%"+scoreP2.getText()+"%#");
             for (int i = 0 ; i<moves.size();i++) {
                 writer.write(moves.get(i));
                 writer.write("#");
@@ -309,10 +306,10 @@ public abstract class GameBase extends Pane {
             e.printStackTrace();
         }
     }
-     private void recordMove(Button btn) {
+     protected void recordMove(Button btn) {
         int row = gridPane.getRowIndex(btn);
         int col = gridPane.getColumnIndex(btn);
-        String move = String.format("%s,%s,%s", currentSymbol, row, col);
+        String move = String.format("%s,%s,%s", btn.getText(), row, col);
         moves.add(move);
     }
 }

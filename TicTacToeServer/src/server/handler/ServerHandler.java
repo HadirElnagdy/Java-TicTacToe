@@ -12,6 +12,7 @@ import java.util.logging.Logger;
 import javafx.scene.control.Alert;
 import access.network.AccessNetwork;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import dataAccessLayer.DataAccessLayer;
@@ -80,13 +81,10 @@ public class ServerHandler {
 
                             message = new Gson().toJson(map);
                             sendMessage(message);
+                            
                          }else if (keyPrimitive != null && keyPrimitive.getAsString().equals("onlinePlayers")) {
                             System.out.println("get onlineplayers");
-//                            Gson gson = new GsonBuilder().create();
-//                            JsonObject setJson = new JsonObject();
-//                            setJson.addProperty("key", "onlinePlayers");
                             DataAccessLayer dbLayer = new DataAccessLayer();
-//                            setJson.addProperty("onlineplayers", dbLayer.getOnlinePlayers());
                             message = dbLayer.getOnlinePlayers();
                             System.out.println("michael hena"+message);
                             sendMessage(message);
@@ -108,7 +106,7 @@ public class ServerHandler {
                             message = new Gson().toJson(map);
                             sendMessage(message);}
                          
-                         else{
+                        else{
                              System.out.println("Wrong json");
                          }
                     }
@@ -122,9 +120,6 @@ public class ServerHandler {
                 } catch (IOException ex) {
                     System.out.println("IO Exception");
                 }
-                    //catch (SQLException ex) {
-//                    System.out.println("Sql Exception");
-//                }
             }
         }.start();
     }

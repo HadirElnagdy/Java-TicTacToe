@@ -14,8 +14,8 @@ public class DtoPlayer {
     private String UserName;
     private String password;
     private String email;
-    public static int score;
-    public String status;
+    private int score;
+    private String status;
 
     public DtoPlayer() {
     }

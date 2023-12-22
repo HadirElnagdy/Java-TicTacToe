@@ -20,8 +20,10 @@ public class LocalSingleEasy extends GameBase {
         
         Button clickedButton = (Button) e.getSource();
         if (clickedButton.getText().isEmpty()) {
+           
+            clickedButton.setText("X");
             switchPlayer();
-            clickedButton.setText("X"); 
+            recordMove(clickedButton); 
             filledCells++;   
             if (checkWinner()) 
                return;
@@ -40,11 +42,13 @@ public class LocalSingleEasy extends GameBase {
         do {
             randomRow = (int) (Math.random() * 3);
             randomCol = (int) (Math.random() * 3);
+            ;
         } while (!((Button) gridPane.getChildren().get(randomRow * 3 + randomCol)).getText().isEmpty());
-
-        Button computerCell = (Button) gridPane.getChildren().get(randomRow * 3 + randomCol);
-        computerCell.setText("O");
         
+        Button computerCell = (Button) gridPane.getChildren().get(randomRow * 3 + randomCol);
+        
+        computerCell.setText("O");
+        recordMove(computerCell);
         filledCells++;
         switchPlayer();
     }
