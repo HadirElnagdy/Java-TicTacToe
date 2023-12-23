@@ -315,7 +315,7 @@ public class SignUpBase extends GridPane {
                 network = NetworkConnection.getInstance();
                 network.sendMessage(jsonString);
                 clearFld();  
-                Navigator.navigateTo(new ChooseOpponentBase());
+               
             }
         }
    });

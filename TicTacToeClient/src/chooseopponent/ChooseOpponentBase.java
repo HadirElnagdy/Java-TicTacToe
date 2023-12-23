@@ -11,12 +11,17 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import network.connection.NetworkConnection;
+import profile.ProfileUIBase;
+import service.Navigator;
+import signInPkg.SignInBase;
 
 public class ChooseOpponentBase extends AnchorPane {
 
@@ -25,8 +30,8 @@ public class ChooseOpponentBase extends AnchorPane {
     protected final Label label1;
     protected final Label label2;
     protected final ListView listView;
-    protected final Button button;
-    protected final Button button0;
+    protected final Button homeBtn;
+    protected final Button profileBtn;
     List<DTOPlayer> onlinePlayers = new ArrayList<>();
 
 //    public ChooseOpponentBase(List<DTOPlayer> onlinePlayers) {
@@ -127,8 +132,8 @@ public class ChooseOpponentBase extends AnchorPane {
         label1 = new Label();
         label2 = new Label();
         listView = new ListView();
-        button = new Button();
-        button0 = new Button();
+        homeBtn = new Button();
+        profileBtn = new Button();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -175,23 +180,29 @@ public class ChooseOpponentBase extends AnchorPane {
 //        cell2.statusLabel.setText("Offline");
 //        cellList.add(cell2);
         //listView.setItems(cellList);
-        button.setLayoutX(14.0);
-        button.setLayoutY(14.0);
-        button.setMnemonicParsing(false);
-        button.setText("home");
+        homeBtn.setLayoutX(14.0);
+        homeBtn.setLayoutY(14.0);
+        homeBtn.setMnemonicParsing(false);
+        homeBtn.setText("home");
 
-        button0.setLayoutX(534.0);
-        button0.setLayoutY(14.0);
-        button0.setMnemonicParsing(false);
-        button0.setText("Profile");
+        profileBtn.setLayoutX(534.0);
+        profileBtn.setLayoutY(14.0);
+        profileBtn.setMnemonicParsing(false);
+        profileBtn.setText("Profile");
+        profileBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Navigator.navigateTo(new ProfileUIBase(),event);
+            }
+        });
 
         getChildren().add(label);
         getChildren().add(label0);
         getChildren().add(label1);
         getChildren().add(label2);
         getChildren().add(listView);
-        getChildren().add(button);
-        getChildren().add(button0);
+        getChildren().add(homeBtn);
+        getChildren().add(profileBtn);
 //        ObservableList<CellBase> cellList = FXCollections.observableArrayList();
 //        for (DTOPlayer player : onlinePlayers) {
 //            CellBase cell = new CellBase();

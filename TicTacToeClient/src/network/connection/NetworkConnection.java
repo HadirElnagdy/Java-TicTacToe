@@ -99,7 +99,10 @@ public class NetworkConnection {
 
                                     opponentBase.receiveOnlinePlayers(onlinePlayers);
 
-                                    Navigator.navigateTo(new ChooseOpponentBase());
+                                    Platform.runLater(() -> {
+                                            Navigator.navigateTo(new ChooseOpponentBase());
+                                        });
+                                    
                                 }
                             } else if (json.has("key") && !json.get("key").isJsonNull()) {
                                 String keyValue = json.get("key").getAsString();
@@ -111,7 +114,7 @@ public class NetworkConnection {
                                         System.out.println("Sign Up succeeded");
                                         Platform.runLater(() -> {
                                             showAlert(Alert.AlertType.CONFIRMATION, "Sign Up succeeded");
-                                            Navigator.navigateTo(new ChooseOpponentBase());//navigate to sign in
+                                            Navigator.navigateTo(new SignInBase());//navigate to sign in
                                         });
                                     } else {
                                         Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "User name already Exist"));

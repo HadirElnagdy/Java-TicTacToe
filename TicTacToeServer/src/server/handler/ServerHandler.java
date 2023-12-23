@@ -30,13 +30,12 @@ public class ServerHandler {
     boolean isRunning = true ; 
     private String message; 
     private boolean isClientConnected = true;
+    
     public ServerHandler(Socket socket) {
         try {
             printStream = new PrintStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
             accessNetwork = new AccessNetwork();
-
-            System.out.println(dataInputStream.readLine());
             // send all player online
             
             readMessages();
@@ -66,10 +65,7 @@ public class ServerHandler {
                         JsonObject json = parser.parse(new StringReader(message)).getAsJsonObject();
                         JsonPrimitive keyPrimitive = json.getAsJsonPrimitive("key");
                         
-                        
-                            
-                        
-                                
+                       
                         if (keyPrimitive != null && keyPrimitive.getAsString().equals("signup")) {
                             
                             String operationValue = json.get("key").getAsString();
