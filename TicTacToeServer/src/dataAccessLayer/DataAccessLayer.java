@@ -195,6 +195,8 @@ public class DataAccessLayer {
                 ex.printStackTrace();
         }
     }
+      
+      
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
@@ -204,5 +206,8 @@ public class DataAccessLayer {
             System.out.println("errooooooeeee!!!!");
             Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, "Error closing database connection", ex);
         }
+    }
+    public Connection getConnection() {
+        return connection;
     }
 }

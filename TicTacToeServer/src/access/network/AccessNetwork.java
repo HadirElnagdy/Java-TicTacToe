@@ -57,8 +57,6 @@ public class AccessNetwork {
             
         } catch (SQLException ex) {
             Logger.getLogger(AccessNetwork.class.getName()).log(Level.SEVERE, "Error during signUp", ex);
-        } finally {
-            dataAccessLayer.closeConnection();
         }
         
         
@@ -88,7 +86,6 @@ public class AccessNetwork {
                     dataAccessLayer.UpdateStatus(username);
                     
                 } else {
-                    //dataAccessLayer.signIn(player);
                     found = false; 
                 }
                     
@@ -101,8 +98,6 @@ public class AccessNetwork {
             
         } catch (SQLException ex) {
             Logger.getLogger(AccessNetwork.class.getName()).log(Level.SEVERE, "Error during signIn", ex);
-        } finally {
-            dataAccessLayer.closeConnection();
         }
         
         

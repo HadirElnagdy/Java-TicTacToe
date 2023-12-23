@@ -1,6 +1,9 @@
 package tictactoeserver;
 
+import dataAccessLayer.DataAccessLayer;
+import java.io.DataInputStream;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
@@ -19,7 +22,8 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import server.handler.ServerHandler;
+import javafx.stage.Stage;
+import server.handler.ClientrHandler;
 
 public class ServerBase extends BorderPane {
 
@@ -45,15 +49,25 @@ public class ServerBase extends BorderPane {
     protected final Label offlineNum;
 
     private boolean isServerRunning = true;
-    protected ServerHandler server ;
-    protected ServerSocket serverSocket;
-    protected Socket socket;
+   
     int onlineNumValue = 0;
     int offlineNumValue = 0;
     int busyNumValue = 0;
     
+    protected ServerSocket serverSocket;
+    protected Socket socket;
+    protected DataInputStream dis;
+    protected PrintStream ps;
+    protected Server server;
+
+    DataAccessLayer dblayer;
+    Thread thread;
+    
     boolean isClicked = true ;
-    public ServerBase() {
+    
+    
+    
+    public ServerBase(Stage stage) {
 
         chart = new PieChart();
         anchorPane = new AnchorPane();
@@ -277,66 +291,36 @@ public class ServerBase extends BorderPane {
                 isServerRunning = true ;
                 serverBtn.setText("OFF");
                 chart.setVisible(true);
-                //svgPath.setVisible(false);
-                        try {
-                           serverSocket = new ServerSocket(5005);
-                           System.out.println("open");
-                            new Thread(()->{
-                               try {
-                                    while (isServerRunning) {
-                                       socket = serverSocket.accept();   
-                                       server = new ServerHandler(socket);
-                                       System.out.println(socket.getInetAddress());
-                                   }
-                               }catch(SocketException ex){
-                                   System.out.println("Server Stoooop");
-                                }  
-                               catch (IOException ex) {
-                                   isServerRunning = false;
-                                   System.out.println("Stop");
-                                   //showAlert("server has stoped");
-                                   Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
-                               }
-                              
-                           }).start();
-                       }catch(SocketException ex){
-                            showAlert("Server Stoooop");
-                       } 
-                        catch (IOException ex) {
-                           ex.printStackTrace();
-                       }
+                server = new Server();
+                
             }else{
-                serverBtn.setText("ON");
-                 
+                serverBtn.setText("ON");                 
                 chart.setVisible(false);
-                //svgPath.setVisible(true);
-                if (serverSocket != null && !serverSocket.isClosed()) {
-                    try {
-                        System.out.println("stoooooooooooop");
-                        isServerRunning = false;
-                        serverSocket.close();
-
-                    } catch (IOException ex) {
-                        showAlert("Server Stop");
-                        
-                        System.out.println("stoooooooooooop");
-                        Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                try {
+                    server.closeConnection();
+                } catch (IOException ex) {
+                    Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
             isClicked =! isClicked ;
         });
        
-    }
-    
-    void showAlert(String message){
-        Alert informationAlert = new Alert(Alert.AlertType.ERROR);
+        
+         stage.setOnCloseRequest((event) -> {
+            System.out.println("Closing Stage");
+            if ((server != null) && (server.isOpened)) {
+                try {
+                    System.out.println("server on is close");
+                    server.closeConnection();
+                    System.exit(0);
+                } catch (IOException ex) {
+                    Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
+                }
 
-        informationAlert.setTitle("");
+            }
 
-        informationAlert.setContentText(message);
-
-        informationAlert.showAndWait();
+        });
+        
     }
     
         private void setCustomColors() {

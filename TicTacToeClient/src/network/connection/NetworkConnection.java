@@ -8,9 +8,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import dto.player.DTOPlayer;
+import home.Alerts;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -29,22 +31,35 @@ public class NetworkConnection {
     private Socket socket;
     private DataInputStream dataInputStream;
     private PrintStream printStream;
-    private String ipAddress;
+    private static String ipAddress;
     public ChooseOpponentBase opponentBase;
     String message;
+    private String ip;
 
     private NetworkConnection(String ipAddress) throws IOException {
-        this.ipAddress = ipAddress;
-        socket = new Socket(ipAddress, 5005);
-        dataInputStream = new DataInputStream(socket.getInputStream());
-        printStream = new PrintStream(socket.getOutputStream());
-        readMessages();
+        try{
+            if (socket == null || !socket.isConnected() || socket.isClosed()) {
+               this.ipAddress = ipAddress;
+               socket = new Socket(ipAddress, 5005);
+               System.out.println("server ip :" + ipAddress);
+               dataInputStream = new DataInputStream(socket.getInputStream());
+               printStream = new PrintStream(socket.getOutputStream());
+               readMessages();
+           }
+
+           ip = socket.getLocalAddress().getHostAddress();
+           System.out.println(ip);
+       }catch (ConnectException e) {
+
+           Platform.runLater(() ->Alerts.showErrorAlert("Connection refused. Make sure the server is running."));
+           
+       }
     }
 
     public static synchronized NetworkConnection getInstance() {
         if (single_instance == null) {
             try {
-                single_instance = new NetworkConnection("127.0.0.1");
+                single_instance = new NetworkConnection(ipAddress);
             } catch (IOException ex) {
                 Logger.getLogger(NetworkConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -95,9 +110,7 @@ public class NetworkConnection {
                                             onlinePlayers.add(player);
                                         }
 
-                                        opponentBase.receiveOnlinePlayers(onlinePlayers);
-
-                                        Navigator.navigateTo(new ChooseOpponentBase());
+                                       Platform.runLater(() -> opponentBase.receiveOnlinePlayers(onlinePlayers));
                                     }
                                 } else if (json.has("key") && !json.get("key").isJsonNull()) {
                                     String keyValue = json.get("key").getAsString();
@@ -108,12 +121,12 @@ public class NetworkConnection {
                                         if ("new user".equals(str)) {
                                             System.out.println("Sign Up succeeded");
                                             Platform.runLater(() -> {
-                                                showAlert(Alert.AlertType.CONFIRMATION, "Sign Up succeeded");
+                                                Alerts.showConfirmationAlert("Sign Up succeeded");
                                                 Navigator.navigateTo(new SignInBase());//navigate to sign in
 
                                             });
                                         } else {
-                                            Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "User name already Exist"));
+                                            Platform.runLater(() -> Alerts.showErrorAlert("User name already Exist"));
                                         }
                                     }
                                     else if ("signin".equals(keyValue)) {
@@ -121,11 +134,11 @@ public class NetworkConnection {
                                         if ("user is exist".equals(str)) {
                                             System.out.println("Sign IN succeeded");
                                             Platform.runLater(() -> {
-                                                showAlert(Alert.AlertType.CONFIRMATION, "Sign IN succeeded");
+                                                Alerts.showConfirmationAlert("Sign IN succeeded");
                                                 Navigator.navigateTo(new ChooseOpponentBase());//navigate to chooseOpponent
                                             });
                                         } else if("not found".equals(str)) {
-                                            Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "User Name or Password may be Incorrect "));
+                                            Platform.runLater(() -> Alerts.showErrorAlert("User Name or Password may be Incorrect "));
                                         }
                                     } else {
                                         System.out.println("Unexpected 'key' value: " + keyValue);
@@ -153,7 +166,7 @@ public class NetworkConnection {
     public void sendMessage(String message) {
         new Thread() {
             @Override
-            public void run() {
+            public void run() {   
                 printStream.println(message);
                 System.out.println(message);
             }
@@ -172,18 +185,16 @@ public class NetworkConnection {
                 socket.close();
             }
         } catch (IOException ex) {
-            showAlert(Alert.AlertType.ERROR, "client  Stoooop");
+            Platform.runLater(() ->Alerts.showErrorAlert("client  Stoooop"));
             Logger.getLogger(NetworkConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    void showAlert(AlertType type, String message) {
-        Alert informationAlert = new Alert(type);
-
-        informationAlert.setTitle("");
-
-        informationAlert.setContentText(message);
-
-        informationAlert.showAndWait();
+    
+     public String getIp() {
+        return ip;
+    }
+     
+    public Socket getSocket() {
+        return socket;
     }
 }

@@ -2,6 +2,7 @@ package home;
 
 import boardGamePkg.RecordsBase;
 import java.util.Optional;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -50,7 +51,8 @@ public class OnlineOfflineScreen extends HomeBase {
                 alert.getDialogPane().setContent(gridPane);
                 Optional<ButtonType> result = alert.showAndWait();
                 if(ipAddressTextField.getText().isEmpty()){
-                    ipAddressTextField.setStyle("");
+                 Platform.runLater(() ->Alerts.showErrorAlert("Must enter ip server"));
+
                 }else{
                     if (result.isPresent() && result.get() == ButtonType.OK) {
                         ChooseAuth destination = new ChooseAuth();

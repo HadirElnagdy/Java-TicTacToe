@@ -19,8 +19,9 @@ import dataAccessLayer.DataAccessLayer;
 import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
+import javafx.application.Platform;
 
-public class ServerHandler {
+public class ClientrHandler {
 
     private DataInputStream dataInputStream;
     private PrintStream printStream;
@@ -28,21 +29,28 @@ public class ServerHandler {
     boolean isRunning = true ; 
     private String message; 
     private boolean isClientConnected = true;
-    public ServerHandler(Socket socket) {
+    
+    String ip;
+    int portNum;
+    public Socket socket;
+
+    public ClientrHandler(Socket socket) {
+        this.socket = socket;
+        ip = socket.getInetAddress().getHostAddress();
+        portNum = socket.getPort();
         try {
             printStream = new PrintStream(socket.getOutputStream());
             dataInputStream = new DataInputStream(socket.getInputStream());
-            accessNetwork = new AccessNetwork();
-            // send all player online
-            
+            accessNetwork = new AccessNetwork();            
             readMessages();
             
         } catch (IOException ex) {
-            showAlert("Server Handle Stoooop!!!!!!!!!");
-            Logger.getLogger(ServerHandler.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.runLater(() -> showAlert("Client Stoooop!!!!!!!!!"));
+            Logger.getLogger(ClientrHandler.class.getName()).log(Level.SEVERE, null, ex);
             closeResources();
         }
     }    
+     
      
      public void readMessages() {
         new Thread() {
@@ -61,11 +69,7 @@ public class ServerHandler {
                         JsonParser parser = new JsonParser();
                         JsonObject json = parser.parse(new StringReader(message)).getAsJsonObject();
                         JsonPrimitive keyPrimitive = json.getAsJsonPrimitive("key");
-                        
-                        
-                            
-                        
-                                
+     
                         if (keyPrimitive != null && keyPrimitive.getAsString().equals("signup")) {
                             
                             String operationValue = json.get("key").getAsString();
@@ -116,7 +120,7 @@ public class ServerHandler {
                 }
                 catch (SocketException ex) {
                     System.out.println("Socket Exception");
-                    showAlert("Client close");
+                    Platform.runLater(() ->showAlert("Client close"));
                 } catch (IOException ex) {
                     System.out.println("IO Exception");
                 }
@@ -148,9 +152,13 @@ public class ServerHandler {
             }
             
         } catch (IOException ex) {
-            showAlert("Server Handle Stoooop");
-            Logger.getLogger(ServerHandler.class.getName()).log(Level.SEVERE, null, ex);
+           Platform.runLater(() ->showAlert("Client Stop"));
+            Logger.getLogger(ClientrHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    public String getIp() {
+        return ip;
     }
     void showAlert(String message){
         Alert informationAlert = new Alert(Alert.AlertType.ERROR);

@@ -19,9 +19,11 @@ public class Home extends Application {
     @Override
     public void start(Stage stage) {
        
+        
         Parent root =new OnlineOfflineScreen(); 
         Scene scene = new Scene(root);
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 
