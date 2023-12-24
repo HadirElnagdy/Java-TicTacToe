@@ -90,7 +90,6 @@ public class DataAccessLayer {
                             System.out.println(score);
                             DtoPlayer player = new DtoPlayer(username, fullName, password, email, score, status);
                             onlinePlayers.add(player);
-//                            System.out.println("&&&&&&&&&&&&&&&&&&&&"+onlinePlayers.get(0).score);
                         }
                     }
                 } else {
@@ -114,8 +113,6 @@ public class DataAccessLayer {
         }
 
         public boolean checkIfUserExist(String userName){
-           
-          
            try {
                 if (connection != null && !connection.isClosed()) {
                 String sql = "SELECT * FROM ROOT.player WHERE USERNAME = ?";

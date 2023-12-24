@@ -9,10 +9,9 @@ import java.io.StringReader;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Alert;
 import access.network.AccessNetwork;
+import alerts.Alerts;
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import dataAccessLayer.DataAccessLayer;
@@ -20,6 +19,7 @@ import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.application.Platform;
+import static tictactoeserver.Server.clientsVector;
 
 public class ClientrHandler {
 
@@ -45,7 +45,7 @@ public class ClientrHandler {
             readMessages();
             
         } catch (IOException ex) {
-            Platform.runLater(() -> showAlert("Client Stoooop!!!!!!!!!"));
+            Platform.runLater(() -> Alerts.showErrorAlert("Client Stoooop!!!!!!!!!"));
             Logger.getLogger(ClientrHandler.class.getName()).log(Level.SEVERE, null, ex);
             closeResources();
         }
@@ -89,9 +89,13 @@ public class ClientrHandler {
                          }else if (keyPrimitive != null && keyPrimitive.getAsString().equals("onlinePlayers")) {
                             System.out.println("get onlineplayers");
                             DataAccessLayer dbLayer = new DataAccessLayer();
+                          
                             message = dbLayer.getOnlinePlayers();
-                            System.out.println("michael hena"+message);
-                            sendMessage(message);
+                            //boatcast to all clients 
+                            for (ClientrHandler clientHandler : clientsVector) {
+                                  clientHandler.sendMessage(message);
+                              }
+                            
                          } 
                          
                          //marwa
@@ -102,11 +106,14 @@ public class ClientrHandler {
                             boolean exist = accessNetwork.checkSignIn(json);
                             System.out.println("client exist= " + exist);
                             String found = exist ? "user is exist" : "not found";
-
+                            String username = json.get("UserName").getAsString();
+                            
                             Map<String, String> map = new HashMap<>();
                             map.put("key", "signin");
                             map.put("message", found);
-
+                            // send username again to save player 
+                            map.put("UserName", username);
+                            
                             message = new Gson().toJson(map);
                             sendMessage(message);}
                          
@@ -120,7 +127,7 @@ public class ClientrHandler {
                 }
                 catch (SocketException ex) {
                     System.out.println("Socket Exception");
-                    Platform.runLater(() ->showAlert("Client close"));
+                    Platform.runLater(() ->Alerts.showErrorAlert("Server has closed"));
                 } catch (IOException ex) {
                     System.out.println("IO Exception");
                 }
@@ -152,7 +159,7 @@ public class ClientrHandler {
             }
             
         } catch (IOException ex) {
-           Platform.runLater(() ->showAlert("Client Stop"));
+           Platform.runLater(() ->Alerts.showErrorAlert("Server has Stopped"));
             Logger.getLogger(ClientrHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -160,13 +167,4 @@ public class ClientrHandler {
     public String getIp() {
         return ip;
     }
-    void showAlert(String message){
-        Alert informationAlert = new Alert(Alert.AlertType.ERROR);
-
-        informationAlert.setTitle("");
-
-        informationAlert.setContentText(message);
-
-        informationAlert.showAndWait();
-    } 
 }

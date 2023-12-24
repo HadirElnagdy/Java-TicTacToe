@@ -5,6 +5,7 @@
  */
 package tictactoeserver;
 
+import alerts.Alerts;
 import com.google.gson.Gson;
 import dataAccessLayer.DataAccessLayer;
 import java.io.IOException;
@@ -28,10 +29,12 @@ public class Server {
     ServerSocket serverSocket;
     boolean isOpened;
     Socket socket;
+    DataAccessLayer dbLayer;
     public static Vector<ClientrHandler> clientsVector = new Vector<ClientrHandler>();
 
     
     public Server() {
+        dbLayer = new DataAccessLayer();
 
         try {
             serverSocket = new ServerSocket(5005);
@@ -41,6 +44,33 @@ public class Server {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    
+      void acceptNewClient() {
+          new Thread() {
+            @Override
+            public void run() {
+
+                while (!serverSocket.isClosed()) {
+                    try {
+                        socket = serverSocket.accept();
+                        clientsVector.add(new ClientrHandler(socket));
+                        System.out.println("number clients is " + clientsVector.size());
+                                                
+                        System.out.println("new client join");
+                    } catch (SocketException ex) {
+                        System.out.println("SocketException in server");
+                        Alerts.showErrorAlert("Server has Closed");
+                    } catch (IOException ex) {
+                        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+
+            }
+
+        }.start();
+    }
+
     
     void closeConnection() throws IOException {
         isOpened = false;
@@ -71,35 +101,4 @@ public class Server {
 
         clientsVector.clear();
     }
-
-
-    void acceptNewClient() {
-          new Thread() {
-            @Override
-            public void run() {
-
-                while (!serverSocket.isClosed()) {
-                    try {
-                        Socket socket = serverSocket.accept();
-                        clientsVector.add(new ClientrHandler(socket));
-                        System.out.println("number clients is " + clientsVector.size());
-
-                        System.out.println("new client join");
-                    } catch (SocketException ex) {
-                        System.out.println("SocketException in server");
-
-                    } catch (IOException ex) {
-                        Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-
-            }
-
-        }.start();
-    }
-
-    
-
-    
-    
 }

@@ -20,8 +20,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
+import player.session.PlayerSession;
 import service.Navigator;
 import signInPkg.SignInBase;
 
@@ -133,6 +132,11 @@ public class NetworkConnection {
                                         String str = json.get("message").getAsString();
                                         if ("user is exist".equals(str)) {
                                             System.out.println("Sign IN succeeded");
+
+                                            String logInUsername = json.get("UserName").getAsString();
+                                            // save username in the playerSession
+                                            PlayerSession.setLogInUsername(logInUsername);                                            
+                                            
                                             Platform.runLater(() -> {
                                                 Alerts.showConfirmationAlert("Sign IN succeeded");
                                                 Navigator.navigateTo(new ChooseOpponentBase());//navigate to chooseOpponent

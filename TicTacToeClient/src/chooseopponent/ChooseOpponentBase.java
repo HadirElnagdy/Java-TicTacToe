@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Button;
@@ -17,6 +18,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import network.connection.NetworkConnection;
+import player.session.PlayerSession;
 
 public class ChooseOpponentBase extends AnchorPane {
 
@@ -71,19 +73,6 @@ public class ChooseOpponentBase extends AnchorPane {
         listView.setPrefHeight(265.0);
         listView.setPrefWidth(600.0);
 
-        // Create an ObservableList to hold the data
-//        CellBase cell1 = new CellBase();
-//        cell1.userNameLabel.setText("User1");
-//        cell1.scoreLabel.setText("100");
-//        cell1.statusLabel.setText("Online");
-//        cellList.add(cell1);
-//
-//        CellBase cell2 = new CellBase();
-//        cell2.userNameLabel.setText("User2");
-//        cell2.scoreLabel.setText("150");
-//        cell2.statusLabel.setText("Offline");
-//        cellList.add(cell2);
-        //listView.setItems(cellList);
         button.setLayoutX(14.0);
         button.setLayoutY(14.0);
         button.setMnemonicParsing(false);
@@ -101,31 +90,27 @@ public class ChooseOpponentBase extends AnchorPane {
         getChildren().add(listView);
         getChildren().add(button);
         getChildren().add(button0);
-//        ObservableList<CellBase> cellList = FXCollections.observableArrayList();
-//        for (DTOPlayer player : onlinePlayers) {
-//            CellBase cell = new CellBase();
-//            cell.userNameLabel.setText(player.getUserName());
-//            cell.scoreLabel.setText(String.valueOf(player.getScore()));
-//            cell.statusLabel.setText(player.getStatus());
-//            // Add cell to the ListView
-//            listView.getItems().add(cell);
-//    }
 
         NetworkConnection.getInstance().opponentBase = this;
         this.sendGetOnlinePlayers();
     }
     
-   public void receiveOnlinePlayers(List<DTOPlayer> onlinePlayers) { 
-        listView.getItems().clear();
-        ObservableList<CellBase> cellList = FXCollections.observableArrayList();
-        for (DTOPlayer player : onlinePlayers) {
-            CellBase cell = new CellBase();
-            cell.userNameLabel.setText(player.getUserName());
-            cell.scoreLabel.setText(String.valueOf(player.getScore()));
-            cell.statusLabel.setText(player.getStatus());
-            // Add cell to the ListView
-            listView.getItems().add(cell);
-        }
+    public void receiveOnlinePlayers(List<DTOPlayer> onlinePlayers) {
+        Platform.runLater(() -> {
+            ObservableList<CellBase> cellList = FXCollections.observableArrayList();
+            for (DTOPlayer player : onlinePlayers) {
+                if (!player.getUserName().equals(PlayerSession.getLogInUsername())) {
+                    CellBase cell = new CellBase();
+                    cell.userNameLabel.setText(player.getUserName());
+                    cell.scoreLabel.setText(String.valueOf(player.getScore()));
+                    cell.statusLabel.setText(player.getStatus());
+                    // Add cell to the list
+                    cellList.add(cell);
+                }
+            }
+            // Set the updated list to the ListView
+            listView.setItems(cellList);
+        });
     }
     
     void sendGetOnlinePlayers() { 
