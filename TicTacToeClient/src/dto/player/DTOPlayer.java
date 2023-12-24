@@ -26,7 +26,7 @@ public class DTOPlayer {
    
     public DTOPlayer(){}
 
-    public DTOPlayer(String UserName,String fullName,  String password, String email, int score ,String status) {
+    public DTOPlayer(String UserName, String fullName,  String password, String email, int score ,String status) {
         this.fullName = fullName;
         this.UserName = UserName;
         this.password = password;
@@ -34,7 +34,6 @@ public class DTOPlayer {
         this.score = score;
         this.status = status;
         
-
     }
 
     public void setFullName(String fullName) {

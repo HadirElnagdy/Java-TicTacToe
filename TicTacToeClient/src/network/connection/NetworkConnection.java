@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import dto.player.DTOPlayer;
+import service.Alerts;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -61,84 +62,94 @@ public class NetworkConnection {
             @Override
             public void run() {
 
-                try {
-                    while (socket.isConnected() && !socket.isClosed()) {
+                    try {
+                        while (socket.isConnected() && !socket.isClosed()) {
 
-                        message = dataInputStream.readLine();
-                        String newJson = message.replace("\\", ""); 
-                        if (message == null) {
-                            System.out.println(".runnnnnnnnnnn()");
-                            socket.close();
-                            break;
-                        }
+                            message = dataInputStream.readLine();
+                            String newJson = message.replace("\\", ""); 
+                            if (message == null) {
+                                System.out.println(".runnnnnnnnnnn()");
+                                socket.close();
+                                break;
+                            }
 
-                        System.out.println("message in network connection" + message);
-                        
-                        try {
-                            JsonParser jsonParser = new JsonParser();
-                            JsonObject json = jsonParser.parse(message).getAsJsonObject();
-                            
-                            System.out.println("hema mar3y hena :"+newJson);
-                            JsonObject modifiedJson = jsonParser.parse(newJson).getAsJsonObject();
+                            System.out.println("message in network connection" + message);
 
-                            if (modifiedJson.has("onlinePlayers")) {
-                                JsonElement playersElement = modifiedJson.get("onlinePlayers");
+                            try {
+                                JsonParser jsonParser = new JsonParser();
+                                JsonObject json = jsonParser.parse(message).getAsJsonObject();
+                                 if (json.has("key") && !json.get("key").isJsonNull()) {
 
-                                if (playersElement.isJsonArray()) {
-                                    JsonArray playersArray = playersElement.getAsJsonArray();
-                                    
-                                    List<DTOPlayer> onlinePlayers = new ArrayList<>();
-                                   // onlinePlayers.clear();
-                                    for (JsonElement playerElement : playersArray) {
-                                        DTOPlayer player = new Gson().fromJson(playerElement, DTOPlayer.class);
-                                        //  if (player.getFullName().equals("My name") == false) {
-                                        
-                                        onlinePlayers.add(player);
-                                        //}
+                                System.out.println("hema mar3y hena :"+newJson);
+                                JsonObject modifiedJson = jsonParser.parse(newJson).getAsJsonObject();
+
+                                if (modifiedJson.has("onlinePlayers")) {
+                                    JsonElement playersElement = modifiedJson.get("onlinePlayers");
+
+                                    if (playersElement.isJsonArray()) {
+                                        JsonArray playersArray = playersElement.getAsJsonArray();
+
+                                        List<DTOPlayer> onlinePlayers = new ArrayList<>();
+                                        for (JsonElement playerElement : playersArray) {
+                                            DTOPlayer player = new Gson().fromJson(playerElement, DTOPlayer.class);
+
+                                            onlinePlayers.add(player);
+                                        }
+
+                                        opponentBase.receiveOnlinePlayers(onlinePlayers);
+
+                                        Navigator.navigateTo(new ChooseOpponentBase());
                                     }
+                                } else if (json.has("key") && !json.get("key").isJsonNull()) {
+                                    String keyValue = json.get("key").getAsString();
+                                    System.out.println("key value: " + keyValue);
 
-                                    opponentBase.receiveOnlinePlayers(onlinePlayers);
+                                    if ("signup".equals(keyValue)) {
+                                        String str = json.get("message").getAsString();
+                                        if ("new user".equals(str)) {
+                                            System.out.println("Sign Up succeeded");
+                                            Platform.runLater(() -> {
+                                                Alerts.showConfirmationAlert("Sign Up succeeded");
+                                                Navigator.navigateTo(new SignInBase());//navigate to sign in
 
-                                    Platform.runLater(() -> {
-                                            Navigator.navigateTo(new ChooseOpponentBase());
-                                        });
-                                    
-                                }
-                            } else if (json.has("key") && !json.get("key").isJsonNull()) {
-                                String keyValue = json.get("key").getAsString();
-                                System.out.println("key value: " + keyValue);
-
-                                if ("signup".equals(keyValue)) {
-                                    String str = json.get("message").getAsString();
-                                    if ("new user".equals(str)) {
-                                        System.out.println("Sign Up succeeded");
-                                        Platform.runLater(() -> {
-                                            showAlert(Alert.AlertType.CONFIRMATION, "Sign Up succeeded");
-                                            Navigator.navigateTo(new SignInBase());//navigate to sign in
-                                        });
+                                            });
+                                        } else {
+                                            Platform.runLater(() -> Alerts.showErrorAlert("User name already Exist"));
+                                        }
+                                    }
+                                    else if ("signin".equals(keyValue)) {
+                                        String str = json.get("message").getAsString();
+                                        if ("user is exist".equals(str)) {
+                                            System.out.println("Sign IN succeeded");
+                                            Platform.runLater(() -> {
+                                                Alerts.showConfirmationAlert("Sign IN succeeded");
+                                                Navigator.navigateTo(new ChooseOpponentBase());//navigate to chooseOpponent
+                                            });
+                                        } else if("not found".equals(str)) {
+                                            Platform.runLater(() -> Alerts.showErrorAlert("User Name or Password may be Incorrect "));
+                                        }
                                     } else {
-                                        Platform.runLater(() -> showAlert(Alert.AlertType.ERROR, "User name already Exist"));
+                                        System.out.println("Unexpected 'key' value: " + keyValue);
                                     }
-                                } else {
-                                    System.out.println("Unexpected 'key' value: " + keyValue);
-                                }
-                            } else {
+                                } 
+                            }else {
                                 System.out.println("Invalid JSON format: 'operation' field is missing or null");
                                 System.out.println("Actual JSON content: " + json);
                             }
-                        } catch (JsonParseException e) {
-                            System.out.println("Invalid JSON format: " + message);
+                        }catch (JsonParseException e) {
+                             System.out.println("Invalid JSON format: " + message);
                         }
                     }
-                } catch (SocketException ex) {
+                }catch (SocketException ex) {
                     System.out.println("Socket EX");
-                } catch (IOException ex) {
+                }catch (IOException ex) {
                     System.out.println("IO EX");
                     ex.printStackTrace();
                 }
             }
-        }.start();
+         }.start();
     }
+    
 
     public void sendMessage(String message) {
         new Thread() {
@@ -162,18 +173,10 @@ public class NetworkConnection {
                 socket.close();
             }
         } catch (IOException ex) {
-            showAlert(Alert.AlertType.ERROR, "client  Stoooop");
+            Alerts.showErrorAlert("client  Stoooop");
             Logger.getLogger(NetworkConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
-    void showAlert(AlertType type, String message) {
-        Alert informationAlert = new Alert(type);
-
-        informationAlert.setTitle("");
-
-        informationAlert.setContentText(message);
-
-        informationAlert.showAndWait();
-    }
+  
 }

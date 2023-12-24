@@ -1,6 +1,6 @@
 package home;
 
-import boardGamePkg.RecordsBase;
+import record.RecordsBase;
 import java.util.Optional;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -11,6 +11,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import record.RecordListBase;
 import service.Navigator;
 
 
@@ -27,7 +28,8 @@ public class OnlineOfflineScreen extends HomeBase {
         onlineBtn = (Button) this.rightBtn;
         offlineBtn = (Button) this.leftBtn;
 
-        recordBtn =new Button();
+        recordBtn = new Button();
+  //      recordBtn.getStyleClass().add("button");
 
     
         onlineBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
@@ -75,7 +77,7 @@ public class OnlineOfflineScreen extends HomeBase {
         recordBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                    Navigator.navigateTo(new RecordsBase(),event);
+                    Navigator.navigateTo(new RecordListBase(),event);
           }
         });
 

@@ -6,9 +6,7 @@ import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.io.StringReader;
-import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Alert;
@@ -81,17 +79,32 @@ public class ServerHandler {
 
                             message = new Gson().toJson(map);
                             sendMessage(message);
+                            
                          }else if (keyPrimitive != null && keyPrimitive.getAsString().equals("onlinePlayers")) {
                             System.out.println("get onlineplayers");
-//                            Gson gson = new GsonBuilder().create();
-//                            JsonObject setJson = new JsonObject();
-//                            setJson.addProperty("key", "onlinePlayers");
                             DataAccessLayer dbLayer = new DataAccessLayer();
-//                            setJson.addProperty("onlineplayers", dbLayer.getOnlinePlayers());
                             message = dbLayer.getOnlinePlayers();
                             System.out.println("michael hena"+message);
                             sendMessage(message);
-                         }else{
+                         } 
+                         
+                         //marwa
+                         else if(keyPrimitive != null && keyPrimitive.getAsString().equals("signin")){
+                             String operationValue = json.get("key").getAsString();
+                            System.out.println("key value: " + operationValue);
+
+                            boolean exist = accessNetwork.checkSignIn(json);
+                            System.out.println("client exist= " + exist);
+                            String found = exist ? "user is exist" : "not found";
+
+                            Map<String, String> map = new HashMap<>();
+                            map.put("key", "signin");
+                            map.put("message", found);
+
+                            message = new Gson().toJson(map);
+                            sendMessage(message);}
+                         
+                        else{
                              System.out.println("Wrong json");
                          }
                     }
@@ -105,9 +118,6 @@ public class ServerHandler {
                 } catch (IOException ex) {
                     System.out.println("IO Exception");
                 }
-                    //catch (SQLException ex) {
-//                    System.out.println("Sql Exception");
-//                }
             }
         }.start();
     }

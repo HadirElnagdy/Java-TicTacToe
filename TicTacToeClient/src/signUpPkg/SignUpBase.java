@@ -299,6 +299,8 @@ public class SignUpBase extends GridPane {
                             emailTxtFld.getText(),
                             0,
                             "offline");
+                    player.setPassword(passwordTxtFld.getText());
+                    player.setEmail(emailTxtFld.getText());
                     JsonObject setJson = new JsonObject();
 
                     // Add specific fields to the payload
@@ -315,7 +317,7 @@ public class SignUpBase extends GridPane {
                 network = NetworkConnection.getInstance();
                 network.sendMessage(jsonString);
                 clearFld();  
-               
+
             }
         }
    });

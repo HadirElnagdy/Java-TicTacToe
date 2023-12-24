@@ -1,9 +1,12 @@
 package chooseopponent;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
+import service.Alerts;
 
 public class CellBase extends AnchorPane {
 
@@ -40,7 +43,11 @@ public class CellBase extends AnchorPane {
 
         sendRequestLink.setLayoutX(467.0);
         sendRequestLink.setLayoutY(17.0);
-        sendRequestLink.setText("Send Request ...");
+        sendRequestLink.setText("Request to play");
+        sendRequestLink.setOnAction((ActionEvent event) -> {
+            Alerts.showInfoAlert("Request sent to: "+userNameLabel.getText());
+            
+        });
 
         getChildren().add(userNameLabel);
         getChildren().add(scoreLabel);

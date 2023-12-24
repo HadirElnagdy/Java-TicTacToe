@@ -27,6 +27,7 @@ public class Navigator {
     private static Scene scene;
     private static Stage stage;
     
+    
     // navigate by event action parameter
     public static void navigateTo(Parent distinationRoot, ActionEvent event){
         scene = new Scene(distinationRoot);
@@ -48,6 +49,7 @@ public class Navigator {
     }
    
     private static void showScene(){
+        //scene.getStylesheets().add(getClass().getResource("/styles.css").toExternalForm());
         stage.setScene(scene);
         stage.show();
         stage.setResizable(false);
