@@ -90,7 +90,6 @@ public class DataAccessLayer {
                             System.out.println(score);
                             DtoPlayer player = new DtoPlayer(username, fullName, password, email, score, status);
                             onlinePlayers.add(player);
-//                            System.out.println("&&&&&&&&&&&&&&&&&&&&"+onlinePlayers.get(0).score);
                         }
                     }
                 } else {
@@ -114,8 +113,6 @@ public class DataAccessLayer {
         }
 
         public boolean checkIfUserExist(String userName){
-           
-          
            try {
                 if (connection != null && !connection.isClosed()) {
                 String sql = "SELECT * FROM ROOT.player WHERE USERNAME = ?";
@@ -176,7 +173,7 @@ public class DataAccessLayer {
       public void UpdateStatus(String username) throws SQLException {
         try{
             if (connection != null && !connection.isClosed()) {
-                    String sqlStatment = "UPDATE ROOT.PLAYER SET STATUS = 'online' WHERE USERNAME= ?";
+                    String sqlStatment = "UPDATE ROOT.PLAYER SET STATUS ='online' WHERE USERNAME= ?";
                     PreparedStatement pst = connection.prepareStatement(sqlStatment);
                     pst.setString(1, username);
                     int rs = pst.executeUpdate();
@@ -195,6 +192,8 @@ public class DataAccessLayer {
                 ex.printStackTrace();
         }
     }
+      
+      
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
@@ -204,5 +203,8 @@ public class DataAccessLayer {
             System.out.println("errooooooeeee!!!!");
             Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, "Error closing database connection", ex);
         }
+    }
+    public Connection getConnection() {
+        return connection;
     }
 }

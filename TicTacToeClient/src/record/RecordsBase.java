@@ -8,7 +8,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.Font;
-import service.Navigator;
+import utilis.Navigator;
 
 
 public class RecordsBase extends AnchorPane {

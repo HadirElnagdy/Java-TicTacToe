@@ -4,24 +4,18 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import dto.player.DTOPlayer;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import network.connection.NetworkConnection;
-import profile.ProfileUIBase;
-import service.Navigator;
-import signInPkg.SignInBase;
+import player.session.PlayerSession;
 
 public class ChooseOpponentBase extends AnchorPane {
 
@@ -30,8 +24,8 @@ public class ChooseOpponentBase extends AnchorPane {
     protected final Label label1;
     protected final Label label2;
     protected final ListView listView;
-    protected final Button homeBtn;
-    protected final Button profileBtn;
+    protected final Button button;
+    protected final Button button0;
     List<DTOPlayer> onlinePlayers = new ArrayList<>();
 
     public ChooseOpponentBase() {
@@ -41,8 +35,8 @@ public class ChooseOpponentBase extends AnchorPane {
         label1 = new Label();
         label2 = new Label();
         listView = new ListView();
-        homeBtn = new Button();
-        profileBtn = new Button();
+        button = new Button();
+        button0 = new Button();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -76,46 +70,45 @@ public class ChooseOpponentBase extends AnchorPane {
         listView.setPrefHeight(265.0);
         listView.setPrefWidth(600.0);
 
-        homeBtn.setLayoutX(14.0);
-        homeBtn.setLayoutY(14.0);
-        homeBtn.setMnemonicParsing(false);
-        homeBtn.setText("home");
+        button.setLayoutX(14.0);
+        button.setLayoutY(14.0);
+        button.setMnemonicParsing(false);
+        button.setText("home");
 
-        profileBtn.setLayoutX(534.0);
-        profileBtn.setLayoutY(14.0);
-        profileBtn.setMnemonicParsing(false);
-        profileBtn.setText("Profile");
-        profileBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Navigator.navigateTo(new ProfileUIBase(),event);
-            }
-        });
+        button0.setLayoutX(534.0);
+        button0.setLayoutY(14.0);
+        button0.setMnemonicParsing(false);
+        button0.setText("Profile");
 
         getChildren().add(label);
         getChildren().add(label0);
         getChildren().add(label1);
         getChildren().add(label2);
         getChildren().add(listView);
-        getChildren().add(homeBtn);
-        getChildren().add(profileBtn);
-
+        getChildren().add(button);
+        getChildren().add(button0);
 
         NetworkConnection.getInstance().opponentBase = this;
         this.sendGetOnlinePlayers();
     }
     
-   public void receiveOnlinePlayers(List<DTOPlayer> onlinePlayers) { 
-        listView.getItems().clear();
-        ObservableList<CellBase> cellList = FXCollections.observableArrayList();
-        for (DTOPlayer player : onlinePlayers) {
-            CellBase cell = new CellBase();
-            cell.userNameLabel.setText(player.getUserName());
-            cell.scoreLabel.setText(String.valueOf(player.getScore()));
-            cell.statusLabel.setText(player.getStatus());
-            // Add cell to the ListView
-            listView.getItems().add(cell);
-        }
+    public void receiveOnlinePlayers(List<DTOPlayer> onlinePlayers) {
+        Platform.runLater(() -> {
+            ObservableList<CellBase> cellList = FXCollections.observableArrayList();
+            for (DTOPlayer player : onlinePlayers) {
+                // check usename logging to not show in list view
+                if (!player.getUserName().equals(PlayerSession.getLogInUsername())) {
+                    CellBase cell = new CellBase();
+                    cell.userNameLabel.setText(player.getUserName());
+                    cell.scoreLabel.setText(String.valueOf(player.getScore()));
+                    cell.statusLabel.setText(player.getStatus());
+                    // add cell to list
+                    cellList.add(cell);
+                }
+            }
+            // set the update list
+            listView.setItems(cellList);
+        });
     }
     
     void sendGetOnlinePlayers() { 

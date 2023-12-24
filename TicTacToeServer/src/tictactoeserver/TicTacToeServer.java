@@ -18,11 +18,12 @@ public class TicTacToeServer extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Parent root = new ServerBase();
+        Parent root = new ServerBase(stage);
         
         Scene scene = new Scene(root);
         
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 

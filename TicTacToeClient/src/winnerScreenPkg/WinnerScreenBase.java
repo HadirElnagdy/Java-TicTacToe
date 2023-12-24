@@ -23,7 +23,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Font;
-import service.Navigator;
+import utilis.Navigator;
 
 public class WinnerScreenBase extends BorderPane {
 

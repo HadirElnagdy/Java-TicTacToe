@@ -1,6 +1,7 @@
 package home;
 
-import service.Alerts;
+
+import utilis.Alerts;
 import boardGamePkg.GameBase;
 import boardGamePkg.LocalSingleEasy;
 import java.util.Optional;
@@ -12,7 +13,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import service.Navigator;
+import utilis.Navigator;
 
 public class EasyHardBase extends HomeBase {
 

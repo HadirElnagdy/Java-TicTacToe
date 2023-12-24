@@ -19,11 +19,11 @@ public class Home extends Application {
     @Override
     public void start(Stage stage) {
        
-        Parent root = new OnlineOfflineScreen(); 
+        
+        Parent root =new OnlineOfflineScreen(); 
         Scene scene = new Scene(root);
-        // Load the CSS file
-//        scene.getStylesheets().add(getClass().getResource("/style/styles.css").toExternalForm());
         stage.setScene(scene);
+        stage.setResizable(false);
         stage.show();
     }
 

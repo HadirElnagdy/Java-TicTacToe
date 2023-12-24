@@ -10,7 +10,7 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import network.connection.NetworkConnection;
-import service.Navigator;
+import utilis.Navigator;
 import signUpPkg.SignUpBase;
 
 public class ChooseAuth extends HomeBase {

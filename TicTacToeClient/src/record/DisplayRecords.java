@@ -3,7 +3,6 @@ package record;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
-
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.FileReader;
@@ -19,8 +18,10 @@ import javafx.scene.layout.Pane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
-import service.Alerts;
-import service.Navigator;
+import utilis.Alerts;
+import utilis.Navigator;
+
+
 
 public class DisplayRecords extends Pane {
 

@@ -3,13 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package service;
+package utilits;
 
-import boardGamePkg.*;
-import home.*;
-import boardGamePkg.GameBase;
-import boardGamePkg.LocalMultiMode;
-import boardGamePkg.LocalSingleEasy;
+
 import java.util.Optional;
 import javafx.event.Event;
 import javafx.scene.control.Alert;
@@ -19,7 +15,6 @@ import javafx.scene.control.Dialog;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import service.Navigator;
 
 /**
  *
@@ -78,10 +73,5 @@ public class Alerts {
     alert.setContentText(message);
     alert.showAndWait();
 }
-     public static void showInfoAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
    
 }

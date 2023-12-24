@@ -1,7 +1,8 @@
 package home;
 
-import record.RecordsBase;
+import utilis.Alerts;
 import java.util.Optional;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -12,7 +13,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import record.RecordListBase;
-import service.Navigator;
+import utilis.Navigator;
 
 
 public class OnlineOfflineScreen extends HomeBase {
@@ -28,8 +29,7 @@ public class OnlineOfflineScreen extends HomeBase {
         onlineBtn = (Button) this.rightBtn;
         offlineBtn = (Button) this.leftBtn;
 
-        recordBtn = new Button();
-  //      recordBtn.getStyleClass().add("button");
+        recordBtn =new Button();
 
     
         onlineBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
@@ -52,7 +52,8 @@ public class OnlineOfflineScreen extends HomeBase {
                 alert.getDialogPane().setContent(gridPane);
                 Optional<ButtonType> result = alert.showAndWait();
                 if(ipAddressTextField.getText().isEmpty()){
-                    ipAddressTextField.setStyle("");
+                 Platform.runLater(() ->Alerts.showErrorAlert("Must enter ip server"));
+
                 }else{
                     if (result.isPresent() && result.get() == ButtonType.OK) {
                         ChooseAuth destination = new ChooseAuth();
