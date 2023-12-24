@@ -26,7 +26,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.text.Font;
-import service.Navigator;
+import utilis.Navigator;
 
 public class DisplayRecords extends Pane {
 

@@ -16,7 +16,7 @@ import javafx.scene.layout.GridPane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
-import service.Navigator;
+import utilis.Navigator;
 
 /**
  *

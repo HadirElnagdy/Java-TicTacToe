@@ -1,5 +1,6 @@
 package home;
 
+import utilis.Alerts;
 import boardGamePkg.RecordsBase;
 import java.util.Optional;
 import javafx.application.Platform;
@@ -12,7 +13,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
-import service.Navigator;
+import utilis.Navigator;
 
 
 public class OnlineOfflineScreen extends HomeBase {

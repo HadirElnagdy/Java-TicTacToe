@@ -8,7 +8,7 @@ package boardGamePkg;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import home.Alerts;
+import utilis.Alerts;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,7 +27,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.text.Font;
-import service.Navigator;
+import utilis.Navigator;
 import winnerScreenPkg.WinnerScreenBase;
 
 /**

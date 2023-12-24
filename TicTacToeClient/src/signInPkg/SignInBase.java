@@ -6,7 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import dto.player.DTOPlayer;
 import chooseopponent.ChooseOpponentBase;
-import home.Alerts;
+import utilis.Alerts;
 import home.ChooseAuth;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -14,6 +14,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import signUpPkg.SignUpBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -22,13 +23,14 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import network.connection.NetworkConnection;
-import service.Navigator;
+import utilis.Navigator;
 
 public class SignInBase extends GridPane {
 
@@ -51,7 +53,7 @@ public class SignInBase extends GridPane {
     protected final Label label2;
     protected final Button signInBtn;
     protected final TextField uNameTxtFld;
-    protected final TextField passwordTxtFld;
+    protected final PasswordField passwordTxtFld;
     protected final Button backBtn;
     NetworkConnection network;
      
@@ -76,7 +78,7 @@ public class SignInBase extends GridPane {
         label2 = new Label();
         signInBtn = new Button();
         uNameTxtFld = new TextField();
-        passwordTxtFld = new TextField();
+        passwordTxtFld = new PasswordField();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -226,7 +228,7 @@ public class SignInBase extends GridPane {
             public void handle(ActionEvent event) {
        
                 if (uNameTxtFld.getText().isEmpty() || passwordTxtFld.getText().isEmpty()){
-                    Alerts.showErrorAlert("must Complete your data.");
+                    Platform.runLater(() ->Alerts.showErrorAlert("must Complete your data."));
                 }
                 else{
                     Gson gson = new GsonBuilder().create();

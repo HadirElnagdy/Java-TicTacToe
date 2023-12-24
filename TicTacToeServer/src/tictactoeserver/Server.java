@@ -5,7 +5,7 @@
  */
 package tictactoeserver;
 
-import alerts.Alerts;
+import utilits.Alerts;
 import dataAccessLayer.DataAccessLayer;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -52,16 +52,15 @@ public class Server {
                         System.out.println("new client join");
                     } catch (SocketException ex) {
                         System.out.println("SocketException in server");
-                        Platform.runLater(() ->Alerts.showErrorAlert("Server has Closed"));
+                        Platform.runLater(() ->Alerts.showErrorAlert("Client Closed"));
                     } catch (IOException ex) {
                         Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
                     }
                 }
-
             }
-
         }.start();
     }
+    
     void closeConnection() throws IOException {
         isOpened = false;
         DataAccessLayer dbLayer = new DataAccessLayer();

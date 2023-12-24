@@ -10,7 +10,7 @@ import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import access.network.AccessNetwork;
-import alerts.Alerts;
+import utilits.Alerts;
 import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;

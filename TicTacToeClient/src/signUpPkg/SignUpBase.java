@@ -5,7 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import dto.player.DTOPlayer;
-import home.Alerts;
+import utilis.Alerts;
 import home.ChooseAuth;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -26,7 +26,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import network.connection.NetworkConnection;
-import service.Navigator;
+import utilis.Navigator;
 
 public class SignUpBase extends GridPane {
 

@@ -8,7 +8,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import dto.player.DTOPlayer;
-import home.Alerts;
+import utilis.Alerts;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -21,7 +21,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
 import player.session.PlayerSession;
-import service.Navigator;
+import utilis.Navigator;
 import signInPkg.SignInBase;
 
 public class NetworkConnection {
