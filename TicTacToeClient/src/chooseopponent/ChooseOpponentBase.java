@@ -4,11 +4,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import dto.player.DTOPlayer;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -99,16 +96,17 @@ public class ChooseOpponentBase extends AnchorPane {
         Platform.runLater(() -> {
             ObservableList<CellBase> cellList = FXCollections.observableArrayList();
             for (DTOPlayer player : onlinePlayers) {
+                // check usename logging to not show in list view
                 if (!player.getUserName().equals(PlayerSession.getLogInUsername())) {
                     CellBase cell = new CellBase();
                     cell.userNameLabel.setText(player.getUserName());
                     cell.scoreLabel.setText(String.valueOf(player.getScore()));
                     cell.statusLabel.setText(player.getStatus());
-                    // Add cell to the list
+                    // add cell to list
                     cellList.add(cell);
                 }
             }
-            // Set the updated list to the ListView
+            // set the update list
             listView.setItems(cellList);
         });
     }

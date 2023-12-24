@@ -91,11 +91,13 @@ public class NetworkConnection {
                             try {
                                 JsonParser jsonParser = new JsonParser();
                                 JsonObject json = jsonParser.parse(message).getAsJsonObject();
-                                 if (json.has("key") && !json.get("key").isJsonNull()) {
+                                // check key in json 
+                                if (json.has("key") && !json.get("key").isJsonNull()) {
 
                                 System.out.println("hema mar3y hena :"+newJson);
                                 JsonObject modifiedJson = jsonParser.parse(newJson).getAsJsonObject();
-
+                                
+                                // check where onlinePlayers value to read his message
                                 if (modifiedJson.has("onlinePlayers")) {
                                     JsonElement playersElement = modifiedJson.get("onlinePlayers");
 
@@ -111,10 +113,12 @@ public class NetworkConnection {
 
                                        Platform.runLater(() -> opponentBase.receiveOnlinePlayers(onlinePlayers));
                                     }
-                                } else if (json.has("key") && !json.get("key").isJsonNull()) {
+                                }
+                                
+                                else if (json.has("key") && !json.get("key").isJsonNull()) {
                                     String keyValue = json.get("key").getAsString();
                                     System.out.println("key value: " + keyValue);
-
+                                    // check where signup value to read his message
                                     if ("signup".equals(keyValue)) {
                                         String str = json.get("message").getAsString();
                                         if ("new user".equals(str)) {
@@ -128,36 +132,43 @@ public class NetworkConnection {
                                             Platform.runLater(() -> Alerts.showErrorAlert("User name already Exist"));
                                         }
                                     }
+                                    // check where signin value to read his message
                                     else if ("signin".equals(keyValue)) {
-                                        String str = json.get("message").getAsString();
-                                        if ("user is exist".equals(str)) {
-                                            System.out.println("Sign IN succeeded");
+                                            String str = json.get("message").getAsString();
+                                            if ("user is exist".equals(str)) {
+                                                System.out.println("Sign IN succeeded");
+                                                // set value of UserName key in session to save it
+                                                String logInUsername = json.get("UserName").getAsString();
+                                                // save username in the playerSession
+                                                PlayerSession.setLogInUsername(logInUsername);                                            
 
-                                            String logInUsername = json.get("UserName").getAsString();
-                                            // save username in the playerSession
-                                            PlayerSession.setLogInUsername(logInUsername);                                            
-                                            
-                                            Platform.runLater(() -> {
-                                                Alerts.showConfirmationAlert("Sign IN succeeded");
-                                                Navigator.navigateTo(new ChooseOpponentBase());//navigate to chooseOpponent
-                                            });
-                                        } else if("not found".equals(str)) {
-                                            Platform.runLater(() -> Alerts.showErrorAlert("User Name or Password may be Incorrect "));
+                                                Platform.runLater(() -> {
+                                                    Alerts.showConfirmationAlert("Sign IN succeeded");
+                                                    Navigator.navigateTo(new ChooseOpponentBase());//navigate to chooseOpponent
+                                                });
+                                            } else if("not found".equals(str)) {
+                                                Platform.runLater(() -> Alerts.showErrorAlert("User Name or Password may be Incorrect "));
+                                            }
+                                        } else {
+                                            System.out.println("Unexpected 'key' value: " + keyValue);
                                         }
-                                    } else {
-                                        System.out.println("Unexpected 'key' value: " + keyValue);
-                                    }
-                                } 
-                            }else {
-                                System.out.println("Invalid JSON format: 'operation' field is missing or null");
-                                System.out.println("Actual JSON content: " + json);
-                            }
+                                    // check where request value and game move ///////////////////////
+                                    
+                                
+                                
+                                    } 
+                                }
+                            
+                        else {
+                            System.out.println("Actual JSON content: " + json);
+                        }
                         }catch (JsonParseException e) {
                              System.out.println("Invalid JSON format: " + message);
                         }
                     }
                 }catch (SocketException ex) {
                     System.out.println("Socket EX");
+                    Platform.runLater(() ->Alerts.showErrorAlert("Server Stoooop"));
                 }catch (IOException ex) {
                     System.out.println("IO EX");
                     ex.printStackTrace();

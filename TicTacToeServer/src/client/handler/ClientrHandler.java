@@ -1,4 +1,4 @@
-package server.handler;
+package client.handler;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -36,7 +36,9 @@ public class ClientrHandler {
 
     public ClientrHandler(Socket socket) {
         this.socket = socket;
+        // ip client
         ip = socket.getInetAddress().getHostAddress();
+        // port client
         portNum = socket.getPort();
         try {
             printStream = new PrintStream(socket.getOutputStream());
@@ -69,7 +71,8 @@ public class ClientrHandler {
                         JsonParser parser = new JsonParser();
                         JsonObject json = parser.parse(new StringReader(message)).getAsJsonObject();
                         JsonPrimitive keyPrimitive = json.getAsJsonPrimitive("key");
-     
+                            
+                        // send respose signup
                         if (keyPrimitive != null && keyPrimitive.getAsString().equals("signup")) {
                             
                             String operationValue = json.get("key").getAsString();
@@ -86,7 +89,9 @@ public class ClientrHandler {
                             message = new Gson().toJson(map);
                             sendMessage(message);
                             
-                         }else if (keyPrimitive != null && keyPrimitive.getAsString().equals("onlinePlayers")) {
+                        }
+                        // send all online players in all clients
+                        else if (keyPrimitive != null && keyPrimitive.getAsString().equals("onlinePlayers")) {
                             System.out.println("get onlineplayers");
                             DataAccessLayer dbLayer = new DataAccessLayer();
                           
@@ -99,6 +104,7 @@ public class ClientrHandler {
                          } 
                          
                          //marwa
+                         // send response sign in with usename to save username when succefful logging in
                          else if(keyPrimitive != null && keyPrimitive.getAsString().equals("signin")){
                              String operationValue = json.get("key").getAsString();
                             System.out.println("key value: " + operationValue);
@@ -115,8 +121,9 @@ public class ClientrHandler {
                             map.put("UserName", username);
                             
                             message = new Gson().toJson(map);
-                            sendMessage(message);}
-                         
+                            sendMessage(message);
+                         }
+                         ///// response request and game move
                         else{
                              System.out.println("Wrong json");
                          }
@@ -146,7 +153,7 @@ public class ClientrHandler {
         }.start();
     }
     
-   
+   // close resource between client and server
     public void closeResources() {
         try {
             System.out.println("Client disconnected");
@@ -163,7 +170,7 @@ public class ClientrHandler {
             Logger.getLogger(ClientrHandler.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+    // get ip of socket's client opened
     public String getIp() {
         return ip;
     }

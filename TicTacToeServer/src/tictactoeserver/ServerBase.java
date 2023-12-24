@@ -6,14 +6,12 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.chart.PieChart;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
@@ -23,7 +21,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
-import server.handler.ClientrHandler;
 
 public class ServerBase extends BorderPane {
 
@@ -291,17 +288,20 @@ public class ServerBase extends BorderPane {
                 isServerRunning = true ;
                 serverBtn.setText("OFF");
                 chart.setVisible(true);
+                // call server
                 server = new Server();
                 
             }else{
                 serverBtn.setText("ON");                 
                 chart.setVisible(false);
                 try {
+                    // close server
                     server.closeConnection();
                 } catch (IOException ex) {
                     Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            // switch button
             isClicked =! isClicked ;
         });
        
@@ -323,6 +323,7 @@ public class ServerBase extends BorderPane {
         
     }
     
+    // pie chart design
         private void setCustomColors() {
         // Get the data slices
         PieChart.Data[] dataSlices = new PieChart.Data[chart.getData().size()];
@@ -342,6 +343,7 @@ public class ServerBase extends BorderPane {
             System.out.println("Style applied for " + dataSlice.getName() + ": " + style);
         }
     }
+        // pie chart label
     private void traverseSceneGraph(PieChart chart, Color color) {
         for (javafx.scene.Node node : chart.lookupAll(".text.chart-pie-label")) {
             if (node instanceof javafx.scene.text.Text) {

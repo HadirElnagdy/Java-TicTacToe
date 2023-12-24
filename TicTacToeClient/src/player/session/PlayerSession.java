@@ -10,7 +10,7 @@ package player.session;
  * @author Michael
  */
 public class PlayerSession {
-    
+    //save usename which log with
     private static String logInUsername;
 
     public static void setLogInUsername(String username) {
