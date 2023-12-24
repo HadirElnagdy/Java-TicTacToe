@@ -52,7 +52,7 @@ public class Server {
                         System.out.println("new client join");
                     } catch (SocketException ex) {
                         System.out.println("SocketException in server");
-                        Platform.runLater(() ->Alerts.showErrorAlert("Client Closed"));
+                        Platform.runLater(() ->Alerts.showErrorAlert("Server Closed"));
                     } catch (IOException ex) {
                         Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
                     }
