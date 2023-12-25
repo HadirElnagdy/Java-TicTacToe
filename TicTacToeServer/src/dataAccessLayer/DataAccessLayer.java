@@ -192,7 +192,42 @@ public class DataAccessLayer {
                 ex.printStackTrace();
         }
     }
-      
+    public int online() throws SQLException {
+         String sqlSelect ="SELECT COUNT(USERNAME) AS COUNTER FROM ROOT.PLAYER WHERE STATUS = ?";
+         PreparedStatement pre =connection.prepareStatement(sqlSelect);
+         pre.setString(1, "online");
+         int count=0;
+         ResultSet rs =pre.executeQuery();
+         while(rs.next()){
+             count=rs.getInt("COUNTER");
+         }
+         return count;
+    }
+    
+    public int offline() throws SQLException {
+         String sqlSelect ="SELECT COUNT(USERNAME) AS COUNTER FROM ROOT.PLAYER WHERE STATUS = ?";
+         PreparedStatement pre =connection.prepareStatement(sqlSelect);
+         pre.setString(1, "offline");
+         int count=0;
+         ResultSet rs =pre.executeQuery();
+         while(rs.next()){
+             count=rs.getInt("COUNTER");
+         }
+         return count;
+    }
+    
+    public int busy() throws SQLException {
+         String sqlSelect ="SELECT COUNT(USERNAME) AS COUNTER FROM ROOT.PLAYER WHERE STATUS = ?";
+         PreparedStatement pre =connection.prepareStatement(sqlSelect);
+         pre.setString(1, "busy");
+         int count=0;
+         ResultSet rs =pre.executeQuery();
+         while(rs.next()){
+             count=rs.getInt("COUNTER");
+         }
+        return count;
+         
+    }
       
     public void closeConnection() {
         try {
