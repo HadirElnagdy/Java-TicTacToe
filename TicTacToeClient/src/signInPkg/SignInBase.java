@@ -30,6 +30,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import network.connection.NetworkConnection;
+import player.session.PlayerSession;
 import utilis.Navigator;
 
 public class SignInBase extends GridPane {
@@ -247,6 +248,8 @@ public class SignInBase extends GridPane {
 
                         network = NetworkConnection.getInstance();
                         network.sendMessage(jsonString);
+                        
+                        PlayerSession.setLogInUsername(player.getUserName());
                         clearFld();
                 }       
             }

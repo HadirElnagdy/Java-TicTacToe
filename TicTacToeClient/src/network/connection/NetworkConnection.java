@@ -148,8 +148,26 @@ public class NetworkConnection {
                                                 });
                                             } else if("not found".equals(str)) {
                                                 Platform.runLater(() -> Alerts.showErrorAlert("User Name or Password may be Incorrect "));
-                                            }
-                                        } else {
+                                            }}
+//                                       }
+                                            //else if ("logout".equals(keyValue)) {
+//                                            String str = json.get("message").getAsString();
+//                                            if ("user is exist".equals(str)) {
+//                                                System.out.println("Log out succeeded");
+//                                                // set value of UserName key in session to save it
+//                                                String logInUsername = json.get("UserName").getAsString();
+//                                                // save username in the playerSession
+//                                                PlayerSession.setLogInUsername(logInUsername);                                            
+//
+//                                                Platform.runLater(() -> {
+//                                                    Alerts.showConfirmationAlert("Sign IN succeeded");
+//                                                    Navigator.navigateTo(new ChooseOpponentBase());//navigate to chooseOpponent
+//                                                });
+//                                            } else if("not found".equals(str)) {
+//                                                Platform.runLater(() -> Alerts.showErrorAlert("User Name or Password may be Incorrect "));
+//                                            }
+//                                        }
+                                    else {
                                             System.out.println("Unexpected 'key' value: " + keyValue);
                                         }
                                     // check where request value and game move ///////////////////////
