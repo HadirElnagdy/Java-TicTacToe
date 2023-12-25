@@ -70,6 +70,20 @@ public class Alerts {
         Optional<ButtonType> result = alert.showAndWait();
         return result.isPresent() && result.get() == ButtonType.OK;
     }
+    public static boolean showConfirmationAlert(String message, String button1, String button2){
+        
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setHeaderText(message);
+
+        ButtonType firstButton = new ButtonType(button1);
+        ButtonType secondButton = new ButtonType(button2);
+       
+        
+        alert.getButtonTypes().setAll(firstButton, secondButton);
+        Optional<ButtonType> result = alert.showAndWait();
+       
+        return result.isPresent() && result.get() == firstButton;
+    }
    
    public static void showErrorAlert(String message) {
     Alert alert = new Alert(AlertType.ERROR);

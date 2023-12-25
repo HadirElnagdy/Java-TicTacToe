@@ -19,6 +19,7 @@ import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.application.Platform;
+import tictactoeserver.Server;
 import static tictactoeserver.Server.clientsVector;
 
 public class ClientrHandler {
@@ -29,6 +30,7 @@ public class ClientrHandler {
     boolean isRunning = true ; 
     private String message; 
     private boolean isClientConnected = true;
+    private String clientUserName;
     
     String ip;
     int portNum;
@@ -76,12 +78,11 @@ public class ClientrHandler {
                         if (keyPrimitive != null && keyPrimitive.getAsString().equals("signup")) {
                             
                             String operationValue = json.get("key").getAsString();
-                            System.out.println("key value: " + operationValue);
+                            System.out.println("Keyyyyyy: " + operationValue);
 
                             boolean exist = accessNetwork.checkSignUp(json);
-                            System.out.println("client exist= " + exist);
+                          //  System.out.println("client exist= " + exist);
                             String found = exist ? "user is exist" : "new user";
-
                             Map<String, String> map = new HashMap<>();
                             map.put("key", "signup");
                             map.put("message", found);
@@ -92,7 +93,7 @@ public class ClientrHandler {
                         }
                         // send all online players in all clients
                         else if (keyPrimitive != null && keyPrimitive.getAsString().equals("onlinePlayers")) {
-                            System.out.println("get onlineplayers");
+                          //  System.out.println("get onlineplayers");
                             DataAccessLayer dbLayer = new DataAccessLayer();
                           
                             message = dbLayer.getOnlinePlayers();
@@ -107,21 +108,56 @@ public class ClientrHandler {
                          // send response sign in with usename to save username when succefful logging in
                          else if(keyPrimitive != null && keyPrimitive.getAsString().equals("signin")){
                              String operationValue = json.get("key").getAsString();
-                            System.out.println("key value: " + operationValue);
+                            //System.out.println("key value: " + operationValue);
 
                             boolean exist = accessNetwork.checkSignIn(json);
-                            System.out.println("client exist= " + exist);
+                            //System.out.println("client exist= " + exist);
                             String found = exist ? "user is exist" : "not found";
                             String username = json.get("UserName").getAsString();
-                            
+                            if(found == "user is exist") clientUserName = username;
                             Map<String, String> map = new HashMap<>();
                             map.put("key", "signin");
                             map.put("message", found);
                             // send username again to save player 
                             map.put("UserName", username);
-                            
                             message = new Gson().toJson(map);
                             sendMessage(message);
+                         }
+                         //send two messages request response and receiverMessage
+                         //"sendingRequest"
+                         else if(keyPrimitive != null && keyPrimitive.getAsString().equals("sendingRequest")){
+                             String receiverUserName = json.get("receiverUserName").getAsString();
+                             Map<String, String> map = new HashMap<>();
+                            map.put("key", "receivingRequest");
+                            map.put("senderUserName", clientUserName);
+                            message = new Gson().toJson(map);
+                              for (int i = 0; i < Server.clientsVector.size(); i++) {
+                                  if(Server.clientsVector.get(i).getUsername().equals(receiverUserName)){
+                                      Server.clientsVector.get(i).sendMessage(message);
+                                      break;
+                                  } 
+                              }         
+                         }
+                         else if(keyPrimitive != null && keyPrimitive.getAsString().equals("requestRespond")){
+                             //This client = sender for now
+                             String receiverUserName = json.get("receiverUserName").getAsString();
+                             String senderUserName = json.get("senderUserName").getAsString();
+                             System.out.println("Response Sender: "+senderUserName+" Response Receiver: "+receiverUserName+ " My client: " + getUsername());
+                             String msg = json.get("message").getAsString();
+                             Map<String, String> map = new HashMap<>();
+                            map.put("key", "requestRespond");
+                            map.put("response", msg);
+                            message = new Gson().toJson(map);
+                            if(msg.equals("Accepted")){ 
+                                DataAccessLayer DAL = new DataAccessLayer();
+                                DAL.makePlayersBusy(receiverUserName, senderUserName);
+                            }
+                              for (int i = 0; i < Server.clientsVector.size(); i++) {
+                                  if(Server.clientsVector.get(i).getUsername().equals(receiverUserName)){
+                                      Server.clientsVector.get(i).sendMessage(message);
+                                      break;
+                                  } 
+                              }         
                          }
                          ///// response request and game move
                         else{
@@ -174,4 +210,8 @@ public class ClientrHandler {
     public String getIp() {
         return ip;
     }
+    public String getUsername(){
+        return clientUserName;
+    }
+    
 }

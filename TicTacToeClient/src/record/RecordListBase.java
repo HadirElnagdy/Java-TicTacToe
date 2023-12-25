@@ -7,8 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -23,7 +21,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
-import service.Navigator;
+import utilis.Navigator;
 
 public class RecordListBase extends BorderPane {
 
