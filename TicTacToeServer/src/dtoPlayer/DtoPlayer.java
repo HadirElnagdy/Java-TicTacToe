@@ -19,6 +19,10 @@ public class DtoPlayer {
 
     public DtoPlayer() {
     }
+
+    public DtoPlayer(String UserName) {
+        this.UserName = UserName;
+    }
     
     public DtoPlayer(String UserName, String password) {
         this.UserName = UserName;

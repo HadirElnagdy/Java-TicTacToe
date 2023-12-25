@@ -123,6 +123,25 @@ public class ClientrHandler {
                             message = new Gson().toJson(map);
                             sendMessage(message);
                          }
+                           else if(keyPrimitive != null && keyPrimitive.getAsString().equals("logout")){
+                             String operationValue = json.get("key").getAsString();
+                            System.out.println("key value: " + operationValue);
+
+                            boolean exist = accessNetwork.checkLogOut(json);
+                            System.out.println("client logedout= " + exist);
+                            String found = exist ? "user is exist" : "not found";
+                            String username = json.get("UserName").getAsString();
+                            
+                            Map<String, String> map = new HashMap<>();
+                            map.put("key", "logout");
+                            
+                            // send username again to save player 
+                            map.put("USERNAME", username);
+                            
+                            message = new Gson().toJson(map);
+                            sendMessage(message);
+                            System.out.println("logedout succeded");
+                         }
                          ///// response request and game move
                         else{
                              System.out.println("Wrong json");
