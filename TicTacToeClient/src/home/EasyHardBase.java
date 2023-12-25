@@ -3,6 +3,7 @@ package home;
 import utilis.Alerts;
 import boardGamePkg.GameBase;
 import boardGamePkg.LocalSingleEasy;
+import boardGamePkg.LocalSingleMedium;
 import boardGamePkg.RecordsBase;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
@@ -83,6 +84,14 @@ public class EasyHardBase extends BorderPane {
         mediumBtn.setText("Medium");
         mediumBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
         mediumBtn.setFont(new Font(14.0));
+        mediumBtn.addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
+            String[] input = Alerts.showInputAlert("Enter player name", null, "Player Name");
+            if(input != null){
+                GameBase destination = new LocalSingleMedium();
+                
+                destination.setPlayersNames(input[0] , "Computer");
+                Navigator.navigateTo(destination,event);}
+        });
         setBottom(pane);
 
         BorderPane.setAlignment(pane0, javafx.geometry.Pos.CENTER);
