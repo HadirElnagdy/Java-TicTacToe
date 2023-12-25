@@ -23,10 +23,12 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import utilis.Navigator;
 import winnerScreenPkg.WinnerScreenBase;
 
@@ -38,7 +40,6 @@ public abstract class GameBase extends Pane {
     
     protected final Label player1Name;
     protected final Label player2Name;
-    protected final Button backBtn;
     protected final Label scoreP1;
     protected final Label scoreP2;
     protected final ToggleButton recordBtn;
@@ -55,9 +56,11 @@ public abstract class GameBase extends Pane {
     private final List<String> rMoves;
     BufferedWriter writer;
     boolean isRecord=false;
+   
+    protected final Button backBtn;
+
     
-    
-    public GameBase(GridPane backDestination, String playingMode) {
+    public GameBase(BorderPane backDestination, String playingMode) {
 
         try {
             writer = new BufferedWriter(new FileWriter("Record History.txt",true));
@@ -75,7 +78,7 @@ public abstract class GameBase extends Pane {
         recordBtn = new ToggleButton();
         gridPane = new GridPane();
         moves = new ArrayList<>();
-         rMoves = new ArrayList<>();
+        rMoves = new ArrayList<>();
         
         filledCells = 0;
         currentSymbol = "O";
@@ -86,48 +89,62 @@ public abstract class GameBase extends Pane {
         setMinWidth(USE_PREF_SIZE);
         setPrefHeight(400.0);
         setPrefWidth(600.0);
+        setStyle("-fx-background-color: #232429;");
 
-
+        
         player1Name.setLayoutX(144.0);
         player1Name.setLayoutY(14.0);
         player1Name.setText("Player 1");
-        player1Name.setFont(new Font("System Bold Italic", 23.0));
+        player1Name.setFont(new Font("System Italic", 23.0));
         player1Name.setText(plyr1Name);
-        
+        player1Name.setStyle("-fx-text-fill: #FFFFFF;");
 
         player2Name.setLayoutX(313.0);
         player2Name.setLayoutY(14.0);
         player2Name.setText("Player 2");
-        player2Name.setFont(new Font("System Bold Italic", 23.0));
+        player2Name.setFont(new Font("System Italic", 20.0));
         player2Name.setText(plyr2Name);
+        player2Name.setStyle("-fx-text-fill: #FFFFFF;");
 
-        backBtn.setLayoutX(14.0);
-        backBtn.setLayoutY(14.0);
+        backBtn.setLayoutX(10.0);
+        backBtn.setLayoutY(10.0);
         backBtn.setMnemonicParsing(false);
-        backBtn.setText("Back");
+        backBtn.setPrefHeight(30.0);
+        backBtn.setPrefWidth(30.0);
+        backBtn.setStyle("-fx-background-color: #525461; -fx-text-fill: #FFFFFF; -fx-background-radius: 15;");
+        backBtn.setText("\u2190");
+        backBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        backBtn.setFont(Font.font("System Bold", FontWeight.BOLD, 16.0));
+        
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-          if(Alerts.showConfirmationAlert("Do you want to Quit?")) 
+            if(Alerts.showConfirmationAlert("Do you want to Quit?")) 
                     GameBase.resetAll();
                     Navigator.navigateTo(backDestination,event); 
             }
         });
 
       
-        scoreP1.setLayoutX(175.0);
+        scoreP1.setLayoutX(150.0);
         scoreP1.setLayoutY(48.0);
         scoreP1.setText(Integer.toString(player1Score));
-
+        scoreP1.setStyle("-fx-text-fill: #FFFFFF;");
+        
         scoreP2.setLayoutX(344.0);
         scoreP2.setLayoutY(48.0);
         scoreP2.setText(Integer.toString(player2Score));
-
-        recordBtn.setLayoutX(14.0);
+        scoreP2.setStyle("-fx-text-fill: #FFFFFF;");
+       
+        recordBtn.setLayoutX(17.0);
         recordBtn.setLayoutY(361.0);
+        recordBtn.setPrefHeight(20.0);
+        recordBtn.setPrefWidth(90.0);
         recordBtn.setMnemonicParsing(false);
         recordBtn.setText("Record");
-                recordBtn.setOnAction(new EventHandler<ActionEvent>() {
+        recordBtn.setStyle("-fx-background-color: #1577FF; -fx-text-fill: #FFFFFF; -fx-background-radius: 10;");
+        
+        recordBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                //
@@ -172,15 +189,21 @@ public abstract class GameBase extends Pane {
             }
         }
     }
+    
     protected Button createCell() {
         Button cell = new Button();
         cell.setMinSize(100, 100);
         cell.setAlignment(Pos.CENTER);
         cell.setFont(new Font(40.0));
-       
-           cell.setOnAction(event -> {
+        cell.setStyle(
+              "-fx-background-color: #232429;"
+            + "-fx-border-color: #1B1E23;"
+            + "-fx-border-width: 5;"
+            + "-fx-border-radius: 10;");  
+        cell.setOnAction(event -> {
             startPlaying(event);
             recordMove(cell);
+            
             if (checkWinner()) {
                 if(currentSymbol == "X"){
                     winner = 1;
@@ -284,6 +307,7 @@ public abstract class GameBase extends Pane {
         
     }
     protected abstract void startPlaying(ActionEvent e);
+    
     // writing the record in text file
     protected void recordMovesToFile() {
         try  {

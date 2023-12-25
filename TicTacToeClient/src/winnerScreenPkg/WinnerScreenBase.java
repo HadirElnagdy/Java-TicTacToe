@@ -3,7 +3,7 @@ package winnerScreenPkg;
 import boardGamePkg.GameBase;
 import boardGamePkg.LocalMultiMode;
 import boardGamePkg.LocalSingleEasy;
-import home.OnlineOfflineScreen;
+import home.FXMLHomeBase;
 import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Level;
@@ -154,7 +154,7 @@ public class WinnerScreenBase extends BorderPane {
             public void handle(ActionEvent event) {
                 GameBase.resetAll();
                 stopVideo();
-                Navigator.navigateTo(new OnlineOfflineScreen(),event);
+                Navigator.navigateTo(new FXMLHomeBase(),event);
           
                 }
         });

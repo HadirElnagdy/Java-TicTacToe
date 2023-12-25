@@ -1,15 +1,6 @@
 package boardGamePkg;
 
-import boardGamePkg.GameBase;
-import boardGamePkg.LocalMultiMode;
-import home.Home;
-import home.OnlineOfflineScreen;
-import home.OnlineOfflineScreen;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import home.FXMLHomeBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -69,7 +60,7 @@ public class RecordsBase extends AnchorPane {
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Navigator.navigateTo(new OnlineOfflineScreen(),event);
+                Navigator.navigateTo(new FXMLHomeBase(),event);
           
                     }
         });
