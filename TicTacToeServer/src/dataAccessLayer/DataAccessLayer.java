@@ -214,7 +214,34 @@ public class DataAccessLayer {
                 System.out.println("something wrong in sign in : " + ex.getMessage());
                 ex.printStackTrace();
         }
-      }
+      } 
+      
+      public boolean logOut(String username) throws SQLException {
+          boolean found =false;
+        try{
+            if (connection != null && !connection.isClosed()) {
+                    String sqlStatment = "UPDATE ROOT.PLAYER SET STATUS ='offline' WHERE USERNAME= ?";
+                    PreparedStatement pst = connection.prepareStatement(sqlStatment);
+                    pst.setString(1, username);
+                    int rs = pst.executeUpdate();
+                    if (rs == 0) {
+                        System.out.println("something wrong !!!");
+                    } else {
+                        System.out.println("Log Out successed");
+                        found=true;
+                    }
+                    
+                 }
+            else{
+                System.out.println("No valid database connection.");
+
+            }
+        }catch(SQLException ex){
+                System.out.println("something wrong in Log Out : " + ex.getMessage());
+                ex.printStackTrace();
+        }
+        return found;
+    }
       
       
     public void closeConnection() {

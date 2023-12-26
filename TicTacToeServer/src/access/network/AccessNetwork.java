@@ -104,5 +104,45 @@ public class AccessNetwork {
         return found;
     }
     
-   
+
+      public boolean checkLogOut(JsonObject json) {
+        boolean found = false ;
+
+        try {  
+             if (json.has("UserName") ) {
+
+                String username = json.get("UserName").getAsString();
+                
+                DtoPlayer player = new DtoPlayer(username);
+
+                System.out.println("recived");
+                
+                System.out.println( "  " + username );
+
+                found = dataAccessLayer.logOut(player.getUserName());
+
+                if (found) {
+                    found = true;
+                    System.out.println("USER FOUND");
+                   // dataAccessLayer.UpdateStatus(username);
+                    
+                } else {
+                    found = false; 
+                }
+                    
+            }else {
+                System.out.println("Incomplete or malformed JSON payload forLog Out");
+                System.out.println("Received JSON payload: " + json.toString());
+
+            }
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AccessNetwork.class.getName()).log(Level.SEVERE, "Error during Log Out", ex);
+        }            
+
+        
+        
+        return found;
+    }
 }
+

@@ -4,11 +4,14 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import dto.player.DTOPlayer;
+import home.FXMLHomeBase;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
@@ -16,6 +19,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
 import network.connection.NetworkConnection;
 import player.session.PlayerSession;
+import utilis.Navigator;
 
 public class ChooseOpponentBase extends AnchorPane {
 
@@ -26,6 +30,7 @@ public class ChooseOpponentBase extends AnchorPane {
     protected final ListView listView;
     protected final Button button;
     protected final Button button0;
+    NetworkConnection network;
     List<DTOPlayer> onlinePlayers = new ArrayList<>();
 
     public ChooseOpponentBase() {
@@ -73,7 +78,29 @@ public class ChooseOpponentBase extends AnchorPane {
         button.setLayoutX(14.0);
         button.setLayoutY(14.0);
         button.setMnemonicParsing(false);
-        button.setText("home");
+        button.setText("logOut");
+              button.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                
+                    Gson gson = new GsonBuilder().create();
+                    DTOPlayer player = new DTOPlayer();
+                    player.setUserName(PlayerSession.getLogInUsername());
+                        JsonObject setJson = new JsonObject();
+
+                        // Add specific fields to the payload
+                        setJson.addProperty("key", "logout");
+                        setJson.addProperty("UserName", player.getUserName());
+                         String jsonString = gson.toJson(setJson);
+                        network = NetworkConnection.getInstance();
+                        network.sendMessage(jsonString);
+                        
+                    Navigator.navigateTo(new FXMLHomeBase(),event);
+              
+                }       
+            
+        
+        });
 
         button0.setLayoutX(534.0);
         button0.setLayoutY(14.0);

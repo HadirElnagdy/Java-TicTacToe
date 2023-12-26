@@ -1,5 +1,9 @@
 package record;
 
+import static boardGamePkg.GameBase.player1Score;
+import static boardGamePkg.GameBase.player2Score;
+import static boardGamePkg.GameBase.winner;
+import home.FXMLHomeBase;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
@@ -13,6 +17,7 @@ import javafx.animation.PauseTransition;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
@@ -79,15 +84,27 @@ public class DisplayRecords extends Pane {
         backBtn.setLayoutY(14.0);
         backBtn.setMnemonicParsing(false);
         backBtn.setText("Back");
+       
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if (Alerts.showConfirmationAlert("Are you sure you want to quit?")) {
                     Navigator.navigateTo(new RecordListBase(), event);
-                }
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Confirmation");
+                alert.setHeaderText(null);
+                alert.setContentText("Are you sure you want to quit?");
+                alert.getButtonTypes().setAll(
+                        javafx.scene.control.ButtonType.YES,
+                        javafx.scene.control.ButtonType.NO);
+                java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
+                    if (result.isPresent() && result.get() == javafx.scene.control.ButtonType.YES) {
+                        Navigator.navigateTo(new FXMLHomeBase(), event);
+                    }
+               }
             }
         });
-
+        
         scoreP1.setLayoutX(175.0);
         scoreP1.setLayoutY(48.0);
 

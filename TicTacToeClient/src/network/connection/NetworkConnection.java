@@ -39,23 +39,23 @@ public class NetworkConnection {
     private String ip;
 
     private NetworkConnection(String ipAddress) throws IOException {
-        try {
+        try{
             if (socket == null || !socket.isConnected() || socket.isClosed()) {
-                this.ipAddress = ipAddress;
-                socket = new Socket(ipAddress, 5005);
-                System.out.println("server ip :" + ipAddress);
-                dataInputStream = new DataInputStream(socket.getInputStream());
-                printStream = new PrintStream(socket.getOutputStream());
-                readMessages();
-            }
+               this.ipAddress = ipAddress;
+               socket = new Socket(ipAddress, 5005);
+               System.out.println("server ip :" + ipAddress);
+               dataInputStream = new DataInputStream(socket.getInputStream());
+               printStream = new PrintStream(socket.getOutputStream());
+               readMessages();
+           }
 
-            ip = socket.getLocalAddress().getHostAddress();
-            System.out.println(ip);
-        } catch (ConnectException e) {
+           ip = socket.getLocalAddress().getHostAddress();
+           System.out.println(ip);
+       }catch (ConnectException e) {
 
-            Platform.runLater(() -> Alerts.showErrorAlert("Connection refused. Make sure the server is running."));
-
-        }
+           Platform.runLater(() ->Alerts.showErrorAlert("Connection refused. Make sure the server is running."));
+           
+       }
     }
 
     public static synchronized NetworkConnection getInstance() {
@@ -78,28 +78,28 @@ public class NetworkConnection {
             @Override
             public void run() {
 
-                try {
-                    while (socket.isConnected() && !socket.isClosed()) {
+                    try {
+                        while (socket.isConnected() && !socket.isClosed()) {
 
-                        message = dataInputStream.readLine();
-                        String newJson = message.replace("\\", "");
-                        if (message == null) {
-                            System.out.println(".runnnnnnnnnnn()");
-                            socket.close();
-                            break;
-                        }
+                            message = dataInputStream.readLine();
+                            String newJson = message.replace("\\", ""); 
+                            if (message == null) {
+                                System.out.println(".runnnnnnnnnnn()");
+                                socket.close();
+                                break;
+                            }
 
-                        System.out.println("message in network connection" + message);
+                            System.out.println("message in network connection" + message);
 
-                        try {
-                            JsonParser jsonParser = new JsonParser();
-                            JsonObject json = jsonParser.parse(message).getAsJsonObject();
-                            // check key in json 
-                            if (json.has("key") && !json.get("key").isJsonNull()) {
+                            try {
+                                JsonParser jsonParser = new JsonParser();
+                                JsonObject json = jsonParser.parse(message).getAsJsonObject();
+                                // check key in json 
+                                if (json.has("key") && !json.get("key").isJsonNull()) {
 
-                                System.out.println("hema mar3y hena :" + newJson);
+                                System.out.println("hema mar3y hena :"+newJson);
                                 JsonObject modifiedJson = jsonParser.parse(newJson).getAsJsonObject();
-
+                                
                                 // check where onlinePlayers value to read his message
                                 if (modifiedJson.has("onlinePlayers")) {
                                     JsonElement playersElement = modifiedJson.get("onlinePlayers");
@@ -114,9 +114,11 @@ public class NetworkConnection {
                                             onlinePlayers.add(player);
                                         }
 
-                                        Platform.runLater(() -> opponentBase.receiveOnlinePlayers(onlinePlayers));
+                                       Platform.runLater(() -> opponentBase.receiveOnlinePlayers(onlinePlayers));
                                     }
-                                } else if (json.has("key") && !json.get("key").isJsonNull()) {
+                                }
+                                
+                                else if (json.has("key") && !json.get("key").isJsonNull()) {
                                     String keyValue = json.get("key").getAsString();
                                     System.out.println("key value: " + keyValue);
                                     // check where signup value to read his message
@@ -132,23 +134,25 @@ public class NetworkConnection {
                                         } else {
                                             Platform.runLater(() -> Alerts.showErrorAlert("User name already Exist"));
                                         }
-                                    } else if ("signin".equals(keyValue)) {
-                                        String str = json.get("message").getAsString();
-                                        if ("user is exist".equals(str)) {
-                                            System.out.println("Sign IN succeeded");
-                                            // set value of UserName key in session to save it
-                                            String logInUsername = json.get("UserName").getAsString();
-                                            // save username in the playerSession
-                                            PlayerSession.setLogInUsername(logInUsername);
+                                    }
+                                    // check where signin value to read his message
+                                    else if ("signin".equals(keyValue)) {
+                                            String str = json.get("message").getAsString();
+                                            if ("user is exist".equals(str)) {
+                                                System.out.println("Sign IN succeeded");
+                                                // set value of UserName key in session to save it
+                                                String logInUsername = json.get("UserName").getAsString();
+                                                // save username in the playerSession
+                                                PlayerSession.setLogInUsername(logInUsername);                                            
 
-                                            Platform.runLater(() -> {
-                                                Alerts.showConfirmationAlert("Sign IN succeeded");
-                                                Navigator.navigateTo(new ChooseOpponentBase());//navigate to chooseOpponent
-                                            });
-                                        } else if ("not found".equals(str)) {
-                                            Platform.runLater(() -> Alerts.showErrorAlert("User Name or Password may be Incorrect "));
-                                        }
-                                    } else if ("receivingRequest".equals(keyValue)) {
+                                                Platform.runLater(() -> {
+                                                    Alerts.showConfirmationAlert("Sign IN succeeded");
+                                                    Navigator.navigateTo(new ChooseOpponentBase());//navigate to chooseOpponent
+                                                });
+                                            } else if("not found".equals(str)) {
+                                                Platform.runLater(() -> Alerts.showErrorAlert("User Name or Password may be Incorrect "));
+                                            }
+                                    }else if ("receivingRequest".equals(keyValue)) {
                                         String senderUserName = json.get("senderUserName").getAsString();
                                         Platform.runLater(() -> {
                                             RequestDTO request = new RequestDTO(PlayerSession.getLogInUsername(), senderUserName);
@@ -179,37 +183,44 @@ public class NetworkConnection {
                                         } else if (msg.equals("Rejected")) {
                                             Platform.runLater(() -> {
                                                 //dismiss the pending alert
-                                                Alerts.showInfoAlert(senderUserName + "rejected your request");
+                                                Alerts.showInfoAlert(senderUserName + " rejected your request");
                                                 Navigator.navigateTo(new ChooseOpponentBase());
                                             });
                                         }
-                                    } else {
-                                        System.out.println("Unexpected 'key' value: " + keyValue);
                                     }
-
+                                    else {
+                                            System.out.println("Unexpected 'key' value: " + keyValue);
+                                        }
+                                    // check where request value and game move ///////////////////////
+                                    
+                                
+                                
+                                    } 
                                 }
-                            } else {
-                                System.out.println("Actual JSON content: " + json);
-                            }
-                        } catch (JsonParseException e) {
-                            System.out.println("Invalid JSON format: " + message);
+                            
+                        else {
+                            System.out.println("Actual JSON content: " + json);
+                        }
+                        }catch (JsonParseException e) {
+                             System.out.println("Invalid JSON format: " + message);
                         }
                     }
-                } catch (SocketException ex) {
+                }catch (SocketException ex) {
                     System.out.println("Socket EX");
-                    Platform.runLater(() -> Alerts.showErrorAlert("Server Stoooop"));
-                } catch (IOException ex) {
+                    Platform.runLater(() ->Alerts.showErrorAlert("Server Stoooop"));
+                }catch (IOException ex) {
                     System.out.println("IO EX");
                     ex.printStackTrace();
                 }
             }
-        }.start();
+         }.start();
     }
+    
 
     public void sendMessage(String message) {
         new Thread() {
             @Override
-            public void run() {
+            public void run() {   
                 printStream.println(message);
                 System.out.println(message);
             }
@@ -228,15 +239,15 @@ public class NetworkConnection {
                 socket.close();
             }
         } catch (IOException ex) {
-            Platform.runLater(() -> Alerts.showErrorAlert("client  Stoooop"));
+            Platform.runLater(() ->Alerts.showErrorAlert("client  Stoooop"));
             Logger.getLogger(NetworkConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public String getIp() {
+    
+     public String getIp() {
         return ip;
     }
-
+     
     public Socket getSocket() {
         return socket;
     }

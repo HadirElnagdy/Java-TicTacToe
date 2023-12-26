@@ -78,11 +78,12 @@ public class ClientrHandler {
                         if (keyPrimitive != null && keyPrimitive.getAsString().equals("signup")) {
                             
                             String operationValue = json.get("key").getAsString();
-                            System.out.println("Keyyyyyy: " + operationValue);
+                            System.out.println("key value: " + operationValue);
 
                             boolean exist = accessNetwork.checkSignUp(json);
-                          //  System.out.println("client exist= " + exist);
+                            System.out.println("client exist= " + exist);
                             String found = exist ? "user is exist" : "new user";
+
                             Map<String, String> map = new HashMap<>();
                             map.put("key", "signup");
                             map.put("message", found);
@@ -93,7 +94,7 @@ public class ClientrHandler {
                         }
                         // send all online players in all clients
                         else if (keyPrimitive != null && keyPrimitive.getAsString().equals("onlinePlayers")) {
-                          //  System.out.println("get onlineplayers");
+                            System.out.println("get onlineplayers");
                             DataAccessLayer dbLayer = new DataAccessLayer();
                           
                             message = dbLayer.getOnlinePlayers();
@@ -108,10 +109,10 @@ public class ClientrHandler {
                          // send response sign in with usename to save username when succefful logging in
                          else if(keyPrimitive != null && keyPrimitive.getAsString().equals("signin")){
                              String operationValue = json.get("key").getAsString();
-                            //System.out.println("key value: " + operationValue);
+                            System.out.println("key value: " + operationValue);
 
                             boolean exist = accessNetwork.checkSignIn(json);
-                            //System.out.println("client exist= " + exist);
+                            System.out.println("client exist= " + exist);
                             String found = exist ? "user is exist" : "not found";
                             String username = json.get("UserName").getAsString();
                             if(found == "user is exist") clientUserName = username;
@@ -120,6 +121,7 @@ public class ClientrHandler {
                             map.put("message", found);
                             // send username again to save player 
                             map.put("UserName", username);
+                            
                             message = new Gson().toJson(map);
                             sendMessage(message);
                          }
@@ -158,7 +160,25 @@ public class ClientrHandler {
                                       Server.clientsVector.get(i).sendMessage(message);
                                       break;
                                   } 
-                              }         
+                              } }
+                           else if(keyPrimitive != null && keyPrimitive.getAsString().equals("logout")){
+                             String operationValue = json.get("key").getAsString();
+                            System.out.println("key value: " + operationValue);
+
+                            boolean exist = accessNetwork.checkLogOut(json);
+                            System.out.println("client logedout= " + exist);
+                            String found = exist ? "user is exist" : "not found";
+                            String username = json.get("UserName").getAsString();
+                            
+                            Map<String, String> map = new HashMap<>();
+                            map.put("key", "logout");
+                            
+                            // send username again to save player 
+                            map.put("USERNAME", username);
+                            
+                            message = new Gson().toJson(map);
+                            sendMessage(message);
+                            System.out.println("logedout succeded");
                          }
                          ///// response request and game move
                         else{
@@ -214,5 +234,4 @@ public class ClientrHandler {
     public String getUsername(){
         return clientUserName;
     }
-    
 }

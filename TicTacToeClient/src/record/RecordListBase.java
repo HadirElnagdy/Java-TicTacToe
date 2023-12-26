@@ -1,6 +1,7 @@
 package record;
 
-import home.OnlineOfflineScreen;
+
+import home.FXMLHomeBase;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -93,7 +94,7 @@ public class RecordListBase extends BorderPane {
         backBtn.setText("Back");
         GridPane.setMargin(backBtn, new Insets(0.0, 0.0, 0.0, 14.0));
         backBtn.setOnAction((ActionEvent event) -> {
-            Navigator.navigateTo(new OnlineOfflineScreen(), event);
+            Navigator.navigateTo(new FXMLHomeBase(), event);
         });
         setTop(gridPane);
 

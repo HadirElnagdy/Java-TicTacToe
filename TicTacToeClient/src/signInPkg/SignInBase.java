@@ -30,6 +30,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import network.connection.NetworkConnection;
+import player.session.PlayerSession;
 import utilis.Navigator;
 
 public class SignInBase extends GridPane {
@@ -78,14 +79,15 @@ public class SignInBase extends GridPane {
         label2 = new Label();
         signInBtn = new Button();
         uNameTxtFld = new TextField();
-        passwordTxtFld = new PasswordField();
-
+       passwordTxtFld = new PasswordField();
+       
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
         setMinWidth(USE_PREF_SIZE);
         setPrefHeight(400.0);
         setPrefWidth(600.0);
+
 
         columnConstraints.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints.setMaxWidth(195.0);
@@ -168,11 +170,13 @@ public class SignInBase extends GridPane {
         GridPane.setColumnIndex(label1, 1);
         GridPane.setRowIndex(label1, 2);
         label1.setText("Username");
+        
         GridPane.setMargin(label1, new Insets(0.0, 0.0, 50.0, 0.0));
 
         GridPane.setColumnIndex(label2, 1);
         GridPane.setRowIndex(label2, 3);
         label2.setText("Password");
+        
         GridPane.setMargin(label2, new Insets(0.0, 0.0, 50.0, 0.0));
 
         GridPane.setColumnIndex(signInBtn, 1);
@@ -190,9 +194,9 @@ public class SignInBase extends GridPane {
         GridPane.setColumnIndex(passwordTxtFld, 1);
         GridPane.setRowIndex(passwordTxtFld, 3);
         passwordTxtFld.setPrefWidth(338.0);
-
+        passwordTxtFld.setPrefHeight(20);
         backBtn = new Button("Back");
-
+        
        
         GridPane.setMargin(backBtn, new Insets(12.0, 0.0, 0.0, 13.5));
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
@@ -222,7 +226,9 @@ public class SignInBase extends GridPane {
         getChildren().add(signInBtn);
         getChildren().add(uNameTxtFld);
         getChildren().add(passwordTxtFld);
+        
         getChildren().add(backBtn);
+        
         signInBtn.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -247,6 +253,8 @@ public class SignInBase extends GridPane {
 
                         network = NetworkConnection.getInstance();
                         network.sendMessage(jsonString);
+                        
+                        PlayerSession.setLogInUsername(player.getUserName());
                         clearFld();
                 }       
             }

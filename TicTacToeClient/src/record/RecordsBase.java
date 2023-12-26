@@ -1,6 +1,7 @@
 package record;
 
-import home.OnlineOfflineScreen;
+
+import home.FXMLHomeBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
@@ -53,7 +54,7 @@ public class RecordsBase extends AnchorPane {
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Navigator.navigateTo(new OnlineOfflineScreen(),event);
+                Navigator.navigateTo(new FXMLHomeBase(),event);
           
                     }
         });

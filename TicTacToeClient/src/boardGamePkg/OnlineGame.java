@@ -13,10 +13,11 @@ import javafx.scene.layout.GridPane;
  *
  * @author Hp
  */
+/*
 public class OnlineGame extends GameBase{
 
     public OnlineGame(GridPane backDestination, String playingMode) {
-        super(/*new ChooseOpponentBase()*/backDestination, "OnlineGame");
+        super(backDestination, "OnlineGame");
     }
 
     @Override
@@ -25,3 +26,4 @@ public class OnlineGame extends GameBase{
     }
     
 }
+*/
