@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import dto.player.DTOPlayer;
 import chooseopponent.ChooseOpponentBase;
+import utilis.Alerts;
 import home.ChooseAuth;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -13,6 +14,7 @@ import java.io.PrintStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import signUpPkg.SignUpBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,13 +23,15 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
+import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
 import network.connection.NetworkConnection;
-import service.Navigator;
+import player.session.PlayerSession;
+import utilis.Navigator;
 
 public class SignInBase extends GridPane {
 
@@ -50,7 +54,7 @@ public class SignInBase extends GridPane {
     protected final Label label2;
     protected final Button signInBtn;
     protected final TextField uNameTxtFld;
-    protected final TextField passwordTxtFld;
+    protected final PasswordField passwordTxtFld;
     protected final Button backBtn;
     NetworkConnection network;
      
@@ -75,14 +79,15 @@ public class SignInBase extends GridPane {
         label2 = new Label();
         signInBtn = new Button();
         uNameTxtFld = new TextField();
-        passwordTxtFld = new TextField();
-
+       passwordTxtFld = new PasswordField();
+       
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
         setMinWidth(USE_PREF_SIZE);
         setPrefHeight(400.0);
         setPrefWidth(600.0);
+
 
         columnConstraints.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints.setMaxWidth(195.0);
@@ -165,11 +170,13 @@ public class SignInBase extends GridPane {
         GridPane.setColumnIndex(label1, 1);
         GridPane.setRowIndex(label1, 2);
         label1.setText("Username");
+        
         GridPane.setMargin(label1, new Insets(0.0, 0.0, 50.0, 0.0));
 
         GridPane.setColumnIndex(label2, 1);
         GridPane.setRowIndex(label2, 3);
         label2.setText("Password");
+        
         GridPane.setMargin(label2, new Insets(0.0, 0.0, 50.0, 0.0));
 
         GridPane.setColumnIndex(signInBtn, 1);
@@ -187,9 +194,9 @@ public class SignInBase extends GridPane {
         GridPane.setColumnIndex(passwordTxtFld, 1);
         GridPane.setRowIndex(passwordTxtFld, 3);
         passwordTxtFld.setPrefWidth(338.0);
-
+        passwordTxtFld.setPrefHeight(20);
         backBtn = new Button("Back");
-
+        
        
         GridPane.setMargin(backBtn, new Insets(12.0, 0.0, 0.0, 13.5));
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
@@ -219,79 +226,40 @@ public class SignInBase extends GridPane {
         getChildren().add(signInBtn);
         getChildren().add(uNameTxtFld);
         getChildren().add(passwordTxtFld);
+        
         getChildren().add(backBtn);
+        
         signInBtn.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
        
-                Gson gson = new GsonBuilder().create();
+                if (uNameTxtFld.getText().isEmpty() || passwordTxtFld.getText().isEmpty()){
+                    Platform.runLater(() ->Alerts.showErrorAlert("must Complete your data."));
+                }
+                else{
+                    Gson gson = new GsonBuilder().create();
+                    DTOPlayer player = new DTOPlayer(            
+                                uNameTxtFld.getText(),
+                                passwordTxtFld.getText()
+                                );
+                        JsonObject setJson = new JsonObject();
 
-          //  if (isInputValid()) {
-                DTOPlayer player = new DTOPlayer(            
-                            uNameTxtFld.getText(),
-                            passwordTxtFld.getText()
-                            );
-                    JsonObject setJson = new JsonObject();
+                        // Add specific fields to the payload
+                        setJson.addProperty("key", "signin");
+                        setJson.addProperty("UserName", player.getUserName());
+                        setJson.addProperty("password", player.getPassword());
+                        String jsonString = gson.toJson(setJson);
 
-                    // Add specific fields to the payload
-                    setJson.addProperty("key", "signin");
-                    setJson.addProperty("UserName", player.getUserName());
-                    setJson.addProperty("password", player.getPassword());
-                    String jsonString = gson.toJson(setJson);
 
-                    
-                    network = NetworkConnection.getInstance();
-                    network.sendMessage(jsonString);
-                    clearFld();
-               
-              Navigator.navigateTo(new ChooseOpponentBase(),event);
-           
+                        network = NetworkConnection.getInstance();
+                        network.sendMessage(jsonString);
+                        
+                        PlayerSession.setLogInUsername(player.getUserName());
+                        clearFld();
+                }       
             }
         
         });
-      
-    }
-    
-        /*   private boolean isInputValid() {
-            
-            // empty validation
-            if (uNameTxtFld.getText().isEmpty() ||
-                passwordTxtFld.getText().isEmpty()
-                ) {
-                return false;
-            }
-
-            // validate password length
-            if (passwordTxtFld.getText().length() < 8) {
-                showAlert("Password must be at least 8 characters long.");
-                return false;
-            }
-
-            // validate username
-            String userNameRegex = "^[a-zA-Z0-9_-]{3,16}$";
-            if (!uNameTxtFld.getText().matches(userNameRegex)) {
-                showAlert("Invalid username format. It should contain 3-16 characters and only letters, numbers, underscores, or hyphens.");
-                return false;
-            }
-
-            // validate email
-            String emailRegex = "^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$";
-            if (!emailTxtFld.getText().matches(emailRegex)) {
-                showAlert("Invalid email format.");
-                return false;
-            }
-
-            return true;
-        }*/
-    
-    void showAlert(String message){
-        Alert informationAlert = new Alert(Alert.AlertType.INFORMATION);
-
-        informationAlert.setTitle("Information");
-
-        informationAlert.setContentText(message);
-
-        informationAlert.showAndWait();
       
     }
     

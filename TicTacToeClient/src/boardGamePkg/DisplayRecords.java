@@ -3,7 +3,7 @@ package boardGamePkg;
 import static boardGamePkg.GameBase.player1Score;
 import static boardGamePkg.GameBase.player2Score;
 import static boardGamePkg.GameBase.winner;
-import home.OnlineOfflineScreen;
+import home.FXMLHomeBase;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
@@ -26,7 +26,7 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.Pane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.text.Font;
-import service.Navigator;
+import utilis.Navigator;
 
 public class DisplayRecords extends Pane {
 
@@ -93,6 +93,7 @@ public class DisplayRecords extends Pane {
         backBtn.setLayoutY(14.0);
         backBtn.setMnemonicParsing(false);
         backBtn.setText("Back");
+       
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -105,11 +106,11 @@ public class DisplayRecords extends Pane {
                         javafx.scene.control.ButtonType.NO);
                 java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
                 if (result.isPresent() && result.get() == javafx.scene.control.ButtonType.YES) {
-                    Navigator.navigateTo(new OnlineOfflineScreen(), event);
+                    Navigator.navigateTo(new FXMLHomeBase(), event);
                 }
             }
         });
-
+        
         scoreP1.setLayoutX(175.0);
         scoreP1.setLayoutY(48.0);
 

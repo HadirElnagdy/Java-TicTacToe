@@ -90,7 +90,6 @@ public class DataAccessLayer {
                             System.out.println(score);
                             DtoPlayer player = new DtoPlayer(username, fullName, password, email, score, status);
                             onlinePlayers.add(player);
-//                            System.out.println("&&&&&&&&&&&&&&&&&&&&"+onlinePlayers.get(0).score);
                         }
                     }
                 } else {
@@ -114,8 +113,6 @@ public class DataAccessLayer {
         }
 
         public boolean checkIfUserExist(String userName){
-           
-          
            try {
                 if (connection != null && !connection.isClosed()) {
                 String sql = "SELECT * FROM ROOT.player WHERE USERNAME = ?";
@@ -145,8 +142,85 @@ public class DataAccessLayer {
            }
            return found ;
        }
+    public boolean signIn(String userName,String password) throws SQLException {
+       
+        try{
+            if (connection != null && !connection.isClosed()) {
+                    String sqlStatment = "SELECT * FROM ROOT.PLAYER WHERE USERNAME=? AND PASSWORD=?";
+                    PreparedStatement pst = connection.prepareStatement(sqlStatment);
+                    pst.setString(1,userName);
+                    pst.setString(2,password);
 
-    
+                     ResultSet rs = pst.executeQuery();
+                    if (rs.next()) {
+                        System.out.println("User exists");
+                        found = true;
+                    } else {
+                        System.out.println("User does not exist");
+                        found = false;
+                    }
+                 }
+            else{
+                System.out.println("No valid database connection.");
+
+            }
+        }catch(SQLException ex){
+                System.out.println("something wrong in sign in : " + ex.getMessage());
+                ex.printStackTrace();
+        }
+        return found; 
+    }
+      public void UpdateStatus(String username) throws SQLException {
+        try{
+            if (connection != null && !connection.isClosed()) {
+                    String sqlStatment = "UPDATE ROOT.PLAYER SET STATUS ='online' WHERE USERNAME= ?";
+                    PreparedStatement pst = connection.prepareStatement(sqlStatment);
+                    pst.setString(1, username);
+                    int rs = pst.executeUpdate();
+                    if (rs == 0) {
+                        System.out.println("something wrong !!!");
+                    } else {
+                        System.out.println("SIGN IN successed");
+                    }
+                 }
+            else{
+                System.out.println("No valid database connection.");
+
+            }
+        }catch(SQLException ex){
+                System.out.println("something wrong in sign in : " + ex.getMessage());
+                ex.printStackTrace();
+        }
+    }
+      
+      public boolean logOut(String username) throws SQLException {
+          boolean found =false;
+        try{
+            if (connection != null && !connection.isClosed()) {
+                    String sqlStatment = "UPDATE ROOT.PLAYER SET STATUS ='offline' WHERE USERNAME= ?";
+                    PreparedStatement pst = connection.prepareStatement(sqlStatment);
+                    pst.setString(1, username);
+                    int rs = pst.executeUpdate();
+                    if (rs == 0) {
+                        System.out.println("something wrong !!!");
+                    } else {
+                        System.out.println("Log Out successed");
+                        found=true;
+                    }
+                    
+                 }
+            else{
+                System.out.println("No valid database connection.");
+
+            }
+        }catch(SQLException ex){
+                System.out.println("something wrong in Log Out : " + ex.getMessage());
+                ex.printStackTrace();
+        }
+        return found;
+    }
+      
+      
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
@@ -156,5 +230,8 @@ public class DataAccessLayer {
             System.out.println("errooooooeeee!!!!");
             Logger.getLogger(DataAccessLayer.class.getName()).log(Level.SEVERE, "Error closing database connection", ex);
         }
+    }
+    public Connection getConnection() {
+        return connection;
     }
 }

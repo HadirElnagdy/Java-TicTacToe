@@ -32,7 +32,7 @@ public class AccessNetwork {
                 int score = json.get("score").getAsInt();
                 String status = json.get("status").getAsString();
                 
-                DtoPlayer player = new DtoPlayer(username, name, email, password, score, status);
+                DtoPlayer player = new DtoPlayer(username, name, password, email, score, status);
 
                 System.out.println("recived");
                 
@@ -57,13 +57,90 @@ public class AccessNetwork {
             
         } catch (SQLException ex) {
             Logger.getLogger(AccessNetwork.class.getName()).log(Level.SEVERE, "Error during signUp", ex);
-        } finally {
-            dataAccessLayer.closeConnection();
+        }
+        
+        
+        return found;
+    }
+     public boolean checkSignIn(JsonObject json) {
+        boolean found = false ;
+
+        try {  
+             if (json.has("UserName") &&json.has("password")
+                    ) {
+
+                String username = json.get("UserName").getAsString();
+                String password = json.get("password").getAsString();
+                
+                DtoPlayer player = new DtoPlayer(username, password);
+
+                System.out.println("recived");
+                
+                System.out.println( "  " + username +"  "+ password);
+
+                found = dataAccessLayer.signIn(player.getUserName(),player.getPassword());
+
+                if (found) {
+                    found = true;
+                    System.out.println("USER FOUND");
+                    dataAccessLayer.UpdateStatus(username);
+                    
+                } else {
+                    found = false; 
+                }
+                    
+            }else {
+                System.out.println("Incomplete or malformed JSON payload for signin");
+                System.out.println("Received JSON payload: " + json.toString());
+
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AccessNetwork.class.getName()).log(Level.SEVERE, "Error during signIn", ex);
         }
         
         
         return found;
     }
     
-   
+      public boolean checkLogOut(JsonObject json) {
+        boolean found = false ;
+
+        try {  
+             if (json.has("UserName") ) {
+
+                String username = json.get("UserName").getAsString();
+                
+                DtoPlayer player = new DtoPlayer(username);
+
+                System.out.println("recived");
+                
+                System.out.println( "  " + username );
+
+                found = dataAccessLayer.logOut(player.getUserName());
+
+                if (found) {
+                    found = true;
+                    System.out.println("USER FOUND");
+                   // dataAccessLayer.UpdateStatus(username);
+                    
+                } else {
+                    found = false; 
+                }
+                    
+            }else {
+                System.out.println("Incomplete or malformed JSON payload forLog Out");
+                System.out.println("Received JSON payload: " + json.toString());
+
+            }
+            
+            
+        } catch (SQLException ex) {
+            Logger.getLogger(AccessNetwork.class.getName()).log(Level.SEVERE, "Error during Log Out", ex);
+        }
+        
+        
+        return found;
+    }
 }

@@ -20,7 +20,16 @@ public class DtoPlayer {
     public DtoPlayer() {
     }
 
-    public DtoPlayer(String UserName, String fullName,  String password, String email, int score, String status) {
+    public DtoPlayer(String UserName) {
+        this.UserName = UserName;
+    }
+    
+    public DtoPlayer(String UserName, String password) {
+        this.UserName = UserName;
+        this.password = password;
+    }
+
+    public DtoPlayer(String UserName,String fullName,  String password, String email, int score ,String status) {
         this.fullName = fullName;
         this.UserName = UserName;
         this.password = password;
