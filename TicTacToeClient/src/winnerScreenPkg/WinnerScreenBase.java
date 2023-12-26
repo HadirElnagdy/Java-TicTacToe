@@ -74,6 +74,8 @@ public class WinnerScreenBase extends BorderPane {
         rowConstraints4 = new RowConstraints();
         resultLabel = new Label();
         
+        setStyle("-fx-background-color: #232429;");
+        
         BorderPane.setAlignment(mv, javafx.geometry.Pos.CENTER);
         mv.setFitHeight(300.0);
         mv.setFitWidth(400.0);
@@ -133,6 +135,7 @@ public class WinnerScreenBase extends BorderPane {
         GridPane.setRowIndex(replayBtn, 1);
         replayBtn.setMnemonicParsing(false);
         replayBtn.setText("Replay");
+        replayBtn.setStyle("-fx-background-color: #1577FF; -fx-text-fill: #FFFFFF; -fx-background-radius: 10; -fx-padding: 10;");
         replayBtn.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -152,6 +155,7 @@ public class WinnerScreenBase extends BorderPane {
         GridPane.setRowIndex(homeBtn, 1);
         homeBtn.setMnemonicParsing(false);
         homeBtn.setText("Home");
+        homeBtn.setStyle("-fx-background-color: #1577FF; -fx-text-fill: #FFFFFF; -fx-background-radius: 10; -fx-padding: 10;");
         homeBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -225,6 +229,7 @@ public class WinnerScreenBase extends BorderPane {
         gridPane0.getRowConstraints().add(rowConstraints4);
         gridPane0.getChildren().add(resultLabel);
         
+        resultLabel.setStyle("-fx-text-fill: #FFFFFF;");
          if(winnerValue == 0){
             resultLabel.setText("It's a Draw!");
             setVideo("/winnerScreenPkg/draw.mp4");
