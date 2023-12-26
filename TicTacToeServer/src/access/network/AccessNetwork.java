@@ -104,6 +104,7 @@ public class AccessNetwork {
         return found;
     }
     
+
       public boolean checkLogOut(JsonObject json) {
         boolean found = false ;
 
@@ -135,12 +136,13 @@ public class AccessNetwork {
 
             }
             
-            
         } catch (SQLException ex) {
             Logger.getLogger(AccessNetwork.class.getName()).log(Level.SEVERE, "Error during Log Out", ex);
-        }
+        }            
+
         
         
         return found;
     }
 }
+

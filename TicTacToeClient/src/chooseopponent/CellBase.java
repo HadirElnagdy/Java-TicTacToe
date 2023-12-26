@@ -1,9 +1,16 @@
 package chooseopponent;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import dto.player.RequestDTO;
+import javafx.event.ActionEvent;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.text.Font;
+import network.connection.NetworkConnection;
+import player.session.PlayerSession;
 
 public class CellBase extends AnchorPane {
 
@@ -11,6 +18,7 @@ public class CellBase extends AnchorPane {
     protected final Label scoreLabel;
     protected final Label statusLabel;
     protected final Hyperlink sendRequestLink;
+    NetworkConnection network;
 
     public CellBase() {
 
@@ -40,7 +48,25 @@ public class CellBase extends AnchorPane {
 
         sendRequestLink.setLayoutX(467.0);
         sendRequestLink.setLayoutY(17.0);
-        sendRequestLink.setText("Send Request ...");
+        sendRequestLink.setText("Request to play");
+        sendRequestLink.setOnAction((ActionEvent event) -> {
+                    RequestDTO request = new RequestDTO(PlayerSession.getLogInUsername(), userNameLabel.getText());
+                    JsonObject setJson = new JsonObject();
+                    Gson gson = new GsonBuilder().create();
+                    
+                    setJson.addProperty("key", "sendingRequest");
+                    setJson.addProperty("senderUserName", request.getSenderUsername());
+                    setJson.addProperty("receiverUserName", request.getReceiverUsername());
+              
+                    String jsonString = gson.toJson(setJson);
+
+                    network = NetworkConnection.getInstance();
+                    network.sendMessage(jsonString);
+                    sendRequestLink.setText("Pending request...");
+                    sendRequestLink.setDisable(true);
+                    //while waiting for the response show a pending alert
+            
+        });
 
         getChildren().add(userNameLabel);
         getChildren().add(scoreLabel);

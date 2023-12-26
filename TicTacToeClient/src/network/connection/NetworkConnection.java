@@ -1,13 +1,16 @@
 package network.connection;
 
+import boardGamePkg.LocalMultiMode;
 import chooseopponent.ChooseOpponentBase;
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import dto.player.DTOPlayer;
+import dto.player.RequestDTO;
 import utilis.Alerts;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -148,25 +151,43 @@ public class NetworkConnection {
                                                 });
                                             } else if("not found".equals(str)) {
                                                 Platform.runLater(() -> Alerts.showErrorAlert("User Name or Password may be Incorrect "));
-                                            }}
-//                                       }
-                                            //else if ("logout".equals(keyValue)) {
-//                                            String str = json.get("message").getAsString();
-//                                            if ("user is exist".equals(str)) {
-//                                                System.out.println("Log out succeeded");
-//                                                // set value of UserName key in session to save it
-//                                                String logInUsername = json.get("UserName").getAsString();
-//                                                // save username in the playerSession
-//                                                PlayerSession.setLogInUsername(logInUsername);                                            
-//
-//                                                Platform.runLater(() -> {
-//                                                    Alerts.showConfirmationAlert("Sign IN succeeded");
-//                                                    Navigator.navigateTo(new ChooseOpponentBase());//navigate to chooseOpponent
-//                                                });
-//                                            } else if("not found".equals(str)) {
-//                                                Platform.runLater(() -> Alerts.showErrorAlert("User Name or Password may be Incorrect "));
-//                                            }
-//                                        }
+                                            }
+                                    }else if ("receivingRequest".equals(keyValue)) {
+                                        String senderUserName = json.get("senderUserName").getAsString();
+                                        Platform.runLater(() -> {
+                                            RequestDTO request = new RequestDTO(PlayerSession.getLogInUsername(), senderUserName);
+                                            JsonObject setJson = new JsonObject();
+                                            Gson gson = new GsonBuilder().create();
+
+                                            setJson.addProperty("key", "requestRespond");
+                                            setJson.addProperty("senderUserName", request.getSenderUsername());
+                                            setJson.addProperty("receiverUserName", request.getReceiverUsername());
+
+                                            if (Alerts.showConfirmationAlert(senderUserName + " is asking you to join a game", "Accept", "Reject")) {
+                                                setJson.addProperty("message", "Accepted");
+                                                Navigator.navigateTo(new LocalMultiMode());//navigate to Online Game
+                                            } else {
+                                                setJson.addProperty("message", "Rejected");
+                                            }
+
+                                            String jsonString = gson.toJson(setJson);
+                                            NetworkConnection.getInstance().sendMessage(jsonString);
+                                        });
+                                    } else if ("requestRespond".equals(keyValue)) {
+                                        String msg = json.get("response").getAsString();
+                                        String senderUserName = json.get("senderUserName").getAsString();
+                                        if (msg.equals("Accepted")) {
+                                            Platform.runLater(() -> {
+                                                Navigator.navigateTo(new LocalMultiMode());//navigate to Online Game
+                                            });
+                                        } else if (msg.equals("Rejected")) {
+                                            Platform.runLater(() -> {
+                                                //dismiss the pending alert
+                                                Alerts.showInfoAlert(senderUserName + " rejected your request");
+                                                Navigator.navigateTo(new ChooseOpponentBase());
+                                            });
+                                        }
+                                    }
                                     else {
                                             System.out.println("Unexpected 'key' value: " + keyValue);
                                         }

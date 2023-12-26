@@ -1,0 +1,28 @@
+/* styles.css */
+
+/* Set background color for the entire application */
+.application-background {
+    -fx-background-color: black;
+}
+
+/* Set text color for labels */
+.label-text {
+    -fx-text-fill: white;
+}
+
+/* Set background and text color for text fields */
+.text-field {
+    -fx-background-color: #525461;
+    -fx-text-fill: white;
+}
+
+/* Set background and text color for buttons */
+.button {
+    -fx-background-color: #1577FF;
+    -fx-text-fill: white;
+}
+
+/* Set text color for hyperlinks */
+.hyperlink {
+    -fx-text-fill: #1577FF;
+}

@@ -2,7 +2,6 @@ package home;
 
 import boardGamePkg.GameBase;
 import boardGamePkg.LocalMultiMode;
-import boardGamePkg.RecordsBase;
 import java.util.Optional;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -16,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import record.RecordListBase;
 import utilis.Alerts;
 import utilis.Navigator;
 
@@ -137,7 +137,7 @@ public class FXMLHomeBase extends BorderPane {
             @Override
             public void handle(ActionEvent event) {
               // to list of record
-                Navigator.navigateTo(new RecordsBase(),event);
+                Navigator.navigateTo(new RecordListBase(),event);
             }
         });
         

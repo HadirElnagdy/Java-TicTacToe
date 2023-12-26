@@ -1,10 +1,10 @@
 package home;
 
+
 import utilis.Alerts;
 import boardGamePkg.GameBase;
 import boardGamePkg.LocalSingleEasy;
 import boardGamePkg.LocalSingleMedium;
-import boardGamePkg.RecordsBase;
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -13,6 +13,7 @@ import javafx.scene.layout.Pane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import record.RecordListBase;
 import utilis.Navigator;
 
 public class EasyHardBase extends BorderPane {
@@ -158,7 +159,7 @@ public class EasyHardBase extends BorderPane {
 
         recordBtn.addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
             // to list of record
-            Navigator.navigateTo(new RecordsBase(),event);
+            Navigator.navigateTo(new RecordListBase(),event);
         });
         
         easyBtn.addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {

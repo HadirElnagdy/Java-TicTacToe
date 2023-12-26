@@ -1,12 +1,13 @@
 
 package profile;
 
+import chooseopponent.ChooseOpponentBase;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -16,7 +17,7 @@ import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.scene.text.Font;
-import javafx.util.Callback;
+import utilis.Navigator;
 
 public class ProfileUIBase extends ScrollPane {
 
@@ -174,7 +175,9 @@ public class ProfileUIBase extends ScrollPane {
         backbtn.setText("Back");
         backbtn.setTranslateY(-45.0);
         backbtn.setFont(new Font(12.0));
-
+        backbtn.setOnAction((ActionEvent event) -> {
+            Navigator.navigateTo(new ChooseOpponentBase(), event);
+        });
         GridPane.setColumnIndex(gridPane0, 3);
         GridPane.setRowIndex(gridPane0, 1);
 

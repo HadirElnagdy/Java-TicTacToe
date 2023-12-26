@@ -19,6 +19,7 @@ import java.net.SocketException;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.application.Platform;
+import tictactoeserver.Server;
 import static tictactoeserver.Server.clientsVector;
 
 public class ClientrHandler {
@@ -29,6 +30,7 @@ public class ClientrHandler {
     boolean isRunning = true ; 
     private String message; 
     private boolean isClientConnected = true;
+    private String clientUserName;
     
     String ip;
     int portNum;
@@ -113,7 +115,7 @@ public class ClientrHandler {
                             System.out.println("client exist= " + exist);
                             String found = exist ? "user is exist" : "not found";
                             String username = json.get("UserName").getAsString();
-                            
+                            if(found == "user is exist") clientUserName = username;
                             Map<String, String> map = new HashMap<>();
                             map.put("key", "signin");
                             map.put("message", found);
@@ -123,6 +125,42 @@ public class ClientrHandler {
                             message = new Gson().toJson(map);
                             sendMessage(message);
                          }
+                         //send two messages request response and receiverMessage
+                         //"sendingRequest"
+                         else if(keyPrimitive != null && keyPrimitive.getAsString().equals("sendingRequest")){
+                             String receiverUserName = json.get("receiverUserName").getAsString();
+                             Map<String, String> map = new HashMap<>();
+                            map.put("key", "receivingRequest");
+                            map.put("senderUserName", clientUserName);
+                            message = new Gson().toJson(map);
+                              for (int i = 0; i < Server.clientsVector.size(); i++) {
+                                  if(Server.clientsVector.get(i).getUsername().equals(receiverUserName)){
+                                      Server.clientsVector.get(i).sendMessage(message);
+                                      break;
+                                  } 
+                              }         
+                         }
+                         else if(keyPrimitive != null && keyPrimitive.getAsString().equals("requestRespond")){
+                             //This client = sender for now
+                             String receiverUserName = json.get("receiverUserName").getAsString();
+                             String senderUserName = json.get("senderUserName").getAsString();
+                             System.out.println("Response Sender: "+senderUserName+" Response Receiver: "+receiverUserName+ " My client: " + getUsername());
+                             String msg = json.get("message").getAsString();
+                             Map<String, String> map = new HashMap<>();
+                            map.put("key", "requestRespond");
+                            map.put("response", msg);
+                            map.put("senderUserName", senderUserName);
+                            message = new Gson().toJson(map);
+                            if(msg.equals("Accepted")){ 
+                                DataAccessLayer DAL = new DataAccessLayer();
+                                DAL.makePlayersBusy(receiverUserName, senderUserName);
+                            }
+                              for (int i = 0; i < Server.clientsVector.size(); i++) {
+                                  if(Server.clientsVector.get(i).getUsername().equals(receiverUserName)){
+                                      Server.clientsVector.get(i).sendMessage(message);
+                                      break;
+                                  } 
+                              } }
                            else if(keyPrimitive != null && keyPrimitive.getAsString().equals("logout")){
                              String operationValue = json.get("key").getAsString();
                             System.out.println("key value: " + operationValue);
@@ -192,5 +230,8 @@ public class ClientrHandler {
     // get ip of socket's client opened
     public String getIp() {
         return ip;
+    }
+    public String getUsername(){
+        return clientUserName;
     }
 }

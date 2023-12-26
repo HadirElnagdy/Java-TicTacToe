@@ -1,4 +1,5 @@
-package boardGamePkg;
+package record;
+
 
 import home.FXMLHomeBase;
 import javafx.event.ActionEvent;
@@ -16,9 +17,6 @@ public class RecordsBase extends AnchorPane {
     protected final Label label;
     protected final Button recordBtn;
     protected final Button backBtn;
-    
-    
-    
 
     public RecordsBase() {
 
@@ -26,8 +24,6 @@ public class RecordsBase extends AnchorPane {
         recordBtn = new Button();
         backBtn = new Button();
        
-        
-
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
@@ -47,12 +43,10 @@ public class RecordsBase extends AnchorPane {
         recordBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Navigator.navigateTo(new DisplayRecords(),event);
+               // Navigator.navigateTo(new DisplayRecords(),event);
             }
         });
             
-        
-
         backBtn.setLayoutX(12.0);
         backBtn.setLayoutY(14.0);
         backBtn.setMnemonicParsing(false);
