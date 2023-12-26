@@ -62,6 +62,8 @@ public class CellBase extends AnchorPane {
 
                     network = NetworkConnection.getInstance();
                     network.sendMessage(jsonString);
+                    sendRequestLink.setText("Pending request...");
+                    sendRequestLink.setDisable(true);
                     //while waiting for the response show a pending alert
             
         });

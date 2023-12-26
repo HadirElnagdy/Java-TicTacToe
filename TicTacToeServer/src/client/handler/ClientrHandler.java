@@ -147,6 +147,7 @@ public class ClientrHandler {
                              Map<String, String> map = new HashMap<>();
                             map.put("key", "requestRespond");
                             map.put("response", msg);
+                            map.put("senderUserName", senderUserName);
                             message = new Gson().toJson(map);
                             if(msg.equals("Accepted")){ 
                                 DataAccessLayer DAL = new DataAccessLayer();
