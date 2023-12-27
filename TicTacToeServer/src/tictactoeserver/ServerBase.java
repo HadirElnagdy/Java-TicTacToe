@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.geometry.Insets;
@@ -64,7 +65,7 @@ public class ServerBase extends BorderPane {
     
     
     
-    public ServerBase(Stage stage) {
+    public ServerBase(Stage stage) throws SQLException {
 
         chart = new PieChart();
         anchorPane = new AnchorPane();
@@ -86,6 +87,7 @@ public class ServerBase extends BorderPane {
         onlineNum = new Label();
         busyNum = new Label();
         offlineNum = new Label();
+        DataAccessLayer dal=new DataAccessLayer();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -248,9 +250,11 @@ public class ServerBase extends BorderPane {
         
         BorderPane.setAlignment(chart, javafx.geometry.Pos.CENTER);
 
-        //change value of online ./ offline / busy
-        onlineNumValue = offlineNumValue = busyNumValue = 10 ;
         
+        int x = dal.online();
+        int y = dal.busy();
+        int z = dal.offline();
+
         onlineNum.setText(Integer.toString(onlineNumValue));
         offlineNum.setText(Integer.toString(offlineNumValue));
         busyNum.setText(Integer.toString(busyNumValue));
@@ -258,9 +262,9 @@ public class ServerBase extends BorderPane {
         
         
         chart.getData().addAll(
-            new PieChart.Data("Online", onlineNumValue),
-            new PieChart.Data("Offline", offlineNumValue),
-            new PieChart.Data("Busy", busyNumValue)
+            new PieChart.Data("Online", x),
+            new PieChart.Data("Offline", y),
+            new PieChart.Data("Busy", z)
         );
             
       
@@ -279,11 +283,19 @@ public class ServerBase extends BorderPane {
         chart.setStartAngle(141.0);
         chart.setOpaqueInsets(new Insets(0.0));
         setCenter(chart);
-
+        
      
         chart.setVisible(false);
         serverBtn.setOnAction(e->{
+            try {
+                busyNum.setText(String.valueOf(dal.busy()));
+                onlineNum.setText(String.valueOf(dal.online()));
+                offlineNum.setText(String.valueOf(dal.offline()));
             
+            } catch (SQLException ex) {
+                Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
+            }
+           
             if(isClicked){
                 isServerRunning = true ;
                 serverBtn.setText("OFF");
@@ -292,6 +304,9 @@ public class ServerBase extends BorderPane {
                 server = new Server();
                 
             }else{
+                busyNum.setText("0");
+                onlineNum.setText("0");
+                offlineNum.setText("0");
                 serverBtn.setText("ON");                 
                 chart.setVisible(false);
                 try {
