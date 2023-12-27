@@ -1,6 +1,5 @@
 
 package network.connection;
-
 import boardGamePkg.OnlineGame;
 import chooseopponent.ChooseOpponentBase;
 import com.google.gson.Gson;
@@ -24,6 +23,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import player.session.GameSession;
 import player.session.PlayerSession;
 import utilis.Navigator;
 import signInPkg.SignInBase;
@@ -171,6 +171,7 @@ public class NetworkConnection {
                                                 PlayerSession.setSymbol("O");
                                                 game = new OnlineGame(request.getReceiverUsername(), request.getSenderUsername());
                                                 Navigator.navigateTo(game);//navigate to Online Game
+
                                             } else {
                                                 setJson.addProperty("message", "Rejected");
                                             }
@@ -186,8 +187,10 @@ public class NetworkConnection {
                                             Platform.runLater(() -> {
                                                 PlayerSession.setMyTurn(true);
                                                 PlayerSession.setSymbol("X");
+
                                                 game = new OnlineGame(receiverUserName, senderUserName);
                                                 Navigator.navigateTo(game);//navigate to Online Game
+
                                             });
                                         } else if (msg.equals("Rejected")) {
                                             Platform.runLater(() -> {
@@ -206,7 +209,9 @@ public class NetworkConnection {
                                         
                                         System.out.println("Player " + player + " row " + row + "column " + col);
                                         
+
                                         Platform.runLater(() ->game.updateUI(symbol, row, col));
+
                                         
                                         PlayerSession.setMyTurn(true);
                                        
