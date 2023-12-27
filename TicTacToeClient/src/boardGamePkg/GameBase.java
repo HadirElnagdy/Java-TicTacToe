@@ -201,7 +201,9 @@ public abstract class GameBase extends Pane {
             + "-fx-border-width: 5;"
             + "-fx-border-radius: 10;");  
         cell.setOnAction(event -> {
+            //abstract metnhod
             startPlaying(event);
+           
             recordMove(cell);
             
             if (checkWinner()) {

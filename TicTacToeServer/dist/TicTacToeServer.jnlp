@@ -8,11 +8,9 @@
   </information>
   <resources>
     <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
-<<<<<<< HEAD
-    <jar href="TicTacToeServer.jar" size="33704" download="eager" />
-=======
-    <jar href="TicTacToeServer.jar" size="27487" download="eager" />
->>>>>>> origin/chart
+
+    <jar href="TicTacToeServer.jar" size="34243" download="eager" />
+
     <jar href="lib\derby.jar" size="3104883" download="eager" />
     <jar href="lib\derbyclient.jar" size="585704" download="eager" />
     <jar href="lib\derbynet.jar" size="266471" download="eager" />

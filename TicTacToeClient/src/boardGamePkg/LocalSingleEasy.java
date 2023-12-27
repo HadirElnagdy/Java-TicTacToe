@@ -20,7 +20,11 @@ public class LocalSingleEasy extends GameBase {
          // Human player's move
         
         Button clickedButton = (Button) e.getSource();
-        clickedButton.setStyle(
+       
+        if (clickedButton.getText().isEmpty()) {
+           
+            clickedButton.setText("X");
+             clickedButton.setStyle(
               "-fx-background-color: #232429;"
             + "-fx-border-color: #1B1E23;"
             + "-fx-border-width: 5;"
@@ -28,9 +32,6 @@ public class LocalSingleEasy extends GameBase {
             + "-fx-text-fill: #FFFFFF;"
             + "-fx-font-size: 40px;" 
             + "-fx-font-weight: " + FontWeight.EXTRA_BOLD.getWeight() + ";"); 
-        if (clickedButton.getText().isEmpty()) {
-           
-            clickedButton.setText("X");
             switchPlayer();
             recordMove(clickedButton); 
             filledCells++;   

@@ -87,7 +87,7 @@ public class DataAccessLayer {
                             String username = rs.getString("USERNAME");
                             String email = rs.getString("EMAIL");
 
-                            System.out.println(score);
+                            //System.out.println(score);
                             DtoPlayer player = new DtoPlayer(username, fullName, password, email, score, status);
                             onlinePlayers.add(player);
                         }
