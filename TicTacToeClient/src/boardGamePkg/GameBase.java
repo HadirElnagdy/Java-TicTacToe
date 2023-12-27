@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package boardGamePkg;
 
 
@@ -201,7 +197,9 @@ public abstract class GameBase extends Pane {
             + "-fx-border-width: 5;"
             + "-fx-border-radius: 10;");  
         cell.setOnAction(event -> {
+            //abstract metnhod
             startPlaying(event);
+           
             recordMove(cell);
             
             if (checkWinner()) {
@@ -301,6 +299,9 @@ public abstract class GameBase extends Pane {
     protected void switchPlayer(){
         currentSymbol = (currentSymbol == "X"?"O":"X");
     }
+    protected void setCurrentSymbol(String symbol){
+        currentSymbol = symbol;
+    }
     public static void resetAll(){
         player1Score = 0;
         player2Score = 0;
@@ -337,4 +338,3 @@ public abstract class GameBase extends Pane {
         moves.add(move);
     }
 }
-

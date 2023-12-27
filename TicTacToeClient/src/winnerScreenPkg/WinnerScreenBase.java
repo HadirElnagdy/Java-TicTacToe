@@ -13,7 +13,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
@@ -233,7 +232,7 @@ public class WinnerScreenBase extends BorderPane {
          if(winnerValue == 0){
             resultLabel.setText("It's a Draw!");
             setVideo("/winnerScreenPkg/draw.mp4");
-        }else if(winnerValue == 2 && GameBase.playingMode == "LocalSingleEasy"){
+        }else if((winnerValue == 2 && GameBase.playingMode == "LocalSingleEasy") || (winnerValue == 3 && GameBase.playingMode == "OnlineGame")){
             resultLabel.setText("You Lost!");
             setVideo("/winnerScreenPkg/lose1.mp4");
         }else{

@@ -118,7 +118,8 @@ public class ChooseOpponentBase extends AnchorPane {
         NetworkConnection.getInstance().opponentBase = this;
         this.sendGetOnlinePlayers();
     }
-    
+
+  
     public void receiveOnlinePlayers(List<DTOPlayer> onlinePlayers) {
         Platform.runLater(() -> {
             ObservableList<CellBase> cellList = FXCollections.observableArrayList();
