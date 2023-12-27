@@ -95,44 +95,38 @@ public class ClientrHandler {
                         // send all online players in all clients
                         else if (keyPrimitive != null && keyPrimitive.getAsString().equals("onlinePlayers")) {
                             System.out.println("get onlineplayers");
-                            DataAccessLayer dbLayer = new DataAccessLayer();
-                          
-                            message = dbLayer.getOnlinePlayers();
-                            //boatcast to all clients 
-                            for (ClientrHandler clientHandler : clientsVector) {
-                                  clientHandler.sendMessage(message);
-                              }
+                            broadcastOnlinePlayers();
                             
                          } 
                          
                          //marwa
                          // send response sign in with usename to save username when succefful logging in
                          else if(keyPrimitive != null && keyPrimitive.getAsString().equals("signin")){
-                             String operationValue = json.get("key").getAsString();
-                            System.out.println("key value: " + operationValue);
+                                String operationValue = json.get("key").getAsString();
+                                System.out.println("key value: " + operationValue);
+                                //broadcastOnlinePlayers();
+                                boolean exist = accessNetwork.checkSignIn(json);
+                                System.out.println("client exist= " + exist);
+                                String found = exist ? "user is exist" : "not found";
+                                String username = json.get("UserName").getAsString();
+                                if(found == "user is exist") clientUserName = username;
+                                Map<String, String> map = new HashMap<>();
+                                map.put("key", "signin");
+                                map.put("message", found);
+                                // send username again to save player 
+                                map.put("UserName", username);
 
-                            boolean exist = accessNetwork.checkSignIn(json);
-                            System.out.println("client exist= " + exist);
-                            String found = exist ? "user is exist" : "not found";
-                            String username = json.get("UserName").getAsString();
-                            if(found == "user is exist") clientUserName = username;
-                            Map<String, String> map = new HashMap<>();
-                            map.put("key", "signin");
-                            map.put("message", found);
-                            // send username again to save player 
-                            map.put("UserName", username);
-                            
-                            message = new Gson().toJson(map);
-                            sendMessage(message);
+                                message = new Gson().toJson(map);
+                                sendMessage(message);
                          }
                          //send two messages request response and receiverMessage
                          //"sendingRequest"
                          else if(keyPrimitive != null && keyPrimitive.getAsString().equals("sendingRequest")){
                              String receiverUserName = json.get("receiverUserName").getAsString();
                              Map<String, String> map = new HashMap<>();
-                            map.put("key", "receivingRequest");
-                            map.put("senderUserName", clientUserName);
-                            message = new Gson().toJson(map);
+                                map.put("key", "receivingRequest");
+                                map.put("senderUserName", clientUserName);
+                                message = new Gson().toJson(map);
                               for (int i = 0; i < Server.clientsVector.size(); i++) {
                                   if(Server.clientsVector.get(i).getUsername().equals(receiverUserName)){
                                       Server.clientsVector.get(i).sendMessage(message);
@@ -150,10 +144,13 @@ public class ClientrHandler {
                             map.put("key", "requestRespond");
                             map.put("response", msg);
                             map.put("senderUserName", senderUserName);
+                            map.put("receiverUserName", receiverUserName);
                             message = new Gson().toJson(map);
                             if(msg.equals("Accepted")){ 
                                 DataAccessLayer DAL = new DataAccessLayer();
                                 DAL.makePlayersBusy(receiverUserName, senderUserName);
+                                //update clients
+                                broadcastOnlinePlayers();
                             }
                               for (int i = 0; i < Server.clientsVector.size(); i++) {
                                   if(Server.clientsVector.get(i).getUsername().equals(receiverUserName)){
@@ -169,7 +166,7 @@ public class ClientrHandler {
                             System.out.println("client logedout= " + exist);
                             String found = exist ? "user is exist" : "not found";
                             String username = json.get("UserName").getAsString();
-                            
+                            broadcastOnlinePlayers();
                             Map<String, String> map = new HashMap<>();
                             map.put("key", "logout");
                             
@@ -179,6 +176,33 @@ public class ClientrHandler {
                             message = new Gson().toJson(map);
                             sendMessage(message);
                             System.out.println("logedout succeded");
+                         }
+                         else if (keyPrimitive != null && keyPrimitive.getAsString().equals("move")) {
+                                String player = json.get("player").getAsString();
+                                String symbol = json.get("symbol").getAsString();
+                                int row = json.get("row").getAsInt();
+                                int col = json.get("col").getAsInt();  
+                                
+                         
+                                System.out.println("Player " + player + " row " + row + "column " + col);
+                                
+                                Map<String, String> map = new HashMap<>();
+                                map.put("key", "move");
+                                map.put("player", player);
+                                map.put("symbol", symbol);
+                                map.put("row", String.valueOf(row));
+                                map.put("col", String.valueOf(col));
+
+                                message = new Gson().toJson(map);
+                                
+                                System.out.println("move successded");
+                                
+                                 for (int i = 0; i < Server.clientsVector.size(); i++) {
+                                    if(Server.clientsVector.get(i).getUsername().equals(player)){
+                                      Server.clientsVector.get(i).sendMessage(message);
+                                      break;
+                                  } 
+                              } 
                          }
                          ///// response request and game move
                         else{
@@ -233,5 +257,15 @@ public class ClientrHandler {
     }
     public String getUsername(){
         return clientUserName;
+    }
+    
+    public void broadcastOnlinePlayers() {
+        DataAccessLayer dbLayer = new DataAccessLayer();
+        String message = dbLayer.getOnlinePlayers();
+
+            // Broadcast the updated online players list to all clients
+            for (ClientrHandler clientHandler : clientsVector) {
+                clientHandler.sendMessage(message);
+            }
     }
 }

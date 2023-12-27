@@ -1,6 +1,6 @@
-package network.connection;
 
-import boardGamePkg.LocalMultiMode;
+package network.connection;
+import boardGamePkg.OnlineGame;
 import chooseopponent.ChooseOpponentBase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
+import player.session.GameSession;
 import player.session.PlayerSession;
 import utilis.Navigator;
 import signInPkg.SignInBase;
@@ -35,6 +36,7 @@ public class NetworkConnection {
     private PrintStream printStream;
     private static String ipAddress;
     public ChooseOpponentBase opponentBase;
+    private OnlineGame game;
     String message;
     private String ip;
 
@@ -165,7 +167,11 @@ public class NetworkConnection {
 
                                             if (Alerts.showConfirmationAlert(senderUserName + " is asking you to join a game", "Accept", "Reject")) {
                                                 setJson.addProperty("message", "Accepted");
-                                                Navigator.navigateTo(new LocalMultiMode());//navigate to Online Game
+                                                PlayerSession.setMyTurn(false);
+                                                PlayerSession.setSymbol("O");
+                                                game = new OnlineGame(request.getReceiverUsername(), request.getSenderUsername());
+                                                Navigator.navigateTo(game);//navigate to Online Game
+
                                             } else {
                                                 setJson.addProperty("message", "Rejected");
                                             }
@@ -176,9 +182,15 @@ public class NetworkConnection {
                                     } else if ("requestRespond".equals(keyValue)) {
                                         String msg = json.get("response").getAsString();
                                         String senderUserName = json.get("senderUserName").getAsString();
+                                        String receiverUserName = json.get("receiverUserName").getAsString();
                                         if (msg.equals("Accepted")) {
                                             Platform.runLater(() -> {
-                                                Navigator.navigateTo(new LocalMultiMode());//navigate to Online Game
+                                                PlayerSession.setMyTurn(true);
+                                                PlayerSession.setSymbol("X");
+
+                                                game = new OnlineGame(receiverUserName, senderUserName);
+                                                Navigator.navigateTo(game);//navigate to Online Game
+
                                             });
                                         } else if (msg.equals("Rejected")) {
                                             Platform.runLater(() -> {
@@ -188,13 +200,27 @@ public class NetworkConnection {
                                             });
                                         }
                                     }
+                                    
+                                    else if("move".equals(keyValue)){
+                                        String player = json.get("player").getAsString();
+                                        String symbol = json.get("symbol").getAsString();
+                                        int row = json.get("row").getAsInt();
+                                        int col = json.get("col").getAsInt(); 
+                                        
+                                        System.out.println("Player " + player + " row " + row + "column " + col);
+                                        
+
+                                        Platform.runLater(() ->game.updateUI(symbol, row, col));
+
+                                        
+                                        PlayerSession.setMyTurn(true);
+                                       
+                                    }
                                     else {
                                             System.out.println("Unexpected 'key' value: " + keyValue);
                                         }
                                     // check where request value and game move ///////////////////////
-                                    
-                                
-                                
+
                                     } 
                                 }
                             
