@@ -11,6 +11,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import dto.player.DTOPlayer;
 import dto.player.RequestDTO;
+import home.FXMLHomeBase;
 import utilis.Alerts;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -83,12 +84,19 @@ public class NetworkConnection {
                         while (socket.isConnected() && !socket.isClosed()) {
 
                             message = dataInputStream.readLine();
-                            String newJson = message.replace("\\", ""); 
-                            if (message == null) {
+                            
+                            if (message == null ) {
                                 System.out.println(".runnnnnnnnnnn()");
-                                socket.close();
+                                Platform.runLater(() -> {
+                                   Alerts.showErrorAlert("Connection refused. Make sure the server is running.");
+                                   Navigator.navigateTo(new FXMLHomeBase());//navigate to home after close connection
+                                });
+                                socket.close(); 
                                 break;
                             }
+                            
+                            String newJson = message.replace("\\", ""); 
+                            
 
                             System.out.println("message in network connection" + message);
 
