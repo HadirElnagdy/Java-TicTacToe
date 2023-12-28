@@ -254,17 +254,45 @@ public class WinnerScreenBase extends BorderPane {
         gridPane0.getChildren().add(resultLabel);
         
         resultLabel.setStyle("-fx-text-fill: #FFFFFF;");
+        
          if(winnerValue == 0){
             resultLabel.setText("It's a Draw!");
             setVideo("/winnerScreenPkg/draw.mp4");
+            JsonObject setJson = new JsonObject();
+            Gson gson = new GsonBuilder().create();
+
+            setJson.addProperty("key", "updateScore");
+            setJson.addProperty("userName", PlayerSession.getLogInUsername());
+            setJson.addProperty("score", 10);
+
+            String jsonString = gson.toJson(setJson);
+            NetworkConnection.getInstance().sendMessage(jsonString);
+            
         }else if((winnerValue == 2 && GameBase.playingMode == "LocalSingleEasy") || (winnerValue == 3 && GameBase.playingMode == "OnlineGame")){
             resultLabel.setText("You Lost!");
             setVideo("/winnerScreenPkg/lose1.mp4");
+            JsonObject setJson = new JsonObject();
+            Gson gson = new GsonBuilder().create();
+
+            setJson.addProperty("key", "updateScore");
+            setJson.addProperty("userName", PlayerSession.getLogInUsername());
+            setJson.addProperty("score", -20);
+
+            String jsonString = gson.toJson(setJson);
+            NetworkConnection.getInstance().sendMessage(jsonString);
         }else{
             String winnerName = (winnerValue == 1?GameBase.plyr1Name:GameBase.plyr2Name);
              resultLabel.setText(winnerName + " Wins!");
-             setVideo("/winnerScreenPkg/win1.mp4");
-             
+             setVideo("/winnerScreenPkg/win1.mp4");       
+             JsonObject setJson = new JsonObject();
+            Gson gson = new GsonBuilder().create();
+
+            setJson.addProperty("key", "updateScore");
+            setJson.addProperty("userName", PlayerSession.getLogInUsername());
+            setJson.addProperty("score", 20);
+
+            String jsonString = gson.toJson(setJson);
+            NetworkConnection.getInstance().sendMessage(jsonString);
         }
           
     }

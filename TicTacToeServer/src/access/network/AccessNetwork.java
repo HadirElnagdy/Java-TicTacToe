@@ -17,7 +17,16 @@ public class AccessNetwork {
     public AccessNetwork() {
         dataAccessLayer = new DataAccessLayer();
     }
-
+    public void updateScore (String userName,int updateScore){
+        try {
+            int score;
+            score=dataAccessLayer.getScore(userName);
+            updateScore=score+updateScore;
+            dataAccessLayer.updateScore(userName, updateScore);
+        } catch (SQLException ex) {
+            Logger.getLogger(AccessNetwork.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     public boolean checkSignUp(JsonObject json) {
         boolean found = false ;
 

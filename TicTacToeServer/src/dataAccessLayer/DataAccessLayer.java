@@ -277,6 +277,75 @@ public class DataAccessLayer {
 
     }
 
+    public void updateScore(String username, int newScore) throws SQLException {
+        try {
+            if (connection != null && !connection.isClosed()) {
+                String sqlStatement = "UPDATE ROOT.PLAYER SET SCORE = ? WHERE USERNAME = ?";
+                try (PreparedStatement pst = connection.prepareStatement(sqlStatement)) {
+                    pst.setInt(1, newScore);
+                    pst.setString(2, username);
+
+                    int rs = pst.executeUpdate();
+                    if (rs == 0) {
+                        System.out.println("Failed to update score for user: " + username);
+                    } else {
+                        System.out.println("Score updated successfully for user: " + username);
+                    }
+                }
+            } else {
+                System.out.println("No valid database connection.");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Database error: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }
+    
+    public int getScore(String username) {
+        int score = 0;
+        try {
+            if (connection != null && !connection.isClosed()) {
+                String sql = "SELECT SCORE FROM ROOT.PLAYER WHERE USERNAME = ?";
+                try (PreparedStatement pst = connection.prepareStatement(sql)) {
+                    pst.setString(1, username);
+                    try (ResultSet rs = pst.executeQuery()) {
+                        if (rs.next()) {
+                            score = rs.getInt("SCORE");
+                        }
+                    }
+                }
+            } else {
+                System.out.println("No valid database connection.");
+            }
+        } catch (SQLException ex) {
+            System.out.println("Database error: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+        return score;
+    }
+
+//    public void incrementScore(String username) throws SQLException {
+//        // Retrieve the current score from the database
+//        int currentScore = getScore(username);
+//
+//        // Increment the score
+//        int newScore = currentScore + 1;
+//
+//        // Update the score in the database
+//        updateScore(username, newScore);
+//    }
+//
+//    public void decrementScore(String username) throws SQLException {
+//        // Retrieve the current score from the database
+//        int currentScore = getScore(username);
+//
+//        // Decrement the score (ensure it doesn't go below 0)
+//        int newScore = Math.max(currentScore - 1, 0);
+//
+//        // Update the score in the database
+//        updateScore(username, newScore);
+//    }
+
     public void closeConnection() {
         try {
             if (connection != null && !connection.isClosed()) {
