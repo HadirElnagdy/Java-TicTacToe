@@ -5,6 +5,10 @@ import boardGamePkg.LocalMultiMode;
 import boardGamePkg.LocalSingleEasy;
 import boardGamePkg.LocalSingleMedium;
 import boardGamePkg.OnlineGame;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import dto.player.RequestDTO;
 import home.FXMLHomeBase;
 import java.io.IOException;
 import java.net.URL;
@@ -24,6 +28,8 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
 import javafx.scene.text.Font;
+import network.connection.NetworkConnection;
+import player.session.PlayerSession;
 import utilis.Navigator;
 
 public class WinnerScreenBase extends BorderPane {
@@ -49,6 +55,7 @@ public class WinnerScreenBase extends BorderPane {
     protected final RowConstraints rowConstraints3;
     protected final RowConstraints rowConstraints4;
     protected final Label resultLabel;
+    private NetworkConnection networkConnection;
 
     public WinnerScreenBase(int winnerValue) {
 
@@ -147,6 +154,21 @@ public class WinnerScreenBase extends BorderPane {
               }else if(GameBase.playingMode == "LocalSingleMedium"){
                   Navigator.navigateTo(new LocalSingleMedium(),event);
               }else if(GameBase.playingMode == "OnlineGame"){
+                    RequestDTO request = new RequestDTO(PlayerSession.getLogInUsername(), PlayerSession.getOpponentUsername());
+                    JsonObject setJson = new JsonObject();
+                    Gson gson = new GsonBuilder().create();
+                    
+                    setJson.addProperty("key", "replay");
+                    setJson.addProperty("senderUserName", request.getSenderUsername());
+                    setJson.addProperty("receiverUserName", request.getReceiverUsername());
+              
+                    String jsonString = gson.toJson(setJson);
+                    PlayerSession.setMyTurn(true);
+                    PlayerSession.setSymbol("X");
+                    PlayerSession.setOpponentUsername(PlayerSession.getOpponentUsername());
+                    networkConnection = NetworkConnection.getInstance();
+                    networkConnection.sendMessage(jsonString);
+                    
                   Navigator.navigateTo(new OnlineGame(),event);
               }
             }

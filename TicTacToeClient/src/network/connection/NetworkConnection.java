@@ -23,7 +23,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Platform;
-import player.session.GameSession;
 import player.session.PlayerSession;
 import utilis.Navigator;
 import signInPkg.SignInBase;
@@ -169,6 +168,7 @@ public class NetworkConnection {
                                                 setJson.addProperty("message", "Accepted");
                                                 PlayerSession.setMyTurn(false);
                                                 PlayerSession.setSymbol("O");
+                                                PlayerSession.setOpponentUsername(senderUserName);
                                                 game = new OnlineGame();
                                                 game.setPlayersNames(request.getReceiverUsername(), request.getSenderUsername());
                                                 Navigator.navigateTo(game);//navigate to Online Game
@@ -188,10 +188,11 @@ public class NetworkConnection {
                                             Platform.runLater(() -> {
                                                 PlayerSession.setMyTurn(true);
                                                 PlayerSession.setSymbol("X");
-
+                                                PlayerSession.setOpponentUsername(senderUserName);
                                                 game = new OnlineGame();
                                                 game.setPlayersNames(receiverUserName, senderUserName);
                                                 Navigator.navigateTo(game);//navigate to Online Game
+                                               
 
                                             });
                                         } else if (msg.equals("Rejected")) {
@@ -217,6 +218,11 @@ public class NetworkConnection {
                                         
                                         PlayerSession.setMyTurn(true);
                                        
+                                    }else if("replay".equals(keyValue)){
+                                        PlayerSession.setMyTurn(false);
+                                        PlayerSession.setSymbol("O");
+                                        PlayerSession.setOpponentUsername(PlayerSession.getOpponentUsername());
+                                        Platform.runLater(() ->Navigator.navigateTo(new OnlineGame()));
                                     }
                                     else {
                                             System.out.println("Unexpected 'key' value: " + keyValue);

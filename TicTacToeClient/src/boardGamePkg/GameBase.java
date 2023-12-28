@@ -338,7 +338,7 @@ public abstract class GameBase extends Pane {
         moves.add(move);
     }
      public String[] getPlayersNames(){
-         String[] names = {plyr1Name, plyr1Name};
+         String[] names = {plyr1Name, plyr2Name};
          return names;
      }
 }

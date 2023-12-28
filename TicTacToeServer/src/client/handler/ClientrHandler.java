@@ -203,8 +203,19 @@ public class ClientrHandler {
                                       break;
                                   } 
                               } 
+                         }else if(keyPrimitive != null && keyPrimitive.getAsString().equals("replay")){
+                                String receiverUserName = json.get("receiverUserName").getAsString();
+                                Map<String, String> map = new HashMap<>();
+                                map.put("key", "replay");
+                                map.put("senderUserName", clientUserName);
+                                message = new Gson().toJson(map);
+                              for (int i = 0; i < Server.clientsVector.size(); i++) {
+                                  if(Server.clientsVector.get(i).getUsername().equals(receiverUserName)){
+                                      Server.clientsVector.get(i).sendMessage(message);
+                                      break;
+                                  } 
+                              }  
                          }
-                         ///// response request and game move
                         else{
                              System.out.println("Wrong json");
                          }
