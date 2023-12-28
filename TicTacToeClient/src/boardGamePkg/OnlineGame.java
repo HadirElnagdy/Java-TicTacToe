@@ -26,14 +26,8 @@ import winnerScreenPkg.WinnerScreenBase;
  */
 public class OnlineGame extends GameBase {
 
-    private String playerName1;
-    private String playerName2;
-
-    public OnlineGame(String playerName1, String playerName2) {
+    public OnlineGame() {
         super(new BorderPane(new ChooseOpponentBase()), "OnlineGame");
-        this.playerName1 = playerName1;
-        this.playerName2 = playerName2;
-        setPlayersNames(playerName1, playerName2);
     }
 
     @Override
@@ -69,7 +63,8 @@ public class OnlineGame extends GameBase {
     private String createMoveMessage(int row, int col) {
         Gson gson = new GsonBuilder().create();
         JsonObject setJson = new JsonObject();
-        String otherPlayer = (PlayerSession.getLogInUsername().equals(playerName1) ? playerName2 : playerName1);
+        String []playersNames = this.getPlayersNames();
+        String otherPlayer = (PlayerSession.getLogInUsername().equals(playersNames[0]) ? playersNames[1] : playersNames[0]);
 
         setJson.addProperty("key", "move");
         setJson.addProperty("player", otherPlayer);
