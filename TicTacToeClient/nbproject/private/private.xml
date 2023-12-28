@@ -3,17 +3,11 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/home/EasyHardBase.java</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/signUpPkg/SignUpBase.java</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/chooseopponent/ChooseOpponentBase.java</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/boardGamePkg/OnlineGame.java</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/chooseopponent/CellBase.java</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/home/FXMLHomeBase.java</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/network/connection/NetworkConnection.java</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/boardGamePkg/GameBase.java</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/player/session/PlayerSession.java</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/winnerScreenPkg/WinnerScreenBase.java</file>
-            <file>file:/C:/Users/Hp/Desktop/Java%20Project/TicTacToeClient/src/boardGamePkg/LocalMultiMode.java</file>
+            <file>file:/D:/java%20course/Java%20Project/1/Java-TicTacToe/TicTacToeClient/src/boardGamePkg/OnlineGame.java</file>
+            <file>file:/D:/java%20course/Java%20Project/1/Java-TicTacToe/TicTacToeClient/src/boardGamePkg/LocalSingleMedium.java</file>
+            <file>file:/D:/java%20course/Java%20Project/1/Java-TicTacToe/TicTacToeClient/src/boardGamePkg/GameBase.java</file>
+            <file>file:/D:/java%20course/Java%20Project/1/Java-TicTacToe/TicTacToeClient/src/boardGamePkg/LocalSingleHard.java</file>
+            <file>file:/D:/java%20course/Java%20Project/1/Java-TicTacToe/TicTacToeClient/src/home/EasyHardBase.java</file>
         </group>
     </open-files>
 </project-private>

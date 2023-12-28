@@ -170,6 +170,14 @@ public class EasyHardBase extends BorderPane {
                 destination.setPlayersNames(input[0] , "Computer");
                 Navigator.navigateTo(destination,event);}
         });
+        hardBtn.addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
+            String[] input = Alerts.showInputAlert("Enter player name", null, "Player Name");
+            if(input != null){
+                GameBase destination = new LocalSingleEasy();
+                
+                destination.setPlayersNames(input[0] , "Computer");
+                Navigator.navigateTo(destination,event);}
+        });
 
       
     }

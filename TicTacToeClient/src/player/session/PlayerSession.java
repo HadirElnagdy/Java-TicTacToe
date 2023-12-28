@@ -15,6 +15,15 @@ public class PlayerSession {
     private static String symbol;
     private static boolean myTurn;
 
+    private static String ipAddress;
+
+    public static String getIpAddress() {
+        return ipAddress;
+    }
+
+    public static void setIpAddress(String ipAddress) {
+        PlayerSession.ipAddress = ipAddress;
+    }
     public static String getSymbol() {
         return symbol;
     }

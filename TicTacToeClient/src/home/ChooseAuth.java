@@ -138,10 +138,6 @@ public class ChooseAuth  extends BorderPane {
             });
         
     }
-     public void setIpAddress(String ipAddress){
-          this.ipAddress = ipAddress ;
-          if (networkConnection != null) {
-            networkConnection.setIpAddress(ipAddress);
-        }
-      }
+     
+      
 }

@@ -87,7 +87,7 @@ public class ServerBase extends BorderPane {
         onlineNum = new Label();
         busyNum = new Label();
         offlineNum = new Label();
-        DataAccessLayer dal=new DataAccessLayer();
+        DataAccessLayer dataAccessLayer=new DataAccessLayer();
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -251,9 +251,9 @@ public class ServerBase extends BorderPane {
         BorderPane.setAlignment(chart, javafx.geometry.Pos.CENTER);
 
         
-        int x = dal.online();
-        int y = dal.busy();
-        int z = dal.offline();
+        int online = dataAccessLayer.online();
+        int busy = dataAccessLayer.busy();
+        int offline = dataAccessLayer.offline();
 
         onlineNum.setText(Integer.toString(onlineNumValue));
         offlineNum.setText(Integer.toString(offlineNumValue));
@@ -262,9 +262,9 @@ public class ServerBase extends BorderPane {
         
         
         chart.getData().addAll(
-            new PieChart.Data("Online", x),
-            new PieChart.Data("Offline", y),
-            new PieChart.Data("Busy", z)
+            new PieChart.Data("Online", online),
+            new PieChart.Data("Offline", offline),
+            new PieChart.Data("Busy", busy)
         );
             
       
@@ -288,9 +288,9 @@ public class ServerBase extends BorderPane {
         chart.setVisible(false);
         serverBtn.setOnAction(e->{
             try {
-                busyNum.setText(String.valueOf(dal.busy()));
-                onlineNum.setText(String.valueOf(dal.online()));
-                offlineNum.setText(String.valueOf(dal.offline()));
+                busyNum.setText(String.valueOf(dataAccessLayer.busy()));
+                onlineNum.setText(String.valueOf(dataAccessLayer.online()));
+                offlineNum.setText(String.valueOf(dataAccessLayer.offline()));
             
             } catch (SQLException ex) {
                 Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);

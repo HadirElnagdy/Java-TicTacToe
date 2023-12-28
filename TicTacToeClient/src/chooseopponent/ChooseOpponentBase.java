@@ -124,17 +124,14 @@ public class ChooseOpponentBase extends AnchorPane {
         Platform.runLater(() -> {
             ObservableList<CellBase> cellList = FXCollections.observableArrayList();
             for (DTOPlayer player : onlinePlayers) {
-                // check usename logging to not show in list view
                 if (!player.getUserName().equals(PlayerSession.getLogInUsername())) {
                     CellBase cell = new CellBase();
                     cell.userNameLabel.setText(player.getUserName());
                     cell.scoreLabel.setText(String.valueOf(player.getScore()));
                     cell.statusLabel.setText(player.getStatus());
-                    // add cell to list
                     cellList.add(cell);
                 }
             }
-            // set the update list
             listView.setItems(cellList);
         });
     }
