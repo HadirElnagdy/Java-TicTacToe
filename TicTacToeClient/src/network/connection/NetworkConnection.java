@@ -169,7 +169,8 @@ public class NetworkConnection {
                                                 setJson.addProperty("message", "Accepted");
                                                 PlayerSession.setMyTurn(false);
                                                 PlayerSession.setSymbol("O");
-                                                game = new OnlineGame(request.getReceiverUsername(), request.getSenderUsername());
+                                                game = new OnlineGame();
+                                                game.setPlayersNames(request.getReceiverUsername(), request.getSenderUsername());
                                                 Navigator.navigateTo(game);//navigate to Online Game
 
                                             } else {
@@ -188,7 +189,8 @@ public class NetworkConnection {
                                                 PlayerSession.setMyTurn(true);
                                                 PlayerSession.setSymbol("X");
 
-                                                game = new OnlineGame(receiverUserName, senderUserName);
+                                                game = new OnlineGame();
+                                                game.setPlayersNames(receiverUserName, senderUserName);
                                                 Navigator.navigateTo(game);//navigate to Online Game
 
                                             });

@@ -4,6 +4,7 @@ import boardGamePkg.GameBase;
 import boardGamePkg.LocalMultiMode;
 import boardGamePkg.LocalSingleEasy;
 import boardGamePkg.LocalSingleMedium;
+import boardGamePkg.OnlineGame;
 import home.FXMLHomeBase;
 import java.io.IOException;
 import java.net.URL;
@@ -145,6 +146,8 @@ public class WinnerScreenBase extends BorderPane {
                   Navigator.navigateTo(new LocalSingleEasy(),event);
               }else if(GameBase.playingMode == "LocalSingleMedium"){
                   Navigator.navigateTo(new LocalSingleMedium(),event);
+              }else if(GameBase.playingMode == "OnlineGame"){
+                  Navigator.navigateTo(new OnlineGame(),event);
               }
             }
         });
