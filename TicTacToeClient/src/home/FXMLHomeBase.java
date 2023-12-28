@@ -15,6 +15,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
+import player.session.PlayerSession;
 import record.RecordListBase;
 import utilis.Alerts;
 import utilis.Navigator;
@@ -166,9 +167,8 @@ public class FXMLHomeBase extends BorderPane {
 
                 }else{
                     if (result.isPresent() && result.get() == ButtonType.OK) {
-                        ChooseAuth destination = new ChooseAuth();
-                        destination.setIpAddress(ipAddressTextField.getText());
-                        Navigator.navigateTo(destination,event);
+                        PlayerSession.setIpAddress(ipAddressTextField.getText());
+                        Navigator.navigateTo(new ChooseAuth(),event);
                     }
                 }
 

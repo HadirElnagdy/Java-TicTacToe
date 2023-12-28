@@ -63,7 +63,7 @@ public class NetworkConnection {
     public static synchronized NetworkConnection getInstance() {
         if (single_instance == null) {
             try {
-                single_instance = new NetworkConnection(ipAddress);
+                single_instance = new NetworkConnection(PlayerSession.getIpAddress());
             } catch (IOException ex) {
                 Logger.getLogger(NetworkConnection.class.getName()).log(Level.SEVERE, null, ex);
             }
