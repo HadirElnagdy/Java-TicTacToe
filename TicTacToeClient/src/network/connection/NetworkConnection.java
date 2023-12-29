@@ -11,6 +11,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import dto.player.DTOPlayer;
 import dto.player.RequestDTO;
+import home.FXMLHomeBase;
 import utilis.Alerts;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -27,6 +28,7 @@ import player.session.GameSession;
 import player.session.PlayerSession;
 import utilis.Navigator;
 import signInPkg.SignInBase;
+import winnerScreenPkg.WinnerScreenBase;
 
 public class NetworkConnection {
 
@@ -154,7 +156,25 @@ public class NetworkConnection {
                                             } else if("not found".equals(str)) {
                                                 Platform.runLater(() -> Alerts.showErrorAlert("User Name or Password may be Incorrect "));
                                             }
-                                    }else if ("receivingRequest".equals(keyValue)) {
+                                    }   else if ("withdraw".equals(keyValue)) {
+                                            String str = json.get("message").getAsString();
+                                            if ("did withdraw".equals(str)) {
+                                                System.out.println("withDrawed succeeded in client side");
+                                                // set value of UserName key in session to save it
+                                                String logInUsername = json.get("UserName2").getAsString();
+                                                // save username in the playerSession
+                                                //PlayerSession.setLogInUsername(logInUsername);  
+                                                
+
+                                                Platform.runLater(() -> {
+                                                    Alerts.showConfirmationAlert(logInUsername +" withDrawed");
+                                                    Navigator.navigateTo(new WinnerScreenBase(1));//navigate to chooseOpponent
+                                                });
+//                                            } else if("not found".equals(str)) {
+//                                                Platform.runLater(() -> Alerts.showErrorAlert("something  Incorrect "));
+                                           }
+                                    }
+                                    else if ("receivingRequest".equals(keyValue)) {
                                         String senderUserName = json.get("senderUserName").getAsString();
                                         Platform.runLater(() -> {
                                             RequestDTO request = new RequestDTO(PlayerSession.getLogInUsername(), senderUserName);
@@ -169,6 +189,7 @@ public class NetworkConnection {
                                                 setJson.addProperty("message", "Accepted");
                                                 PlayerSession.setMyTurn(false);
                                                 PlayerSession.setSymbol("O");
+                                                PlayerSession.setOpponentUserName(senderUserName);
                                                 game = new OnlineGame(request.getReceiverUsername(), request.getSenderUsername());
                                                 Navigator.navigateTo(game);//navigate to Online Game
 
@@ -187,6 +208,9 @@ public class NetworkConnection {
                                             Platform.runLater(() -> {
                                                 PlayerSession.setMyTurn(true);
                                                 PlayerSession.setSymbol("X");
+                                                
+                                                PlayerSession.setOpponentUserName(senderUserName);
+                                                
 
                                                 game = new OnlineGame(receiverUserName, senderUserName);
                                                 Navigator.navigateTo(game);//navigate to Online Game
@@ -232,9 +256,11 @@ public class NetworkConnection {
                         }
                     }
                 }catch (SocketException ex) {
+                    Navigator.navigateTo(new FXMLHomeBase());
                     System.out.println("Socket EX");
                     Platform.runLater(() ->Alerts.showErrorAlert("Server Stoooop"));
                 }catch (IOException ex) {
+                    Navigator.navigateTo(new FXMLHomeBase());
                     System.out.println("IO EX");
                     ex.printStackTrace();
                 }

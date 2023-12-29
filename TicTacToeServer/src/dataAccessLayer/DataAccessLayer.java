@@ -192,6 +192,23 @@ public class DataAccessLayer {
                 ex.printStackTrace();
         }
     }
+          public void serverClosed() throws SQLException {
+         
+        try{
+                    String sqlStatment = "UPDATE  ROOT.PLAYER SET STATUS ='offline'";
+                    PreparedStatement pst = connection.prepareStatement(sqlStatment);
+                    int rs = pst.executeUpdate();
+                    if(rs==0){
+                        System.out.println("something wrong in SERVER Closed !!!");}
+                    else{
+                        System.out.println(" SERVER Closed successed");}
+                  
+        }catch(SQLException ex){
+                System.out.println("something wrong in SERVER CLOSED : " + ex.getMessage());
+                ex.printStackTrace();
+        }
+      
+    }
       public void makePlayersBusy(String player1, String player2){
           try{
             if (connection != null && !connection.isClosed()) {
@@ -267,6 +284,34 @@ public class DataAccessLayer {
          return count;
     }
     
+    
+      public boolean withDraw(String username1,String username2) throws SQLException {
+          boolean found =false;
+        try{
+            if (connection != null && !connection.isClosed()) {
+                    String sqlStatment = "UPDATE ROOT.PLAYER SET STATUS ='online' WHERE USERNAME= ? OR USERNAME= ?";
+                    PreparedStatement pst = connection.prepareStatement(sqlStatment);
+                    pst.setString(1, username1);
+                     pst.setString(2, username2);
+                    int rs = pst.executeUpdate();
+                    if (rs == 0) {
+                        System.out.println("something wrong !!!");
+                    } else {
+                        System.out.println("withDraws successed");
+                        found=true;
+                    }
+                    
+                 }
+            else{
+                System.out.println("No valid database connection.");
+
+            }
+        }catch(SQLException ex){
+                System.out.println("something wrong in Log Out : " + ex.getMessage());
+                ex.printStackTrace();
+        }
+        return found;
+    }
     public int busy() throws SQLException {
          String sqlSelect ="SELECT COUNT(USERNAME) AS COUNTER FROM ROOT.PLAYER WHERE STATUS = ?";
          PreparedStatement pre =connection.prepareStatement(sqlSelect);

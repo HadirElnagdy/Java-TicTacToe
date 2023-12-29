@@ -16,7 +16,15 @@ public class DtoPlayer {
     private String email;
     private int score;
     private String status;
+    private String opponentUserName;
 
+    public String getOpponentUserName() {
+        return opponentUserName;
+    }
+
+    public void setOpponentUserName(String opponentUserName) {
+        this.opponentUserName = opponentUserName;
+    }
     public DtoPlayer() {
     }
 

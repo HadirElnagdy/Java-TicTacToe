@@ -119,6 +119,62 @@ public class ClientrHandler {
                                 message = new Gson().toJson(map);
                                 sendMessage(message);
                          }
+                              else if (keyPrimitive != null && keyPrimitive.getAsString().equals("withdraw")) {
+                               String operationValue = json.get("key").getAsString();
+                               System.out.println("key value: " + operationValue);
+
+                              boolean exist = accessNetwork.checkWithDraw(json);
+                              System.out.println("client exist= " + exist);
+                             String found = exist ? "did withdraw" : "can not did withdraw";
+                               String username = json.get("UserName").getAsString();
+                               String username2 = json.get("UserName2").getAsString();
+
+                              if (found.equals("did withdraw")) {
+                                   //clientUserName = username2;
+                                   // Find the client with the specified username and send the message
+                                      Map<String, String> map = new HashMap<>();
+                                    map.put("key", "withdraw");
+                                    //map.put("message", found);
+                                    map.put("UserName2", username);
+
+                                message = new Gson().toJson(map);
+                                   for (int i = 0; i < Server.clientsVector.size(); i++) {
+                                       if (Server.clientsVector.get(i).getUsername().equals(username2)) {
+                                           Server.clientsVector.get(i).sendMessage(message);
+                                           break;
+                                       }
+                                  }
+                                   System.out.println("hena Tmam el massege bttbe3t");
+                               }
+
+                               // Rest of your code...
+                           }
+//                         else if(keyPrimitive != null && keyPrimitive.getAsString().equals("withdraw")){
+//                                String operationValue = json.get("key").getAsString();
+//                                System.out.println("key value: " + operationValue);
+//                                //broadcastOnlinePlayers();
+//                                boolean exist = accessNetwork.checkWithDraw(json);
+//                                System.out.println("client exist= " + exist);
+//                                String found = exist ? "did withdraw" : "can not did withdraw";
+//                                String username = json.get("UserName").getAsString();
+//                                String username2 = json.get("UserName2").getAsString();
+//                               
+//                                if(found == "did withdraw") clientUserName = username2;
+//                                  for (int i = 0; i < Server.clientsVector.size(); i++) {
+//                                  if(Server.clientsVector.get(i).getUsername().equals(username2)){
+//                                      Server.clientsVector.get(i).sendMessage(message);
+//                                      break;
+//                                  } 
+//                              }
+////                                Map<String, String> map = new HashMap<>();
+////                                map.put("key", "withdraw");
+////                                map.put("message", found);
+////                                // send username again to save player 
+////                                map.put("UserName2", username);
+////
+////                                message = new Gson().toJson(map);
+////                                sendMessage(message);
+//                         }
                          //send two messages request response and receiverMessage
                          //"sendingRequest"
                          else if(keyPrimitive != null && keyPrimitive.getAsString().equals("sendingRequest")){

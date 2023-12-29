@@ -14,7 +14,17 @@ public class PlayerSession {
     private static String logInUsername;
     private static String symbol;
     private static boolean myTurn;
+    private static String opponentUserName;
 
+    public static String getOpponentUserName() {
+        return opponentUserName;
+    }
+
+    public static void setOpponentUserName(String opponentUserName) {
+        PlayerSession.opponentUserName = opponentUserName;
+    }
+
+      
     public static String getSymbol() {
         return symbol;
     }

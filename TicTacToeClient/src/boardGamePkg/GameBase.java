@@ -32,7 +32,7 @@ import winnerScreenPkg.WinnerScreenBase;
  *
  * @author Hp
  */
-public abstract class GameBase extends Pane {
+public abstract  class GameBase extends Pane {
     
     protected final Label player1Name;
     protected final Label player2Name;
@@ -53,7 +53,7 @@ public abstract class GameBase extends Pane {
     BufferedWriter writer;
     boolean isRecord=false;
    
-    protected final Button backBtn;
+    protected static Button backBtn;
 
     
     public GameBase(BorderPane backDestination, String playingMode) {
@@ -115,9 +115,10 @@ public abstract class GameBase extends Pane {
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-            if(Alerts.showConfirmationAlert("Do you want to Quit?")) 
-                    GameBase.resetAll();
-                    Navigator.navigateTo(backDestination,event); 
+            if(Alerts.showConfirmationAlert("Do you want to Quit?")) {
+                      action();
+                      GameBase.resetAll();
+                    Navigator.navigateTo(backDestination,event); }
             }
         });
 
@@ -337,4 +338,7 @@ public abstract class GameBase extends Pane {
         String move = String.format("%s,%s,%s", btn.getText(), row, col);
         moves.add(move);
     }
+     public void action(){
+         System.out.println("Base Class Action");
+     } 
 }
