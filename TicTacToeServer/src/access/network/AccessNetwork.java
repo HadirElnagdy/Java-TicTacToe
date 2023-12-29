@@ -17,7 +17,16 @@ public class AccessNetwork {
     public AccessNetwork() {
         dataAccessLayer = new DataAccessLayer();
     }
-
+    public void updateScore (String userName,int updateScore){
+        try {
+            int score;
+            score=dataAccessLayer.getScore(userName);
+            updateScore=score+updateScore;
+            dataAccessLayer.updateScore(userName, updateScore);
+        } catch (SQLException ex) {
+            Logger.getLogger(AccessNetwork.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     public boolean checkSignUp(JsonObject json) {
         boolean found = false ;
 
@@ -103,46 +112,29 @@ public class AccessNetwork {
         
         return found;
     }
-    
- public boolean checkLogOut(JsonObject json) {
-        boolean found = false ;
-
-        try {  
-             if (json.has("UserName") ) {
-
-                String username = json.get("UserName").getAsString();
-                
-                DtoPlayer player = new DtoPlayer(username);
-
-                System.out.println("recived");
-                
-                System.out.println( "  " + username );
-
-                found = dataAccessLayer.logOut(player.getUserName());
-
-                if (found) {
-                    found = true;
-                    System.out.println("USER FOUND");
-                   // dataAccessLayer.UpdateStatus(username);
-                    
-                } else {
-                    found = false; 
-                }
-                    
-            }else {
-                System.out.println("Incomplete or malformed JSON payload forLog Out");
-                System.out.println("Received JSON payload: " + json.toString());
-
-            }
-            
-        } catch (SQLException ex) {
-            Logger.getLogger(AccessNetwork.class.getName()).log(Level.SEVERE, "Error during Log Out", ex);
-        }            
-
-        
-        
-        return found;
-    }
+//    
+// public boolean checkLogOut(JsonObject json) {
+//        boolean found = true;
+//        try {  
+//             if (json.has("UserName") ) {
+//                String username = json.get("UserName").getAsString();
+//                DtoPlayer player = new DtoPlayer(username);
+//                dataAccessLayer.logOut(username);
+//                          
+//            }else {
+//                System.out.println("Incomplete or malformed JSON payload forLog Out");
+//                System.out.println("Received JSON payload: " + json.toString());
+//
+//            }
+//            
+//        } catch (SQLException ex) {
+//            Logger.getLogger(AccessNetwork.class.getName()).log(Level.SEVERE, "Error during Log Out", ex);
+//        }            
+//
+//        
+//        
+//        return found;
+//    }
       public boolean checkWithDraw(JsonObject json) {
         boolean found = false ;
 
@@ -153,7 +145,7 @@ public class AccessNetwork {
                 String username2 = json.get("UserName2").getAsString();
                 
                 DtoPlayer player = new DtoPlayer(username);
-              player.setOpponentUserName(username2);
+                player.setOpponentUserName(username2);
 
                 System.out.println("recived");
                 

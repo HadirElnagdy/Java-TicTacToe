@@ -1,3 +1,4 @@
+
 package signUpPkg;
 
 import com.google.gson.Gson;
@@ -18,7 +19,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import network.connection.NetworkConnection;
 import utilis.Navigator;
 
@@ -94,25 +97,37 @@ public class SignUpBase extends GridPane {
         setMinWidth(USE_PREF_SIZE);
         setPrefHeight(401.0);
         setPrefWidth(597.0);
+        
+        setStyle("-fx-background-color: #232429;");
+        backBtn = new Button();
+        
+        backBtn.setLayoutX(10.0);
+        backBtn.setLayoutY(10.0);
+        backBtn.setMnemonicParsing(false);
+        backBtn.setPrefHeight(30.0);
+        backBtn.setPrefWidth(30.0);
+        backBtn.setStyle("-fx-background-image: url('signInPkg/back.png');" +
+                  "-fx-background-size: cover; -fx-background-radius: 15; -fx-text-fill: #FFFFFF;");
+        backBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        backBtn.setText("\u2190");
+        backBtn.setFont(Font.font("System Bold", FontWeight.BOLD, 16.0));
+        GridPane.setMargin(backBtn, new Insets(10.0, 0.0, 0.0, 10.5));
 
-         backBtn = new Button("Back");
-
-        GridPane.setMargin(backBtn, new Insets(8.0, 0.0, 0.0, 10.5));
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
         @Override
         public void handle(ActionEvent event) {
                 Navigator.navigateTo(new ChooseAuth(),event);
             }
         });
-        columnConstraints.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
+         columnConstraints.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints.setMaxWidth(294.0);
         columnConstraints.setMinWidth(10.0);
-        columnConstraints.setPrefWidth(32.0);
+        columnConstraints.setPrefWidth(68.0);
 
         columnConstraints0.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints0.setMaxWidth(565.0);
         columnConstraints0.setMinWidth(10.0);
-        columnConstraints0.setPrefWidth(555.0);
+        columnConstraints0.setPrefWidth(499.0);
 
         columnConstraints1.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
         columnConstraints1.setMaxWidth(565.0);
@@ -168,7 +183,7 @@ public class SignUpBase extends GridPane {
         GridPane.setColumnIndex(passwordTxtFld, 1);
         GridPane.setRowIndex(passwordTxtFld, 4);
         GridPane.setMargin(passwordTxtFld, new Insets(0.0, 5.0, 0.0, 5.0));
-        passwordTxtFld.setPromptText("Password");
+
         GridPane.setColumnIndex(gridPane, 1);
         GridPane.setRowIndex(gridPane, 2);
         gridPane.setPrefHeight(47.0);
@@ -236,10 +251,29 @@ public class SignUpBase extends GridPane {
         label4.setText("Already a member?");
         GridPane.setMargin(label4, new Insets(0.0, 0.0, 20.0, 5.0));
 
-        uNameTxtFld.setPromptText("Enter User Name");
-        emailTxtFld.setPromptText("Enter Email");
-        nameTxtFld.setPromptText("Enter Full Name");
+        GridPane.setColumnIndex(signInHyperLink, 1);
+        signInHyperLink.setText("Sign in");
+        GridPane.setMargin(signInHyperLink, new Insets(0.0, 0.0, 20.0, 0.0));
 
+        
+        // Set text color
+        label.setTextFill(Color.WHITE);
+        label0.setTextFill(Color.WHITE);
+        label1.setTextFill(Color.WHITE);
+        label2.setTextFill(Color.WHITE);
+        label3.setTextFill(Color.WHITE);
+        label4.setTextFill(Color.WHITE);
+
+        // Set text field color
+        emailTxtFld.setStyle("-fx-text-fill: #FFFFFF; -fx-background-color: #525461; -fx-background-radius: 8;");
+        passwordTxtFld.setStyle("-fx-text-fill: #FFFFFF; -fx-background-color: #525461; -fx-background-radius: 8;");
+        nameTxtFld.setStyle("-fx-text-fill: #FFFFFF; -fx-background-color: #525461; -fx-background-radius: 8;");
+        uNameTxtFld.setStyle("-fx-text-fill: #FFFFFF; -fx-background-color: #525461; -fx-background-radius: 8;");
+
+        // Set button color
+        createAccountBtn.setStyle("-fx-background-color: #1577FF; -fx-text-fill: WHITE; -fx-background-radius: 10;");
+
+        
         GridPane.setColumnIndex(signInHyperLink, 1);
         signInHyperLink.setText("Sign in");
         GridPane.setMargin(signInHyperLink, new Insets(0.0, 0.0, 20.0, 0.0));
@@ -310,8 +344,7 @@ public class SignUpBase extends GridPane {
                     String jsonString = gson.toJson(setJson);
 
                 network = NetworkConnection.getInstance();
-                network.sendMessage(jsonString);
-                clearFld();  
+                network.sendMessage(jsonString); 
 
             }
         }

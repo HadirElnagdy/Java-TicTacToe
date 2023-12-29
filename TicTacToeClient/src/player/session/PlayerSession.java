@@ -5,6 +5,8 @@
  */
 package player.session;
 
+import boardGamePkg.OnlineGame;
+
 /**
  *
  * @author Michael
@@ -12,10 +14,14 @@ package player.session;
 public class PlayerSession {
     //save usename which log with
     private static String logInUsername;
+    private static String opponentUsername;
     private static String symbol;
     private static boolean myTurn;
     private static String opponentUserName;
 
+    private static String ipAddress;
+    private static OnlineGame game;
+    
     public static String getOpponentUserName() {
         return opponentUserName;
     }
@@ -23,8 +29,30 @@ public class PlayerSession {
     public static void setOpponentUserName(String opponentUserName) {
         PlayerSession.opponentUserName = opponentUserName;
     }
+   
+    public static OnlineGame getGame() {
+        return game;
+    }
 
-      
+    public static void setGame(OnlineGame game) {
+        PlayerSession.game = game;
+    }
+
+    public static String getOpponentUsername() {
+        return opponentUsername;
+    }
+
+    public static void setOpponentUsername(String opponentName) {
+        PlayerSession.opponentUsername = opponentName;
+    }
+
+    public static String getIpAddress() {
+        return ipAddress;
+    }
+
+    public static void setIpAddress(String ipAddress) {
+        PlayerSession.ipAddress = ipAddress;
+    }
     public static String getSymbol() {
         return symbol;
     }

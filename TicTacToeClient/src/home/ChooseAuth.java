@@ -3,9 +3,11 @@ package home;
 import signInPkg.SignInBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.text.Font;
@@ -64,7 +66,7 @@ public class ChooseAuth  extends BorderPane {
         signUpBtn.setFont(new Font(14.0));
 
         signInBtn.setLayoutX(208.0);
-        signInBtn.setLayoutY(110.0);
+        signInBtn.setLayoutY(95.0);
         signInBtn.setMnemonicParsing(false);
         signInBtn.setPrefHeight(40.0);
         signInBtn.setPrefWidth(184.0);
@@ -114,10 +116,12 @@ public class ChooseAuth  extends BorderPane {
         backBtn.setMnemonicParsing(false);
         backBtn.setPrefHeight(30.0);
         backBtn.setPrefWidth(30.0);
-        backBtn.setStyle("-fx-background-color: #525461; -fx-text-fill: #FFFFFF; -fx-background-radius: 15;");
-        backBtn.setText("\u2190");
+        backBtn.setStyle("-fx-background-image: url('signInPkg/back.png');" +
+                  "-fx-background-size: cover; -fx-background-radius: 15; -fx-text-fill: #FFFFFF;");
         backBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        backBtn.setText("\u2190");
         backBtn.setFont(Font.font("System Bold", FontWeight.BOLD, 16.0));
+        GridPane.setMargin(backBtn, new Insets(10.0, 0.0, 0.0, 10.5));
         setTop(pane0);
         
         backBtn.addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {
@@ -138,10 +142,6 @@ public class ChooseAuth  extends BorderPane {
             });
         
     }
-     public void setIpAddress(String ipAddress){
-          this.ipAddress = ipAddress ;
-          if (networkConnection != null) {
-            networkConnection.setIpAddress(ipAddress);
-        }
-      }
+     
+      
 }

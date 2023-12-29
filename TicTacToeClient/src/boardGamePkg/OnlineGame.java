@@ -30,14 +30,8 @@ import winnerScreenPkg.WinnerScreenBase;
  */
 public class OnlineGame extends GameBase {
 
-    private String playerName1;
-    private String playerName2;
-
-    public OnlineGame(String playerName1, String playerName2) {
+    public OnlineGame() {
         super(new BorderPane(new ChooseOpponentBase()), "OnlineGame");
-        this.playerName1 = playerName1;
-        this.playerName2 = playerName2;
-        setPlayersNames(playerName1, playerName2);
     }
     
   NetworkConnection network;
@@ -84,6 +78,7 @@ public class OnlineGame extends GameBase {
                     + "-fx-font-weight: " + FontWeight.EXTRA_BOLD.getWeight() + ";");
 
             clickedButton.setText(sym);
+            recordMove(clickedButton);
             filledCells++;
             setCurrentSymbol(sym);
             PlayerSession.setMyTurn(false);
@@ -95,10 +90,9 @@ public class OnlineGame extends GameBase {
     private String createMoveMessage(int row, int col) {
         Gson gson = new GsonBuilder().create();
         JsonObject setJson = new JsonObject();
-        String otherPlayer = (PlayerSession.getLogInUsername().equals(playerName1) ? playerName2 : playerName1);
 
         setJson.addProperty("key", "move");
-        setJson.addProperty("player", otherPlayer);
+        setJson.addProperty("player", PlayerSession.getOpponentUsername());
         setJson.addProperty("symbol", PlayerSession.getSymbol());
         setJson.addProperty("row", row);
         setJson.addProperty("col", col);
@@ -118,12 +112,44 @@ public class OnlineGame extends GameBase {
                 + "-fx-font-weight: " + FontWeight.EXTRA_BOLD.getWeight() + ";");
 
         btn.setText(symbol);
+        recordMove(btn);
         filledCells++;
         setCurrentSymbol(symbol);
-        if (checkWinner()) {
-            Navigator.navigateTo(new WinnerScreenBase(3));
-        }else if (filledCells >= 9) {
-            Navigator.navigateTo(new WinnerScreenBase(0));
+        if(checkWinner()){
+                if(PlayerSession.getSymbol() == "O"){
+                    player1Score += 20;
+                    player2Score -= 20;
+                    try {
+                        writer.flush();
+                    } catch (IOException ex) {
+                        Logger.getLogger(GameBase.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                }else if (PlayerSession.getSymbol() == "X"){
+                    player1Score -= 20;
+                    player2Score += 20;
+                    
+                    try {
+                        writer.flush();
+                    } catch (IOException ex) {
+                        Logger.getLogger(GameBase.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    
+                }
+               winner = 3;
+               Navigator.navigateTo(new WinnerScreenBase(winner));
+ 
+            }else if (filledCells >= 9) {
+                winner = 0;
+                player1Score += 10;
+                player2Score += 10;
+                try {
+                    writer.flush();
+                } catch (IOException ex) {
+                    Logger.getLogger(GameBase.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                // draw 0
+                Navigator.navigateTo(new WinnerScreenBase(winner));
         } 
 
     }

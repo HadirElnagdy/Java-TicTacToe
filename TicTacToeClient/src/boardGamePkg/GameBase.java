@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -25,6 +26,7 @@ import javafx.scene.layout.Pane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import player.session.PlayerSession;
 import utilis.Navigator;
 import winnerScreenPkg.WinnerScreenBase;
 
@@ -107,10 +109,12 @@ public abstract  class GameBase extends Pane {
         backBtn.setMnemonicParsing(false);
         backBtn.setPrefHeight(30.0);
         backBtn.setPrefWidth(30.0);
-        backBtn.setStyle("-fx-background-color: #525461; -fx-text-fill: #FFFFFF; -fx-background-radius: 15;");
-        backBtn.setText("\u2190");
+        backBtn.setStyle("-fx-background-image: url('signInPkg/back.png');" +
+                  "-fx-background-size: cover; -fx-background-radius: 15; -fx-text-fill: #FFFFFF;");
         backBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        backBtn.setText("\u2190");
         backBtn.setFont(Font.font("System Bold", FontWeight.BOLD, 16.0));
+        GridPane.setMargin(backBtn, new Insets(10.0, 0.0, 0.0, 10.5));
         
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
@@ -204,7 +208,7 @@ public abstract  class GameBase extends Pane {
             recordMove(cell);
             
             if (checkWinner()) {
-                if(currentSymbol == "X"){
+                if(currentSymbol == "X" || (playingMode == "OnlineGame" && PlayerSession.getSymbol() == "X")){
                     winner = 1;
                     player1Score += 20;
                     player2Score -= 20;
@@ -215,7 +219,7 @@ public abstract  class GameBase extends Pane {
                         Logger.getLogger(GameBase.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
-                }else{
+                }else if (currentSymbol == "O" || (playingMode == "OnlineGame" && PlayerSession.getSymbol() == "O")){
                     winner = 2;
                     player1Score -= 20;
                     player2Score += 20;
@@ -341,4 +345,8 @@ public abstract  class GameBase extends Pane {
      public void action(){
          System.out.println("Base Class Action");
      } 
+     public String[] getPlayersNames(){
+         String[] names = {plyr1Name, plyr2Name};
+         return names;
+     }
 }

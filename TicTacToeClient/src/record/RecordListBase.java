@@ -1,6 +1,5 @@
 package record;
 
-
 import home.FXMLHomeBase;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -33,7 +32,7 @@ public class RecordListBase extends BorderPane {
     protected final RowConstraints rowConstraints;
     protected final Label label;
     protected final Button backBtn;
-    protected final ListView<String> listView;
+    protected final ListView<RecordListCell> recordListView;
     protected final List<String> rMoves;
 
     public RecordListBase() {
@@ -45,15 +44,8 @@ public class RecordListBase extends BorderPane {
         rowConstraints = new RowConstraints();
         label = new Label();
         backBtn = new Button();
-        listView = new ListView();
+        recordListView = new ListView();
         rMoves = new ArrayList<>();
-        
-        ObservableList<String> myListView = FXCollections.observableArrayList();
-        loadMovesFromFile(myListView);
-        System.out.println("Contents of myListView: " + myListView);
-        
-        listView.setItems(myListView);
-      
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -61,6 +53,7 @@ public class RecordListBase extends BorderPane {
         setMinWidth(USE_PREF_SIZE);
         setPrefHeight(400.0);
         setPrefWidth(600.0);
+        setStyle("-fx-background-color: #232429;");
 
         BorderPane.setAlignment(gridPane, javafx.geometry.Pos.CENTER);
         gridPane.setPrefHeight(55.0);
@@ -89,7 +82,10 @@ public class RecordListBase extends BorderPane {
         GridPane.setHalignment(label, javafx.geometry.HPos.CENTER);
         label.setText("Records");
         label.setFont(new Font("System Bold Italic", 36.0));
-
+        label.setStyle("-fx-text-fill: white;");
+        
+        
+        
         backBtn.setMnemonicParsing(false);
         backBtn.setText("Back");
         GridPane.setMargin(backBtn, new Insets(0.0, 0.0, 0.0, 14.0));
@@ -98,12 +94,10 @@ public class RecordListBase extends BorderPane {
         });
         setTop(gridPane);
 
-        BorderPane.setAlignment(listView, javafx.geometry.Pos.CENTER);
-        listView.setPrefHeight(200.0);
-        listView.setPrefWidth(200.0);
-        setCenter(listView);
-        
-        
+        BorderPane.setAlignment(recordListView, javafx.geometry.Pos.CENTER);
+        recordListView.setPrefHeight(200.0);
+        recordListView.setPrefWidth(200.0);
+        setCenter(recordListView);
 
         gridPane.getColumnConstraints().add(columnConstraints);
         gridPane.getColumnConstraints().add(columnConstraints0);
@@ -111,61 +105,63 @@ public class RecordListBase extends BorderPane {
         gridPane.getRowConstraints().add(rowConstraints);
         gridPane.getChildren().add(label);
         gridPane.getChildren().add(backBtn);
-        
-       listView.setOnMouseClicked((event) -> {
-           
-            Navigator.navigateTo(new DisplayRecords(listView.getSelectionModel().getSelectedIndex()), event);
-           
+
+        recordListView.setOnMouseClicked((event) -> {
+            Navigator.navigateTo(new DisplayRecords(recordListView.getSelectionModel().getSelectedIndex()), event);
+
         });
-       
-        listView.setCellFactory(param -> new ListCell<String>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
+        recordListView.setStyle("-fx-control-inner-background: black;");
+        recordListView.setCellFactory(list -> new ListCell<RecordListCell>() {
+            protected void updateItem(RecordListCell item, boolean empty) {
                 super.updateItem(item, empty);
-                if (!empty) {
-                    setText(item);
-                    setGraphic(null);
-                    setPrefHeight(25);
-                    setFont(Font.font("Arial", FontWeight.BOLD, 12));
+                if (item != null) {
+                    setGraphic(item);
+                    int index = getIndex();
+                    item.setStyle(index % 2 == 0 ? "-fx-background-color: #525461;" : "-fx-background-color: black;");
                 } else {
-                    setText(null);
                     setGraphic(null);
                 }
             }
-            
         });
-
-        
+        loadMovesFromFile();
     }
 
+    private void loadMovesFromFile() {
+        Platform.runLater(() -> {
+            int cnt = 0;
+            ObservableList<RecordListCell> recordCells = FXCollections.observableArrayList();
+            try (BufferedReader reader = new BufferedReader(new FileReader("Record History.txt"))) {
+                String line;
+                StringBuilder record = new StringBuilder();
+                //System.out.println("record.RecordListBase.loadMovesFromFile()");
+                while ((line = reader.readLine()) != null) {
+                    if (line.equals("&")) {
+                        rMoves.add(record.toString());
+                        System.out.println(rMoves);
+                        String[] recordParts = record.toString().split("%");
+                        System.out.println(recordParts);
+                        if (recordParts.length == 5) {
+                            //String formattedRecord = String.format("%d\t\t%s\t\t%s", (++cnt), recordParts[0], recordParts[1]);
 
-    private void loadMovesFromFile(ObservableList<String> movesList) {
-        int cnt = 0;
-        try (BufferedReader reader = new BufferedReader(new FileReader("Record History.txt"))) {
-            String line;
-            StringBuilder record = new StringBuilder();
-            //System.out.println("record.RecordListBase.loadMovesFromFile()");
-            while ((line = reader.readLine()) != null) {
-                if (line.equals("&")) {
-                    rMoves.add(record.toString());
-                    String[] recordParts = record.toString().split("%");
-                    if (recordParts.length == 5) {
-                        String formattedRecord = String.format("%d\t\t%s\t\t%s", (++cnt), recordParts[0], recordParts[1]);
+                            RecordListCell cell = new RecordListCell();
+                            cell.IDLabel.setText(Integer.toString((++cnt)));
+                            cell.firstPlyrLbl.setText(recordParts[0]);
+                            cell.secondPlyrLbl.setText(recordParts[1]);
+                            recordCells.add(cell);
 
-                        Platform.runLater(() -> {
-                            movesList.add(formattedRecord);
-                            System.out.println("Added to movesList: " + formattedRecord);
-                        });
+                        }
+                        record.setLength(0);
+
+                    } else {
+                        record.append(line).append("\t\t\t");
                     }
-                    record.setLength(0);
-                } else {
-                    record.append(line).append("\t\t\t");
                 }
+                System.out.println("Ay 7agaaaaaaaaaaaaaaaaaaaaa");
+                recordListView.setItems(recordCells);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        });
     }
-    
-   
+
 }
