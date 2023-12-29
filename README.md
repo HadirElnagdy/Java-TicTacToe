@@ -3,16 +3,16 @@
 ## Overview
 This Java-based TicTacToe game offers a rich set of features, including gameplay recording and online multiplayer modes. Players can engage in a classic 3x3 grid, taking turns to mark spaces and aiming to achieve three in a row for victory.
 
-    #### Client Application Modes:
-    - **One Player Mode:** Challenge the computer for a solo gaming experience.
-    - **Two Player Mode:** Play locally with another player.
-    - **Online Mode:** Connect with players over the network for competitive matches.
+ #### Client Application Modes:
+ - **One Player Mode:** Challenge the computer for a solo gaming experience.
+ - **Two Player Mode:** Play locally with another player.
+ - **Online Mode:** Connect with players over the network for competitive matches.
     
-    #### Server Application:
-    The server application plays a crucial role by:
-    - Handling user requests.
-    - Managing user data in a database.
-    - Facilitating data exchange between users.
+#### Server Application:
+The server application plays a crucial role by:
+- Handling user requests.
+- Managing user data in a database.
+- Facilitating data exchange between users.
 
 ## Team Members
 - Hadir Elnagdy
