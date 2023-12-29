@@ -16,6 +16,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonPrimitive;
 import dataAccessLayer.DataAccessLayer;
 import java.net.SocketException;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.application.Platform;
@@ -119,7 +120,37 @@ public class ClientrHandler {
                                 message = new Gson().toJson(map);
                                 sendMessage(message);
                          }
-                         //send two messages request response and receiverMessage
+                              else if (keyPrimitive != null && keyPrimitive.getAsString().equals("withdraw")) {
+                                    String operationValue = json.get("key").getAsString();
+                                    System.out.println("key value: " + operationValue);
+
+                                  // boolean exist = accessNetwork.checkWithDraw(json);
+                                  // System.out.println("client exist= " + exist);
+                                   // String found = exist ? "did withdraw" : "can not did withdraw";
+                                    String username = json.get("UserName").getAsString();
+                                    String username2 = json.get("UserName2").getAsString();
+
+                                   //if (found.equals("did withdraw")) {
+                                        //clientUserName = username2;
+                                        // Find the client with the specified username and send the message
+                                         Map<String, String> map = new HashMap<>();
+                                         map.put("key", "withdraw");
+                                        // map.put("message", found);
+                                         map.put("UserName2", username);
+
+                                         message = new Gson().toJson(map);
+                                            for (int i = 0; i < Server.clientsVector.size(); i++) {
+                                            if (Server.clientsVector.get(i).getUsername().equals(username2)) {
+                                                Server.clientsVector.get(i).sendMessage(message);
+                                                break;
+                                            }
+                                       
+                                        System.out.println("hena Tmam el massege bttbe3t");
+                               }
+
+                               // Rest of your code...
+                           }
+
                          //"sendingRequest"
                          else if(keyPrimitive != null && keyPrimitive.getAsString().equals("sendingRequest")){
                              String receiverUserName = json.get("receiverUserName").getAsString();
@@ -159,17 +190,18 @@ public class ClientrHandler {
                                   } 
                               } }
                            else if(keyPrimitive != null && keyPrimitive.getAsString().equals("logout")){
-                             String operationValue = json.get("key").getAsString();
-                            System.out.println("key value: " + operationValue);
-
-                            boolean exist = accessNetwork.checkLogOut(json);
-                            System.out.println("client logedout= " + exist);
-                            String found = exist ? "user is exist" : "not found";
+                            
                             String username = json.get("UserName").getAsString();
+                            
                             broadcastOnlinePlayers();
                             Map<String, String> map = new HashMap<>();
                             map.put("key", "logout");
-                            
+                            DataAccessLayer DAL = new DataAccessLayer();
+                           try {
+                               DAL.logOut(username);
+                           } catch (SQLException ex) {
+                               Logger.getLogger(ClientrHandler.class.getName()).log(Level.SEVERE, null, ex);
+                           }
                             // send username again to save player 
                             map.put("USERNAME", username);
                             

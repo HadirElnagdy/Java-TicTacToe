@@ -68,6 +68,7 @@ public class Alerts {
         alert.setHeaderText(message);
 
         Optional<ButtonType> result = alert.showAndWait();
+       
         return result.isPresent() && result.get() == ButtonType.OK;
     }
     public static boolean showConfirmationAlert(String message, String button1, String button2){

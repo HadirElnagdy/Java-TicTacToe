@@ -27,6 +27,7 @@ import javafx.application.Platform;
 import player.session.PlayerSession;
 import utilis.Navigator;
 import signInPkg.SignInBase;
+import winnerScreenPkg.WinnerScreenBase;
 
 public class NetworkConnection {
 
@@ -106,7 +107,6 @@ public class NetworkConnection {
                             // check key in json 
                             if (json.has("key") && !json.get("key").isJsonNull()) {
 
-                                System.out.println("hema mar3y hena :" + newJson);
                                 JsonObject modifiedJson = jsonParser.parse(newJson).getAsJsonObject();
 
                                 // check where onlinePlayers value to read his message
@@ -143,22 +143,42 @@ public class NetworkConnection {
                                         }
                                     } // check where signin value to read his message
                                     else if ("signin".equals(keyValue)) {
-                                        String str = json.get("message").getAsString();
-                                        if ("user is exist".equals(str)) {
-                                            System.out.println("Sign IN succeeded");
-                                            // set value of UserName key in session to save it
-                                            String logInUsername = json.get("UserName").getAsString();
-                                            // save username in the playerSession
-                                            PlayerSession.setLogInUsername(logInUsername);
+                                            String str = json.get("message").getAsString();
+                                            if ("user is exist".equals(str)) {
+                                                System.out.println("Sign IN succeeded");
+                                                // set value of UserName key in session to save it
+                                                String logInUsername = json.get("UserName").getAsString();
+                                                // save username in the playerSession
+                                                PlayerSession.setLogInUsername(logInUsername);                                            
 
-                                            Platform.runLater(() -> {
-                                                Alerts.showConfirmationAlert("Sign IN succeeded");
-                                                Navigator.navigateTo(new ChooseOpponentBase());//navigate to chooseOpponent
-                                            });
-                                        } else if ("not found".equals(str)) {
-                                            Platform.runLater(() -> Alerts.showErrorAlert("User Name or Password may be Incorrect "));
-                                        }
-                                    } else if ("receivingRequest".equals(keyValue)) {
+                                                Platform.runLater(() -> {
+                                                    Alerts.showConfirmationAlert("Sign IN succeeded");
+                                                    Navigator.navigateTo(new ChooseOpponentBase());//navigate to chooseOpponent
+                                                });
+                                            } else if("not found".equals(str)) {
+                                                Platform.runLater(() -> Alerts.showErrorAlert("User Name or Password may be Incorrect "));
+                                            }
+                                    }   
+                                    
+                                    
+                                   else if ("withdraw".equals(keyValue)) {
+                                       
+                                        //System.out.println("bbbbbbbbbbbbbb in oponent ");
+                                          //System.out.println(""+json.get("message").getAsString());
+
+                                                // set value of UserName key in session to save it
+                                                String logInUsername = json.get("UserName2").getAsString();
+          
+                                                Platform.runLater(() -> {
+                                                    Alerts.showConfirmationAlert(logInUsername +" withDrawed");
+                                                    Navigator.navigateTo(new WinnerScreenBase(1));//navigate to chooseOpponent
+                                                });
+//                                            } else if("not found".equals(str)) {
+//                                                Platform.runLater(() -> Alerts.showErrorAlert("something  Incorrect "));
+                                           
+                                    }
+
+                                    else if ("receivingRequest".equals(keyValue)) {
                                         String senderUserName = json.get("senderUserName").getAsString();
                                         Platform.runLater(() -> {
                                             RequestDTO request = new RequestDTO(PlayerSession.getLogInUsername(), senderUserName);
@@ -194,7 +214,6 @@ public class NetworkConnection {
                                                 PlayerSession.setMyTurn(true);
                                                 PlayerSession.setSymbol("X");
                                                 PlayerSession.setOpponentUsername(senderUserName);
-
                                                 PlayerSession.setGame(new OnlineGame());
                                                 PlayerSession.getGame().setPlayersNames(receiverUserName, senderUserName);
                                                 Navigator.navigateTo(PlayerSession.getGame());//navigate to Online Game
@@ -235,12 +254,13 @@ public class NetworkConnection {
                             System.out.println("Invalid JSON format: " + message);
                         }
                     }
-                } catch (SocketException ex) {
+                }catch (SocketException ex) {
+                    Platform.runLater(() ->Navigator.navigateTo(new FXMLHomeBase()));
                     System.out.println("Socket EX");
-                    Platform.runLater(() -> Alerts.showErrorAlert("Server Stoooop"));
-                } catch (IOException ex) {
+                    Platform.runLater(() ->Alerts.showErrorAlert("Server Stoooop"));
+                }catch (IOException ex) {
                     System.out.println("IO EX");
-                    ex.printStackTrace();
+                    Navigator.navigateTo(new FXMLHomeBase());
                 }
             }
         }.start();

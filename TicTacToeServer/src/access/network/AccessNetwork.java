@@ -112,27 +112,50 @@ public class AccessNetwork {
         
         return found;
     }
-    
-
-      public boolean checkLogOut(JsonObject json) {
+//    
+// public boolean checkLogOut(JsonObject json) {
+//        boolean found = true;
+//        try {  
+//             if (json.has("UserName") ) {
+//                String username = json.get("UserName").getAsString();
+//                DtoPlayer player = new DtoPlayer(username);
+//                dataAccessLayer.logOut(username);
+//                          
+//            }else {
+//                System.out.println("Incomplete or malformed JSON payload forLog Out");
+//                System.out.println("Received JSON payload: " + json.toString());
+//
+//            }
+//            
+//        } catch (SQLException ex) {
+//            Logger.getLogger(AccessNetwork.class.getName()).log(Level.SEVERE, "Error during Log Out", ex);
+//        }            
+//
+//        
+//        
+//        return found;
+//    }
+      public boolean checkWithDraw(JsonObject json) {
         boolean found = false ;
 
         try {  
              if (json.has("UserName") ) {
 
                 String username = json.get("UserName").getAsString();
+                String username2 = json.get("UserName2").getAsString();
                 
                 DtoPlayer player = new DtoPlayer(username);
+                player.setOpponentUserName(username2);
 
                 System.out.println("recived");
                 
                 System.out.println( "  " + username );
 
-                found = dataAccessLayer.logOut(player.getUserName());
+                found = dataAccessLayer.withDraw(player.getUserName(),player.getOpponentUserName());
 
                 if (found) {
                     found = true;
-                    System.out.println("USER FOUND");
+                    System.out.println("Users updated in with Draw");
                    // dataAccessLayer.UpdateStatus(username);
                     
                 } else {

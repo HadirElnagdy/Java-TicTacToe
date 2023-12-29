@@ -191,31 +191,48 @@ public class DataAccessLayer {
             ex.printStackTrace();
         }
     }
-
-    public void makePlayersBusy(String player1, String player2) {
-        try {
-            if (connection != null && !connection.isClosed()) {
-                String sqlStatment = "UPDATE ROOT.PLAYER SET STATUS ='busy' WHERE USERNAME = ? OR USERNAME = ?";
-                PreparedStatement pst = connection.prepareStatement(sqlStatment);
-                pst.setString(1, player1);
-                pst.setString(2, player2);
-                int rs = pst.executeUpdate();
-                if (rs == 0) {
-                    System.out.println("something wrong !!!");
-                } else {
-                    System.out.println("SIGN IN successed");
-                }
-            } else {
-                System.out.println("No valid database connection.");
-
-            }
-        } catch (SQLException ex) {
-            System.out.println("something wrong in sign in : " + ex.getMessage());
-            ex.printStackTrace();
+          public void serverClosed() throws SQLException {
+         
+        try{
+                    String sqlStatment = "UPDATE  ROOT.PLAYER SET STATUS ='offline'";
+                    PreparedStatement pst = connection.prepareStatement(sqlStatment);
+                    int rs = pst.executeUpdate();
+                    if(rs==0){
+                        System.out.println("something wrong in SERVER Closed !!!");}
+                    else{
+                        System.out.println(" SERVER Closed successed");}
+                  
+        }catch(SQLException ex){
+                System.out.println("something wrong in SERVER CLOSED : " + ex.getMessage());
+                ex.printStackTrace();
         }
+      
+    }
+      public void makePlayersBusy(String player1, String player2){
+          
+                try {
+                    if (connection != null && !connection.isClosed()) {
+                        String sqlStatment = "UPDATE ROOT.PLAYER SET STATUS ='busy' WHERE USERNAME = ? OR USERNAME = ?";
+                        PreparedStatement pst = connection.prepareStatement(sqlStatment);
+                        pst.setString(1, player1);
+                        pst.setString(2, player2);
+                        int rs = pst.executeUpdate();
+                        if (rs == 0) {
+                            System.out.println("something wrong !!!");
+                        } else {
+                            System.out.println("SIGN IN successed");
+                        }
+                    } else {
+                        System.out.println("No valid database connection.");
+
+                    }
+                } catch (SQLException ex) {
+                    System.out.println("something wrong in sign in : " + ex.getMessage());
+                    ex.printStackTrace();
+                }
     }
 
-    public boolean logOut(String username) throws SQLException {
+    public void logOut(String username) throws SQLException {
         boolean found = false;
         try {
             if (connection != null && !connection.isClosed()) {
@@ -238,7 +255,7 @@ public class DataAccessLayer {
             System.out.println("something wrong in Log Out : " + ex.getMessage());
             ex.printStackTrace();
         }
-        return found;
+       
     }
 
     public int online() throws SQLException {
@@ -263,8 +280,35 @@ public class DataAccessLayer {
             count = rs.getInt("COUNTER");
         }
         return count;
-    }
+    }    
+    
+      public boolean withDraw(String username1,String username2) throws SQLException {
+          boolean found =false;
+        try{
+            if (connection != null && !connection.isClosed()) {
+                    String sqlStatment = "UPDATE ROOT.PLAYER SET STATUS ='online' WHERE USERNAME= ? OR USERNAME= ?";
+                    PreparedStatement pst = connection.prepareStatement(sqlStatment);
+                    pst.setString(1, username1);
+                     pst.setString(2, username2);
+                    int rs = pst.executeUpdate();
+                    if (rs == 0) {
+                        System.out.println("something wrong !!!");
+                    } else {
+                        System.out.println("withDraws successed");
+                        found=true;
+                    }
+                    
+                 }
+            else{
+                System.out.println("No valid database connection.");
 
+            }
+        }catch(SQLException ex){
+                System.out.println("something wrong in Log Out : " + ex.getMessage());
+                ex.printStackTrace();
+        }
+        return found;
+    }
     public int busy() throws SQLException {
         String sqlSelect = "SELECT COUNT(USERNAME) AS COUNTER FROM ROOT.PLAYER WHERE STATUS = ?";
         PreparedStatement pre = connection.prepareStatement(sqlSelect);
@@ -325,27 +369,6 @@ public class DataAccessLayer {
         return score;
     }
 
-//    public void incrementScore(String username) throws SQLException {
-//        // Retrieve the current score from the database
-//        int currentScore = getScore(username);
-//
-//        // Increment the score
-//        int newScore = currentScore + 1;
-//
-//        // Update the score in the database
-//        updateScore(username, newScore);
-//    }
-//
-//    public void decrementScore(String username) throws SQLException {
-//        // Retrieve the current score from the database
-//        int currentScore = getScore(username);
-//
-//        // Decrement the score (ensure it doesn't go below 0)
-//        int newScore = Math.max(currentScore - 1, 0);
-//
-//        // Update the score in the database
-//        updateScore(username, newScore);
-//    }
 
     public void closeConnection() {
         try {

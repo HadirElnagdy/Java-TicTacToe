@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import dto.player.DTOPlayer;
+import home.ChooseAuth;
 import home.FXMLHomeBase;
 import java.util.ArrayList;
 import java.util.List;
@@ -143,7 +144,7 @@ public class ChooseOpponentBase extends AnchorPane {
                         network = NetworkConnection.getInstance();
                         network.sendMessage(jsonString);
                         
-                    Navigator.navigateTo(new FXMLHomeBase(),event);
+                    Navigator.navigateTo(new ChooseAuth(),event);
               
                 }       
             

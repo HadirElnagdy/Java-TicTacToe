@@ -5,21 +5,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import dto.player.DTOPlayer;
-import chooseopponent.ChooseOpponentBase;
 import utilis.Alerts;
 import home.ChooseAuth;
-import java.io.DataInputStream;
-import java.io.IOException;
-import java.io.PrintStream;
-import java.net.Socket;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.application.Platform;
 import signUpPkg.SignUpBase;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Hyperlink;
 import javafx.scene.control.Label;
@@ -157,7 +149,7 @@ public class SignInBase extends GridPane {
         rowConstraints4.setVgrow(javafx.scene.layout.Priority.SOMETIMES);
 
         label0.setText("Don't have an account?");
-        GridPane.setMargin(label0, new Insets(0.0, 0.0, 10.0, 0.0));
+       // GridPane.setMargin(label0, new Insets(0.0, 0.0, 10.0, 0.0));
 
         backBtn.setLayoutX(10.0);
         backBtn.setLayoutY(10.0);
@@ -283,7 +275,7 @@ public class SignInBase extends GridPane {
                         network.sendMessage(jsonString);
                         
                         PlayerSession.setLogInUsername(player.getUserName());
-                        clearFld();
+                        
                 }       
             }
         

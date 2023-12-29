@@ -344,8 +344,7 @@ public class SignUpBase extends GridPane {
                     String jsonString = gson.toJson(setJson);
 
                 network = NetworkConnection.getInstance();
-                network.sendMessage(jsonString);
-                clearFld();  
+                network.sendMessage(jsonString); 
 
             }
         }

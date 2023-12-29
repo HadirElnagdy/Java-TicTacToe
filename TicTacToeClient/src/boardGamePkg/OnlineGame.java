@@ -1,5 +1,6 @@
 package boardGamePkg;
 
+import static boardGamePkg.GameBase.backBtn;
 import static boardGamePkg.GameBase.player1Score;
 import static boardGamePkg.GameBase.player2Score;
 import static boardGamePkg.GameBase.winner;
@@ -7,16 +8,19 @@ import chooseopponent.ChooseOpponentBase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import dto.player.DTOPlayer;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.text.FontWeight;
 import network.connection.NetworkConnection;
 import player.session.PlayerSession;
+import utilis.Alerts;
 import utilis.Navigator;
 import winnerScreenPkg.WinnerScreenBase;
 
@@ -29,7 +33,29 @@ public class OnlineGame extends GameBase {
     public OnlineGame() {
         super(new BorderPane(new ChooseOpponentBase()), "OnlineGame");
     }
-
+    
+  NetworkConnection network;
+        // @Override
+            //////////////////////////////////////////
+//           backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+//            public void handle(ActionEvent event) {
+//            if(Alerts.showConfirmationAlert("Do you want to Quit?"))
+//            {       Gson gson = new GsonBuilder().create();
+//                    DTOPlayer player = new DTOPlayer();
+//                    player.setUserName(PlayerSession.getLogInUsername());
+//                        JsonObject setJson = new JsonObject();
+//
+//                        // Add specific fields to the payload
+//                        setJson.addProperty("key", "withdraw");
+//                        setJson.addProperty("UserName", player.getUserName());
+//                         String jsonString = gson.toJson(setJson);
+//                        network = NetworkConnection.getInstance();
+//                        network.sendMessage(jsonString);
+//                       GameBase.resetAll();
+//                      // Navigator.navigateTo(backDestination,event); 
+//            }
+//        }});
+   
     @Override
     protected void startPlaying(ActionEvent e) {
         Button clickedButton = (Button) e.getSource();
@@ -52,6 +78,7 @@ public class OnlineGame extends GameBase {
                     + "-fx-font-weight: " + FontWeight.EXTRA_BOLD.getWeight() + ";");
 
             clickedButton.setText(sym);
+            recordMove(clickedButton);
             filledCells++;
             setCurrentSymbol(sym);
             PlayerSession.setMyTurn(false);
@@ -85,13 +112,13 @@ public class OnlineGame extends GameBase {
                 + "-fx-font-weight: " + FontWeight.EXTRA_BOLD.getWeight() + ";");
 
         btn.setText(symbol);
+        recordMove(btn);
         filledCells++;
         setCurrentSymbol(symbol);
         if(checkWinner()){
                 if(PlayerSession.getSymbol() == "O"){
                     player1Score += 20;
                     player2Score -= 20;
-                    if(isRecord)recordMovesToFile();
                     try {
                         writer.flush();
                     } catch (IOException ex) {
@@ -101,7 +128,7 @@ public class OnlineGame extends GameBase {
                 }else if (PlayerSession.getSymbol() == "X"){
                     player1Score -= 20;
                     player2Score += 20;
-                    if(isRecord)recordMovesToFile();
+                    
                     try {
                         writer.flush();
                     } catch (IOException ex) {
@@ -116,17 +143,33 @@ public class OnlineGame extends GameBase {
                 winner = 0;
                 player1Score += 10;
                 player2Score += 10;
-                if(isRecord)recordMovesToFile();
                 try {
                     writer.flush();
                 } catch (IOException ex) {
                     Logger.getLogger(GameBase.class.getName()).log(Level.SEVERE, null, ex);
                 }
-                if(isRecord)recordMovesToFile();
                 // draw 0
                 Navigator.navigateTo(new WinnerScreenBase(winner));
         } 
 
     }
+    @Override
+    public void action(){
+      Gson gson = new GsonBuilder().create();
+                    DTOPlayer player = new DTOPlayer();
+                    player.setUserName(PlayerSession.getLogInUsername());
+                        JsonObject setJson = new JsonObject();
+
+                        // Add specific fields to the payload
+                        setJson.addProperty("key", "withdraw");
+                        setJson.addProperty("UserName", player.getUserName());
+                        System.out.println("jjjjjjj"+ PlayerSession.getOpponentUserName());
+                        setJson.addProperty("UserName2", PlayerSession.getOpponentUserName());
+                         String jsonString = gson.toJson(setJson);
+                        network = NetworkConnection.getInstance();
+                        network.sendMessage(jsonString);
+               
+                      // Navigator.navigateTo(backDestination,event);
+     }
 
 }
