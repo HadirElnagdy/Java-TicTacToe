@@ -19,14 +19,14 @@ public class CellBase extends AnchorPane {
     protected final Label statusLabel;
     protected final Hyperlink sendRequestLink;
     NetworkConnection network;
-
-    public CellBase() {
+    ChooseOpponentBase ch;
+    public CellBase(ChooseOpponentBase ch) {
 
         userNameLabel = new Label();
         scoreLabel = new Label();
         statusLabel = new Label();
         sendRequestLink = new Hyperlink();
-
+        this.ch = ch;
         setId("AnchorPane");
         setPrefHeight(57.0);
         setPrefWidth(580.0);
@@ -50,6 +50,9 @@ public class CellBase extends AnchorPane {
         sendRequestLink.setLayoutY(17.0);
         sendRequestLink.setText("Request to play");
         sendRequestLink.setOnAction((ActionEvent event) -> {
+           
+                    ch.showLoadingIndicator();
+            
                     RequestDTO request = new RequestDTO(PlayerSession.getLogInUsername(), userNameLabel.getText());
                     JsonObject setJson = new JsonObject();
                     Gson gson = new GsonBuilder().create();
@@ -64,7 +67,7 @@ public class CellBase extends AnchorPane {
                     network.sendMessage(jsonString);
                     sendRequestLink.setText("Pending request...");
                     sendRequestLink.setDisable(true);
-                    //while waiting for the response show a pending alert
+                    //while waiting for the response show a pending alertz
             
         });
 

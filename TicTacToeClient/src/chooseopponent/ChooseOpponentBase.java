@@ -15,7 +15,10 @@ import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import network.connection.NetworkConnection;
 import player.session.PlayerSession;
@@ -32,6 +35,10 @@ public class ChooseOpponentBase extends AnchorPane {
     protected final Button button0;
     NetworkConnection network;
     List<DTOPlayer> onlinePlayers = new ArrayList<>();
+    static double ii = 0; 
+
+    private final ProgressIndicator loadingIndicator;
+    private final Pane overlayPane;
 
     public ChooseOpponentBase() {
 
@@ -43,6 +50,15 @@ public class ChooseOpponentBase extends AnchorPane {
         button = new Button();
         button0 = new Button();
 
+        loadingIndicator = new ProgressIndicator();
+        loadingIndicator.setVisible(false);
+        loadingIndicator.setLayoutX(270.0);
+        loadingIndicator.setLayoutY(200.0);
+        
+        overlayPane = new Pane();
+        overlayPane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);"); // Semi-transparent black
+        overlayPane.setVisible(false);
+        
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
@@ -50,6 +66,11 @@ public class ChooseOpponentBase extends AnchorPane {
         setPrefHeight(400.0);
         setPrefWidth(600.0);
 
+//        StackPane stackPane = new StackPane(listView, loadingIndicator); // Wrap listView and loadingIndicator in a StackPane
+//        stackPane.setLayoutX(1.0);
+//        stackPane.setLayoutY(135.0);
+//        stackPane.setPrefHeight(265.0);
+//        stackPane.setPrefWidth(600.0);
         label.setLayoutX(103.0);
         label.setLayoutY(34.0);
         label.setText("Choose Your Opponent");
@@ -106,6 +127,7 @@ public class ChooseOpponentBase extends AnchorPane {
         button0.setLayoutY(14.0);
         button0.setMnemonicParsing(false);
         button0.setText("Profile");
+        getChildren().add(overlayPane);
 
         getChildren().add(label);
         getChildren().add(label0);
@@ -114,7 +136,7 @@ public class ChooseOpponentBase extends AnchorPane {
         getChildren().add(listView);
         getChildren().add(button);
         getChildren().add(button0);
-
+        getChildren().add(loadingIndicator);
         NetworkConnection.getInstance().opponentBase = this;
         this.sendGetOnlinePlayers();
     }
@@ -125,7 +147,7 @@ public class ChooseOpponentBase extends AnchorPane {
             ObservableList<CellBase> cellList = FXCollections.observableArrayList();
             for (DTOPlayer player : onlinePlayers) {
                 if (!player.getUserName().equals(PlayerSession.getLogInUsername())) {
-                    CellBase cell = new CellBase();
+                    CellBase cell = new CellBase(this);
                     cell.userNameLabel.setText(player.getUserName());
                     cell.scoreLabel.setText(String.valueOf(player.getScore()));
                     cell.statusLabel.setText(player.getStatus());
@@ -142,5 +164,18 @@ public class ChooseOpponentBase extends AnchorPane {
         setJson.addProperty("key", "onlinePlayers");
         String jsonString = gson.toJson(setJson);
         NetworkConnection.getInstance().sendMessage(jsonString);
+    }
+    
+    public void showLoadingIndicator() {
+         loadingIndicator.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+         loadingIndicator.setVisible(true);
+         overlayPane.setVisible(true);
+         listView.setDisable(true);
+    }
+
+    public void hideLoadingIndicator() {
+        loadingIndicator.setVisible(false);
+        overlayPane.setVisible(false);
+         listView.setDisable(false);
     }
 }

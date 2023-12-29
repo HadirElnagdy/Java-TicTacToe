@@ -180,7 +180,6 @@ public class NetworkConnection {
                                                 game = new OnlineGame();
                                                 game.setPlayersNames(request.getReceiverUsername(), request.getSenderUsername());
                                                 Navigator.navigateTo(game);//navigate to Online Game
-
                                             } else {
                                                 setJson.addProperty("message", "Rejected");
                                             }
@@ -193,6 +192,7 @@ public class NetworkConnection {
                                         String senderUserName = json.get("senderUserName").getAsString();
                                         String receiverUserName = json.get("receiverUserName").getAsString();
                                         if (msg.equals("Accepted")) {
+                                            opponentBase.hideLoadingIndicator(); 
                                             Platform.runLater(() -> {
                                                 PlayerSession.setMyTurn(true);
                                                 PlayerSession.setSymbol("X");
@@ -200,8 +200,6 @@ public class NetworkConnection {
                                                 game = new OnlineGame();
                                                 game.setPlayersNames(receiverUserName, senderUserName);
                                                 Navigator.navigateTo(game);//navigate to Online Game
-                                               
-
                                             });
                                         } else if (msg.equals("Rejected")) {
                                             Platform.runLater(() -> {

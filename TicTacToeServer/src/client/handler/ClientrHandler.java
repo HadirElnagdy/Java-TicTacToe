@@ -231,7 +231,7 @@ public class ClientrHandler {
                 }
                 catch (SocketException ex) {
                     System.out.println("Socket Exception");
-                    Platform.runLater(() ->Alerts.showErrorAlert("Server has closed"));
+                    Platform.runLater(() ->Alerts.showErrorAlert("Client has closed"));
                 } catch (IOException ex) {
                     System.out.println("IO Exception");
                 }
