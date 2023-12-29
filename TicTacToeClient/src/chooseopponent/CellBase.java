@@ -46,6 +46,11 @@ public class CellBase extends AnchorPane {
         statusLabel.setText("Status");
         statusLabel.setFont(new Font(18.0));
 
+        sendRequestLink.setStyle("-fx-text-fill: #1577FF;");
+        statusLabel.setStyle("-fx-text-fill: white;");
+        scoreLabel.setStyle("-fx-text-fill: white;");
+        userNameLabel.setStyle("-fx-text-fill: white;");
+
         sendRequestLink.setLayoutX(467.0);
         sendRequestLink.setLayoutY(17.0);
         sendRequestLink.setText("Request to play");

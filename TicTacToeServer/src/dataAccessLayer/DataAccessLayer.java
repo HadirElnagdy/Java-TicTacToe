@@ -111,7 +111,7 @@ public class DataAccessLayer {
         System.out.println("Result: " + setJson);
         return jsonString;
     }
-
+    
     public boolean checkIfUserExist(String userName) {
         try {
             if (connection != null && !connection.isClosed()) {
@@ -168,6 +168,7 @@ public class DataAccessLayer {
         }
         return found;
     }
+    
 
     public void UpdateStatus(String username) throws SQLException {
         try {

@@ -1,5 +1,5 @@
-
 package network.connection;
+
 import boardGamePkg.OnlineGame;
 import chooseopponent.ChooseOpponentBase;
 import com.google.gson.Gson;
@@ -36,28 +36,27 @@ public class NetworkConnection {
     private PrintStream printStream;
     private static String ipAddress;
     public ChooseOpponentBase opponentBase;
-    private OnlineGame game;
     String message;
     private String ip;
 
     private NetworkConnection(String ipAddress) throws IOException {
-        try{
+        try {
             if (socket == null || !socket.isConnected() || socket.isClosed()) {
-               this.ipAddress = ipAddress;
-               socket = new Socket(ipAddress, 5005);
-               System.out.println("server ip :" + ipAddress);
-               dataInputStream = new DataInputStream(socket.getInputStream());
-               printStream = new PrintStream(socket.getOutputStream());
-               readMessages();
-           }
+                this.ipAddress = ipAddress;
+                socket = new Socket(ipAddress, 5005);
+                System.out.println("server ip :" + ipAddress);
+                dataInputStream = new DataInputStream(socket.getInputStream());
+                printStream = new PrintStream(socket.getOutputStream());
+                readMessages();
+            }
 
-           ip = socket.getLocalAddress().getHostAddress();
-           System.out.println(ip);
-       }catch (ConnectException e) {
+            ip = socket.getLocalAddress().getHostAddress();
+            System.out.println(ip);
+        } catch (ConnectException e) {
 
-           Platform.runLater(() ->Alerts.showErrorAlert("Connection refused. Make sure the server is running."));
-           
-       }
+            Platform.runLater(() -> Alerts.showErrorAlert("Connection refused. Make sure the server is running."));
+
+        }
     }
 
     public static synchronized NetworkConnection getInstance() {
@@ -80,8 +79,8 @@ public class NetworkConnection {
             @Override
             public void run() {
 
-                    try {
-                        while (socket.isConnected() && !socket.isClosed()) {
+                try {
+                    while (socket.isConnected() && !socket.isClosed()) {
 
                             message = dataInputStream.readLine();
                             
@@ -97,18 +96,19 @@ public class NetworkConnection {
                             
                             String newJson = message.replace("\\", ""); 
                             
+        
 
-                            System.out.println("message in network connection" + message);
+                        System.out.println("message in network connection" + message);
 
-                            try {
-                                JsonParser jsonParser = new JsonParser();
-                                JsonObject json = jsonParser.parse(message).getAsJsonObject();
-                                // check key in json 
-                                if (json.has("key") && !json.get("key").isJsonNull()) {
+                        try {
+                            JsonParser jsonParser = new JsonParser();
+                            JsonObject json = jsonParser.parse(message).getAsJsonObject();
+                            // check key in json 
+                            if (json.has("key") && !json.get("key").isJsonNull()) {
 
-                                System.out.println("hema mar3y hena :"+newJson);
+                                System.out.println("hema mar3y hena :" + newJson);
                                 JsonObject modifiedJson = jsonParser.parse(newJson).getAsJsonObject();
-                                
+
                                 // check where onlinePlayers value to read his message
                                 if (modifiedJson.has("onlinePlayers")) {
                                     JsonElement playersElement = modifiedJson.get("onlinePlayers");
@@ -123,11 +123,9 @@ public class NetworkConnection {
                                             onlinePlayers.add(player);
                                         }
 
-                                       Platform.runLater(() -> opponentBase.receiveOnlinePlayers(onlinePlayers));
+                                        Platform.runLater(() -> opponentBase.receiveOnlinePlayers(onlinePlayers));
                                     }
-                                }
-                                
-                                else if (json.has("key") && !json.get("key").isJsonNull()) {
+                                } else if (json.has("key") && !json.get("key").isJsonNull()) {
                                     String keyValue = json.get("key").getAsString();
                                     System.out.println("key value: " + keyValue);
                                     // check where signup value to read his message
@@ -143,25 +141,24 @@ public class NetworkConnection {
                                         } else {
                                             Platform.runLater(() -> Alerts.showErrorAlert("User name already Exist"));
                                         }
-                                    }
-                                    // check where signin value to read his message
+                                    } // check where signin value to read his message
                                     else if ("signin".equals(keyValue)) {
-                                            String str = json.get("message").getAsString();
-                                            if ("user is exist".equals(str)) {
-                                                System.out.println("Sign IN succeeded");
-                                                // set value of UserName key in session to save it
-                                                String logInUsername = json.get("UserName").getAsString();
-                                                // save username in the playerSession
-                                                PlayerSession.setLogInUsername(logInUsername);                                            
+                                        String str = json.get("message").getAsString();
+                                        if ("user is exist".equals(str)) {
+                                            System.out.println("Sign IN succeeded");
+                                            // set value of UserName key in session to save it
+                                            String logInUsername = json.get("UserName").getAsString();
+                                            // save username in the playerSession
+                                            PlayerSession.setLogInUsername(logInUsername);
 
-                                                Platform.runLater(() -> {
-                                                    Alerts.showConfirmationAlert("Sign IN succeeded");
-                                                    Navigator.navigateTo(new ChooseOpponentBase());//navigate to chooseOpponent
-                                                });
-                                            } else if("not found".equals(str)) {
-                                                Platform.runLater(() -> Alerts.showErrorAlert("User Name or Password may be Incorrect "));
-                                            }
-                                    }else if ("receivingRequest".equals(keyValue)) {
+                                            Platform.runLater(() -> {
+                                                Alerts.showConfirmationAlert("Sign IN succeeded");
+                                                Navigator.navigateTo(new ChooseOpponentBase());//navigate to chooseOpponent
+                                            });
+                                        } else if ("not found".equals(str)) {
+                                            Platform.runLater(() -> Alerts.showErrorAlert("User Name or Password may be Incorrect "));
+                                        }
+                                    } else if ("receivingRequest".equals(keyValue)) {
                                         String senderUserName = json.get("senderUserName").getAsString();
                                         Platform.runLater(() -> {
                                             RequestDTO request = new RequestDTO(PlayerSession.getLogInUsername(), senderUserName);
@@ -177,9 +174,9 @@ public class NetworkConnection {
                                                 PlayerSession.setMyTurn(false);
                                                 PlayerSession.setSymbol("O");
                                                 PlayerSession.setOpponentUsername(senderUserName);
-                                                game = new OnlineGame();
-                                                game.setPlayersNames(request.getReceiverUsername(), request.getSenderUsername());
-                                                Navigator.navigateTo(game);//navigate to Online Game
+                                                PlayerSession.setGame(new OnlineGame());
+                                                PlayerSession.getGame().setPlayersNames(request.getReceiverUsername(), request.getSenderUsername());
+                                                Navigator.navigateTo(PlayerSession.getGame());//navigate to Online Game
                                             } else {
                                                 setJson.addProperty("message", "Rejected");
                                             }
@@ -197,9 +194,11 @@ public class NetworkConnection {
                                                 PlayerSession.setMyTurn(true);
                                                 PlayerSession.setSymbol("X");
                                                 PlayerSession.setOpponentUsername(senderUserName);
-                                                game = new OnlineGame();
-                                                game.setPlayersNames(receiverUserName, senderUserName);
-                                                Navigator.navigateTo(game);//navigate to Online Game
+
+                                                PlayerSession.setGame(new OnlineGame());
+                                                PlayerSession.getGame().setPlayersNames(receiverUserName, senderUserName);
+                                                Navigator.navigateTo(PlayerSession.getGame());//navigate to Online Game
+
                                             });
                                         } else if (msg.equals("Rejected")) {
                                             Platform.runLater(() -> {
@@ -208,59 +207,49 @@ public class NetworkConnection {
                                                 Navigator.navigateTo(new ChooseOpponentBase());
                                             });
                                         }
-                                    }
-                                    
-                                    else if("move".equals(keyValue)){
+                                    } else if ("move".equals(keyValue)) {
                                         String player = json.get("player").getAsString();
                                         String symbol = json.get("symbol").getAsString();
                                         int row = json.get("row").getAsInt();
-                                        int col = json.get("col").getAsInt(); 
-                                        
+                                        int col = json.get("col").getAsInt();
+
                                         System.out.println("Player " + player + " row " + row + "column " + col);
-                                        
-
-                                        Platform.runLater(() ->game.updateUI(symbol, row, col));
-
-                                        
+                                        Platform.runLater(() -> PlayerSession.getGame().updateUI(symbol, row, col));
                                         PlayerSession.setMyTurn(true);
-                                       
-                                    }else if("replay".equals(keyValue)){
+
+                                    } else if ("replay".equals(keyValue)) {
                                         PlayerSession.setMyTurn(false);
                                         PlayerSession.setSymbol("O");
-                                        PlayerSession.setOpponentUsername(PlayerSession.getOpponentUsername());
-                                        Platform.runLater(() ->Navigator.navigateTo(new OnlineGame()));
+                                        PlayerSession.setGame(new OnlineGame());
+                                        Platform.runLater(() -> Navigator.navigateTo(PlayerSession.getGame()));
+                                    } else {
+                                        System.out.println("Unexpected 'key' value: " + keyValue);
                                     }
-                                    else {
-                                            System.out.println("Unexpected 'key' value: " + keyValue);
-                                        }
                                     // check where request value and game move ///////////////////////
 
-                                    } 
                                 }
-                            
-                        else {
-                            System.out.println("Actual JSON content: " + json);
-                        }
-                        }catch (JsonParseException e) {
-                             System.out.println("Invalid JSON format: " + message);
+                            } else {
+                                System.out.println("Actual JSON content: " + json);
+                            }
+                        } catch (JsonParseException e) {
+                            System.out.println("Invalid JSON format: " + message);
                         }
                     }
-                }catch (SocketException ex) {
+                } catch (SocketException ex) {
                     System.out.println("Socket EX");
-                    Platform.runLater(() ->Alerts.showErrorAlert("Server Stoooop"));
-                }catch (IOException ex) {
+                    Platform.runLater(() -> Alerts.showErrorAlert("Server Stoooop"));
+                } catch (IOException ex) {
                     System.out.println("IO EX");
                     ex.printStackTrace();
                 }
             }
-         }.start();
+        }.start();
     }
-    
 
     public void sendMessage(String message) {
         new Thread() {
             @Override
-            public void run() {   
+            public void run() {
                 printStream.println(message);
                 System.out.println(message);
             }
@@ -279,15 +268,15 @@ public class NetworkConnection {
                 socket.close();
             }
         } catch (IOException ex) {
-            Platform.runLater(() ->Alerts.showErrorAlert("client  Stoooop"));
+            Platform.runLater(() -> Alerts.showErrorAlert("client  Stoooop"));
             Logger.getLogger(NetworkConnection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
-     public String getIp() {
+
+    public String getIp() {
         return ip;
     }
-     
+
     public Socket getSocket() {
         return socket;
     }

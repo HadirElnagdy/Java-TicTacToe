@@ -26,6 +26,7 @@ import javafx.scene.layout.Pane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
+import player.session.PlayerSession;
 import utilis.Navigator;
 import winnerScreenPkg.WinnerScreenBase;
 
@@ -206,7 +207,7 @@ public abstract class GameBase extends Pane {
             recordMove(cell);
             
             if (checkWinner()) {
-                if(currentSymbol == "X"){
+                if(currentSymbol == "X" || (playingMode == "OnlineGame" && PlayerSession.getSymbol() == "X")){
                     winner = 1;
                     player1Score += 20;
                     player2Score -= 20;
@@ -217,7 +218,7 @@ public abstract class GameBase extends Pane {
                         Logger.getLogger(GameBase.class.getName()).log(Level.SEVERE, null, ex);
                     }
                     
-                }else{
+                }else if (currentSymbol == "O" || (playingMode == "OnlineGame" && PlayerSession.getSymbol() == "O")){
                     winner = 2;
                     player1Score -= 20;
                     player2Score += 20;

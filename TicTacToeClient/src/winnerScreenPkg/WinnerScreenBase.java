@@ -165,12 +165,11 @@ public class WinnerScreenBase extends BorderPane {
                     String jsonString = gson.toJson(setJson);
                     PlayerSession.setMyTurn(true);
                     PlayerSession.setSymbol("X");
-                    PlayerSession.setOpponentUsername(PlayerSession.getOpponentUsername());
+                    PlayerSession.setGame(new OnlineGame());
                     networkConnection = NetworkConnection.getInstance();
                     networkConnection.sendMessage(jsonString);
-
-                    Navigator.navigateTo(new OnlineGame(), event);
-                }
+                    Navigator.navigateTo(PlayerSession.getGame());
+              }
             }
         });
 
@@ -334,6 +333,7 @@ public class WinnerScreenBase extends BorderPane {
 //                String jsonString = gson.toJson(setJson);
 //                NetworkConnection.getInstance().sendMessage(jsonString);
             }
+             
         }
 
     }

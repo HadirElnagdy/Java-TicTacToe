@@ -372,6 +372,7 @@ import javafx.event.ActionEvent;
 import home.EasyHardBase;
 
 import javafx.scene.control.Button;
+import javafx.scene.text.FontWeight;
 
 
 public class LocalSingleMedium extends GameBase {
@@ -388,6 +389,14 @@ public class LocalSingleMedium extends GameBase {
         if (clickedButton.getText().isEmpty()) {
             switchPlayer();
             clickedButton.setText("X");
+            clickedButton.setStyle(
+                    "-fx-background-color: #232429;"
+                  + "-fx-border-color: #1B1E23;"
+                  + "-fx-border-width: 5;"
+                  + "-fx-border-radius: 10;"
+                  + "-fx-text-fill: #FFFFFF;"
+                  + "-fx-font-size: 40px;" 
+                  + "-fx-font-weight: " + FontWeight.EXTRA_BOLD.getWeight() + ";"); 
             filledCells++;
             if (checkWinner()) {
                 return;
@@ -410,6 +419,14 @@ public class LocalSingleMedium extends GameBase {
         // Set the computer's move on the corresponding button
         Button computerCell = (Button) gridPane.getChildren().get(bestMove[0] * 3 + bestMove[1]);
         computerCell.setText("O");
+        computerCell.setStyle(
+                    "-fx-background-color: #232429;"
+                  + "-fx-border-color: #1B1E23;"
+                  + "-fx-border-width: 5;"
+                  + "-fx-border-radius: 10;"
+                  + "-fx-text-fill: #1577FF;"
+                  + "-fx-font-size: 40px;" 
+                  + "-fx-font-weight: " + FontWeight.EXTRA_BOLD.getWeight() + ";"); 
         recordMove(computerCell);
         filledCells++;
         switchPlayer();
