@@ -165,11 +165,11 @@ public class WinnerScreenBase extends BorderPane {
                     String jsonString = gson.toJson(setJson);
                     PlayerSession.setMyTurn(true);
                     PlayerSession.setSymbol("X");
-                    PlayerSession.setOpponentUsername(PlayerSession.getOpponentUsername());
+                    PlayerSession.setGame(new OnlineGame());
                     networkConnection = NetworkConnection.getInstance();
                     networkConnection.sendMessage(jsonString);
                     
-                  Navigator.navigateTo(new OnlineGame(),event);
+                    Navigator.navigateTo(PlayerSession.getGame());
               }
             }
         });
@@ -262,7 +262,8 @@ public class WinnerScreenBase extends BorderPane {
             setVideo("/winnerScreenPkg/lose1.mp4");
         }else{
             String winnerName = (winnerValue == 1?GameBase.plyr1Name:GameBase.plyr2Name);
-             resultLabel.setText(winnerName + " Wins!");
+             if(GameBase.playingMode == "OnlineGame") resultLabel.setText("You Win!");
+             else resultLabel.setText(winnerName + " Wins!");
              setVideo("/winnerScreenPkg/win1.mp4");
              
         }

@@ -5,6 +5,8 @@
  */
 package player.session;
 
+import boardGamePkg.OnlineGame;
+
 /**
  *
  * @author Michael
@@ -16,6 +18,15 @@ public class PlayerSession {
     private static String symbol;
     private static boolean myTurn;
     private static String ipAddress;
+    private static OnlineGame game;
+
+    public static OnlineGame getGame() {
+        return game;
+    }
+
+    public static void setGame(OnlineGame game) {
+        PlayerSession.game = game;
+    }
 
     public static String getOpponentUsername() {
         return opponentUsername;
