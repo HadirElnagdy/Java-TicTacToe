@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -108,10 +109,12 @@ public abstract class GameBase extends Pane {
         backBtn.setMnemonicParsing(false);
         backBtn.setPrefHeight(30.0);
         backBtn.setPrefWidth(30.0);
-        backBtn.setStyle("-fx-background-color: #525461; -fx-text-fill: #FFFFFF; -fx-background-radius: 15;");
-        backBtn.setText("\u2190");
+        backBtn.setStyle("-fx-background-image: url('signInPkg/back.png');" +
+                  "-fx-background-size: cover; -fx-background-radius: 15; -fx-text-fill: #FFFFFF;");
         backBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        backBtn.setText("\u2190");
         backBtn.setFont(Font.font("System Bold", FontWeight.BOLD, 16.0));
+        GridPane.setMargin(backBtn, new Insets(10.0, 0.0, 0.0, 10.5));
         
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override

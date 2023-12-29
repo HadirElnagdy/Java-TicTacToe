@@ -203,6 +203,11 @@ public class ClientrHandler {
                                       break;
                                   } 
                               } 
+                         }
+                         else if (keyPrimitive != null && keyPrimitive.getAsString().equals("updateScore")) {
+                            String userName =json.get("userName").getAsString();
+                            int newScore = json.get("score").getAsInt();           
+                            accessNetwork.updateScore(userName, newScore);
                          }else if(keyPrimitive != null && keyPrimitive.getAsString().equals("replay")){
                                 String receiverUserName = json.get("receiverUserName").getAsString();
                                 Map<String, String> map = new HashMap<>();
@@ -226,7 +231,7 @@ public class ClientrHandler {
                 }
                 catch (SocketException ex) {
                     System.out.println("Socket Exception");
-                    Platform.runLater(() ->Alerts.showErrorAlert("Server has closed"));
+                    Platform.runLater(() ->Alerts.showErrorAlert("Client has closed"));
                 } catch (IOException ex) {
                     System.out.println("IO Exception");
                 }

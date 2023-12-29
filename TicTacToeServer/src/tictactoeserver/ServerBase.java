@@ -9,6 +9,9 @@ import java.net.Socket;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
@@ -22,6 +25,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class ServerBase extends BorderPane {
 
@@ -62,7 +66,8 @@ public class ServerBase extends BorderPane {
     Thread thread;
     
     boolean isClicked = true ;
-    
+    //Timeline updateChartTimeline;
+    DataAccessLayer dataAccessLayer=new DataAccessLayer();
     
     
     public ServerBase(Stage stage) throws SQLException {
@@ -87,7 +92,7 @@ public class ServerBase extends BorderPane {
         onlineNum = new Label();
         busyNum = new Label();
         offlineNum = new Label();
-        DataAccessLayer dataAccessLayer=new DataAccessLayer();
+        
 
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
@@ -250,6 +255,20 @@ public class ServerBase extends BorderPane {
         
         BorderPane.setAlignment(chart, javafx.geometry.Pos.CENTER);
 
+//        updateChartTimeline = new Timeline(new KeyFrame(Duration.seconds(2), event -> updateChart()));
+//        updateChartTimeline.setCycleCount(Timeline.INDEFINITE);
+//        updateChartTimeline.play();
+        new Thread(() -> {
+            while (isServerRunning) {
+                try {
+                    Thread.sleep(5000); // Sleep for 2 seconds
+                    Platform.runLater(this::updateChart);
+                } catch (InterruptedException ex) {
+                    // Handle interruption
+                    ex.printStackTrace();
+                }
+            }
+        }).start();
         
         int online = dataAccessLayer.online();
         int busy = dataAccessLayer.busy();
@@ -337,7 +356,31 @@ public class ServerBase extends BorderPane {
         });
         
     }
-    
+    private void updateChart() {
+        Platform.runLater(() -> {
+            try {
+                int online = dataAccessLayer.online();
+                int busy = dataAccessLayer.busy();
+                int offline = dataAccessLayer.offline();
+
+                onlineNum.setText(Integer.toString(online));
+                offlineNum.setText(Integer.toString(offline));
+                busyNum.setText(Integer.toString(busy));
+
+                chart.getData().clear();
+                chart.getData().addAll(
+                        new PieChart.Data("Online", online),
+                        new PieChart.Data("Offline", offline),
+                        new PieChart.Data("Busy", busy)
+                );
+
+                setCustomColors();
+                traverseSceneGraph(chart, Color.WHITE);
+            } catch (SQLException ex) {
+                Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        });
+    }
     // pie chart design
         private void setCustomColors() {
         // Get the data slices

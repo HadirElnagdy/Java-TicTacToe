@@ -28,7 +28,9 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import network.connection.NetworkConnection;
 import player.session.PlayerSession;
 import utilis.Navigator;
@@ -79,14 +81,15 @@ public class SignInBase extends GridPane {
         label2 = new Label();
         signInBtn = new Button();
         uNameTxtFld = new TextField();
-       passwordTxtFld = new PasswordField();
-       
+        passwordTxtFld = new PasswordField();
+        backBtn =new Button();
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
         setMinWidth(USE_PREF_SIZE);
         setPrefHeight(400.0);
         setPrefWidth(600.0);
+        setStyle("-fx-background-color: #232429;");
 
 
         columnConstraints.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
@@ -156,6 +159,26 @@ public class SignInBase extends GridPane {
         label0.setText("Don't have an account?");
         GridPane.setMargin(label0, new Insets(0.0, 0.0, 10.0, 0.0));
 
+        backBtn.setLayoutX(10.0);
+        backBtn.setLayoutY(10.0);
+        backBtn.setMnemonicParsing(false);
+        backBtn.setPrefHeight(30.0);
+        backBtn.setPrefWidth(30.0);
+        backBtn.setStyle("-fx-background-image: url('signInPkg/back.png');" +
+                  "-fx-background-size: cover; -fx-background-radius: 15; -fx-text-fill: #FFFFFF;");
+        backBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        backBtn.setText("\u2190");
+        backBtn.setFont(Font.font("System Bold", FontWeight.BOLD, 16.0));
+        GridPane.setMargin(backBtn, new Insets(10.0, 0.0, 0.0, 10.5));
+
+        backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
+        @Override
+        public void handle(ActionEvent event) {
+                Navigator.navigateTo(new ChooseAuth(),event);
+            }
+        });
+        
+        
         GridPane.setColumnIndex(createAccountHyperLink, 1);
         createAccountHyperLink.setText("Create Account");
         GridPane.setMargin(createAccountHyperLink, new Insets(0.0, 0.0, 10.0, 0.0));
@@ -166,6 +189,8 @@ public class SignInBase extends GridPane {
           
                     }
         });
+
+        GridPane.setMargin(label1, new Insets(0.0, 0.0, 20.0, 0.0)); 
 
         GridPane.setColumnIndex(label1, 1);
         GridPane.setRowIndex(label1, 2);
@@ -195,16 +220,9 @@ public class SignInBase extends GridPane {
         GridPane.setRowIndex(passwordTxtFld, 3);
         passwordTxtFld.setPrefWidth(338.0);
         passwordTxtFld.setPrefHeight(20);
-        backBtn = new Button("Back");
-        
        
-        GridPane.setMargin(backBtn, new Insets(12.0, 0.0, 0.0, 13.5));
-        backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent event) {
-                Navigator.navigateTo(new ChooseAuth(),event);
-            }
-        });
+        
+
         
         getColumnConstraints().add(columnConstraints);
         getColumnConstraints().add(columnConstraints0);
@@ -229,6 +247,16 @@ public class SignInBase extends GridPane {
         
         getChildren().add(backBtn);
         
+        passwordTxtFld.setStyle("-fx-text-fill: #FFFFFF; -fx-background-color: #525461; -fx-background-radius: 8;");
+        uNameTxtFld.setStyle("-fx-text-fill: #FFFFFF; -fx-background-color: #525461; -fx-background-radius: 8;");
+
+        label.setTextFill(Color.WHITE);
+        label0.setTextFill(Color.WHITE);
+        label1.setTextFill(Color.WHITE);
+        label2.setTextFill(Color.WHITE);
+        
+        signInBtn.setStyle("-fx-background-color: #1577FF; -fx-text-fill: WHITE; -fx-background-radius: 10;");
+
         signInBtn.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -268,4 +296,5 @@ public class SignInBase extends GridPane {
         passwordTxtFld.clear();
     }
 }
+
 

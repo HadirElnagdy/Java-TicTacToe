@@ -6,9 +6,11 @@ import boardGamePkg.GameBase;
 import boardGamePkg.LocalSingleEasy;
 import boardGamePkg.LocalSingleMedium;
 import javafx.event.ActionEvent;
+import javafx.geometry.Insets;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.text.Font;
@@ -114,10 +116,12 @@ public class EasyHardBase extends BorderPane {
         backBtn.setMnemonicParsing(false);
         backBtn.setPrefHeight(30.0);
         backBtn.setPrefWidth(30.0);
-        backBtn.setStyle("-fx-background-color: #525461; -fx-text-fill: #FFFFFF; -fx-background-radius: 15;");
-        backBtn.setText("\u2190");
+        backBtn.setStyle("-fx-background-image: url('signInPkg/back.png');" +
+                  "-fx-background-size: cover; -fx-background-radius: 15; -fx-text-fill: #FFFFFF;");
         backBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        backBtn.setText("\u2190");
         backBtn.setFont(Font.font("System Bold", FontWeight.BOLD, 16.0));
+        GridPane.setMargin(backBtn, new Insets(10.0, 0.0, 0.0, 10.5));
         setTop(pane0);
         
         backBtn.addEventHandler(ActionEvent.ACTION, (ActionEvent event) -> {

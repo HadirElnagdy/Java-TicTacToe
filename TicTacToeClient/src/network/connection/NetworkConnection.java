@@ -11,6 +11,7 @@ import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import dto.player.DTOPlayer;
 import dto.player.RequestDTO;
+import home.FXMLHomeBase;
 import utilis.Alerts;
 import java.io.DataInputStream;
 import java.io.IOException;
@@ -81,13 +82,21 @@ public class NetworkConnection {
                 try {
                     while (socket.isConnected() && !socket.isClosed()) {
 
-                        message = dataInputStream.readLine();
-                        String newJson = message.replace("\\", "");
-                        if (message == null) {
-                            System.out.println(".runnnnnnnnnnn()");
-                            socket.close();
-                            break;
-                        }
+                            message = dataInputStream.readLine();
+                            
+                            if (message == null ) {
+                                System.out.println(".runnnnnnnnnnn()");
+                                Platform.runLater(() -> {
+                                   Alerts.showErrorAlert("Connection refused. Make sure the server is running.");
+                                   Navigator.navigateTo(new FXMLHomeBase());//navigate to home after close connection
+                                });
+                                socket.close(); 
+                                break;
+                            }
+                            
+                            String newJson = message.replace("\\", ""); 
+                            
+        
 
                         System.out.println("message in network connection" + message);
 
@@ -168,7 +177,6 @@ public class NetworkConnection {
                                                 PlayerSession.setGame(new OnlineGame());
                                                 PlayerSession.getGame().setPlayersNames(request.getReceiverUsername(), request.getSenderUsername());
                                                 Navigator.navigateTo(PlayerSession.getGame());//navigate to Online Game
-
                                             } else {
                                                 setJson.addProperty("message", "Rejected");
                                             }
@@ -181,10 +189,12 @@ public class NetworkConnection {
                                         String senderUserName = json.get("senderUserName").getAsString();
                                         String receiverUserName = json.get("receiverUserName").getAsString();
                                         if (msg.equals("Accepted")) {
+                                            opponentBase.hideLoadingIndicator(); 
                                             Platform.runLater(() -> {
                                                 PlayerSession.setMyTurn(true);
                                                 PlayerSession.setSymbol("X");
                                                 PlayerSession.setOpponentUsername(senderUserName);
+
                                                 PlayerSession.setGame(new OnlineGame());
                                                 PlayerSession.getGame().setPlayersNames(receiverUserName, senderUserName);
                                                 Navigator.navigateTo(PlayerSession.getGame());//navigate to Online Game

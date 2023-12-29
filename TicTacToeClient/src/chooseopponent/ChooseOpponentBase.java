@@ -14,8 +14,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.scene.text.Font;
 import network.connection.NetworkConnection;
 import player.session.PlayerSession;
@@ -28,10 +32,13 @@ public class ChooseOpponentBase extends AnchorPane {
     protected final Label label1;
     protected final Label label2;
     protected final ListView listView;
-    protected final Button button;
-    protected final Button button0;
+    protected final Button logOutBtn;
     NetworkConnection network;
     List<DTOPlayer> onlinePlayers = new ArrayList<>();
+    static double ii = 0; 
+
+    private final ProgressIndicator loadingIndicator;
+    private final Pane overlayPane;
 
     public ChooseOpponentBase() {
 
@@ -40,9 +47,26 @@ public class ChooseOpponentBase extends AnchorPane {
         label1 = new Label();
         label2 = new Label();
         listView = new ListView();
-        button = new Button();
-        button0 = new Button();
+        logOutBtn = new Button();
 
+        loadingIndicator = new ProgressIndicator();
+        loadingIndicator.setVisible(false);
+        loadingIndicator.setLayoutX(270.0);
+        loadingIndicator.setLayoutY(200.0);
+        
+        overlayPane = new Pane();
+        overlayPane.setStyle("-fx-background-color: rgba(0, 0, 0, 0.5);"); // Semi-transparent black
+        overlayPane.setVisible(false);
+        
+        setStyle("-fx-background-color: #232429;");
+
+                label.setStyle("-fx-text-fill: white;");
+        label0.setStyle("-fx-text-fill: white;");
+        label1.setStyle("-fx-text-fill: white;");
+        label2.setStyle("-fx-text-fill: white;");
+        listView.setStyle("-fx-control-inner-background: black;");
+
+       
         setMaxHeight(USE_PREF_SIZE);
         setMaxWidth(USE_PREF_SIZE);
         setMinHeight(USE_PREF_SIZE);
@@ -50,6 +74,11 @@ public class ChooseOpponentBase extends AnchorPane {
         setPrefHeight(400.0);
         setPrefWidth(600.0);
 
+//        StackPane stackPane = new StackPane(listView, loadingIndicator); // Wrap listView and loadingIndicator in a StackPane
+//        stackPane.setLayoutX(1.0);
+//        stackPane.setLayoutY(135.0);
+//        stackPane.setPrefHeight(265.0);
+//        stackPane.setPrefWidth(600.0);
         label.setLayoutX(103.0);
         label.setLayoutY(34.0);
         label.setText("Choose Your Opponent");
@@ -75,11 +104,30 @@ public class ChooseOpponentBase extends AnchorPane {
         listView.setPrefHeight(265.0);
         listView.setPrefWidth(600.0);
 
-        button.setLayoutX(14.0);
-        button.setLayoutY(14.0);
-        button.setMnemonicParsing(false);
-        button.setText("logOut");
-              button.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
+        
+        listView.setStyle("-fx-control-inner-background: black;");
+        listView.setCellFactory(list -> new ListCell<CellBase>(){
+             protected void updateItem(CellBase item, boolean empty) {
+            super.updateItem(item, empty);
+            if (item != null) {
+                setGraphic(item);
+                int index = getIndex();
+                item.setStyle(index % 2 == 0 ? "-fx-background-color: #525461;" : "-fx-background-color: black;");
+            } else {
+                setGraphic(null);
+            }
+         }
+        });
+
+        logOutBtn.setLayoutX(14.0);
+        logOutBtn.setLayoutY(14.0);
+        logOutBtn.setMnemonicParsing(false);
+        logOutBtn.setPrefHeight(30.0);
+        logOutBtn.setPrefWidth(30.0);
+        logOutBtn.setStyle("-fx-background-image: url('asset/logOut.png');" +
+                  "-fx-background-size: cover; -fx-background-radius: 15; -fx-text-fill: #FFFFFF;");
+        
+        logOutBtn.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 
@@ -102,19 +150,17 @@ public class ChooseOpponentBase extends AnchorPane {
         
         });
 
-        button0.setLayoutX(534.0);
-        button0.setLayoutY(14.0);
-        button0.setMnemonicParsing(false);
-        button0.setText("Profile");
+
+        
+        getChildren().add(overlayPane);
 
         getChildren().add(label);
         getChildren().add(label0);
         getChildren().add(label1);
         getChildren().add(label2);
         getChildren().add(listView);
-        getChildren().add(button);
-        getChildren().add(button0);
-
+        getChildren().add(logOutBtn);
+        getChildren().add(loadingIndicator);
         NetworkConnection.getInstance().opponentBase = this;
         this.sendGetOnlinePlayers();
     }
@@ -125,7 +171,7 @@ public class ChooseOpponentBase extends AnchorPane {
             ObservableList<CellBase> cellList = FXCollections.observableArrayList();
             for (DTOPlayer player : onlinePlayers) {
                 if (!player.getUserName().equals(PlayerSession.getLogInUsername())) {
-                    CellBase cell = new CellBase();
+                    CellBase cell = new CellBase(this);
                     cell.userNameLabel.setText(player.getUserName());
                     cell.scoreLabel.setText(String.valueOf(player.getScore()));
                     cell.statusLabel.setText(player.getStatus());
@@ -142,5 +188,18 @@ public class ChooseOpponentBase extends AnchorPane {
         setJson.addProperty("key", "onlinePlayers");
         String jsonString = gson.toJson(setJson);
         NetworkConnection.getInstance().sendMessage(jsonString);
+    }
+    
+    public void showLoadingIndicator() {
+         loadingIndicator.setProgress(ProgressIndicator.INDETERMINATE_PROGRESS);
+         loadingIndicator.setVisible(true);
+         overlayPane.setVisible(true);
+         listView.setDisable(true);
+    }
+
+    public void hideLoadingIndicator() {
+        loadingIndicator.setVisible(false);
+        overlayPane.setVisible(false);
+         listView.setDisable(false);
     }
 }
