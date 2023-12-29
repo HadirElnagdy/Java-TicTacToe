@@ -58,6 +58,8 @@ public class TicTacToeServer extends Application {
                 }
                 System.out.println("Exiting application...");
                 stage.close(); // Close the application
+                
+             
             }
         });}
 //    @Override
