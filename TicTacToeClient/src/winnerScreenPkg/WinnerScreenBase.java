@@ -80,9 +80,9 @@ public class WinnerScreenBase extends BorderPane {
         rowConstraints3 = new RowConstraints();
         rowConstraints4 = new RowConstraints();
         resultLabel = new Label();
-        
+
         setStyle("-fx-background-color: #232429;");
-        
+
         BorderPane.setAlignment(mv, javafx.geometry.Pos.CENTER);
         mv.setFitHeight(300.0);
         mv.setFitWidth(400.0);
@@ -147,33 +147,32 @@ public class WinnerScreenBase extends BorderPane {
             @Override
             public void handle(ActionEvent event) {
                 stopVideo();
-              if(GameBase.playingMode == "LocalMulti"){
-                  Navigator.navigateTo(new LocalMultiMode(),event);
-              }else if(GameBase.playingMode == "LocalSingleEasy"){
-                  Navigator.navigateTo(new LocalSingleEasy(),event);
-              }else if(GameBase.playingMode == "LocalSingleMedium"){
-                  Navigator.navigateTo(new LocalSingleMedium(),event);
-              }else if(GameBase.playingMode == "OnlineGame"){
+                if (GameBase.playingMode == "LocalMulti") {
+                    Navigator.navigateTo(new LocalMultiMode(), event);
+                } else if (GameBase.playingMode == "LocalSingleEasy") {
+                    Navigator.navigateTo(new LocalSingleEasy(), event);
+                } else if (GameBase.playingMode == "LocalSingleMedium") {
+                    Navigator.navigateTo(new LocalSingleMedium(), event);
+                } else if (GameBase.playingMode == "OnlineGame") {
                     RequestDTO request = new RequestDTO(PlayerSession.getLogInUsername(), PlayerSession.getOpponentUsername());
                     JsonObject setJson = new JsonObject();
                     Gson gson = new GsonBuilder().create();
-                    
+
                     setJson.addProperty("key", "replay");
                     setJson.addProperty("senderUserName", request.getSenderUsername());
                     setJson.addProperty("receiverUserName", request.getReceiverUsername());
-              
+
                     String jsonString = gson.toJson(setJson);
                     PlayerSession.setMyTurn(true);
                     PlayerSession.setSymbol("X");
                     PlayerSession.setOpponentUsername(PlayerSession.getOpponentUsername());
                     networkConnection = NetworkConnection.getInstance();
                     networkConnection.sendMessage(jsonString);
-                    
-                  Navigator.navigateTo(new OnlineGame(),event);
-              }
+
+                    Navigator.navigateTo(new OnlineGame(), event);
+                }
             }
         });
-        
 
         GridPane.setColumnIndex(homeBtn, 4);
         GridPane.setRowIndex(homeBtn, 1);
@@ -185,12 +184,12 @@ public class WinnerScreenBase extends BorderPane {
             public void handle(ActionEvent event) {
                 GameBase.resetAll();
                 stopVideo();
-                Navigator.navigateTo(new FXMLHomeBase(),event);
-          
-                }
+                Navigator.navigateTo(new FXMLHomeBase(), event);
+
+            }
         });
         setBottom(gridPane);
-        
+
         BorderPane.setAlignment(gridPane0, javafx.geometry.Pos.CENTER);
 
         columnConstraints5.setHgrow(javafx.scene.layout.Priority.SOMETIMES);
@@ -252,52 +251,95 @@ public class WinnerScreenBase extends BorderPane {
         gridPane0.getRowConstraints().add(rowConstraints3);
         gridPane0.getRowConstraints().add(rowConstraints4);
         gridPane0.getChildren().add(resultLabel);
-        
+
         resultLabel.setStyle("-fx-text-fill: #FFFFFF;");
-        
-         if(winnerValue == 0){
-            resultLabel.setText("It's a Draw!");
-            setVideo("/winnerScreenPkg/draw.mp4");
-            JsonObject setJson = new JsonObject();
-            Gson gson = new GsonBuilder().create();
 
-            setJson.addProperty("key", "updateScore");
-            setJson.addProperty("userName", PlayerSession.getLogInUsername());
-            setJson.addProperty("score", 10);
+        if (GameBase.playingMode == "OnlineGame") {
+            if (winnerValue == 0) {
+                resultLabel.setText("It's a Draw!");
+                setVideo("/winnerScreenPkg/draw.mp4");
+                JsonObject setJson = new JsonObject();
+                Gson gson = new GsonBuilder().create();
 
-            String jsonString = gson.toJson(setJson);
-            NetworkConnection.getInstance().sendMessage(jsonString);
-            
-        }else if((winnerValue == 2 && GameBase.playingMode == "LocalSingleEasy") || (winnerValue == 3 && GameBase.playingMode == "OnlineGame")){
-            resultLabel.setText("You Lost!");
-            setVideo("/winnerScreenPkg/lose1.mp4");
-            JsonObject setJson = new JsonObject();
-            Gson gson = new GsonBuilder().create();
+                setJson.addProperty("key", "updateScore");
+                setJson.addProperty("userName", PlayerSession.getLogInUsername());
+                setJson.addProperty("score", 10);
 
-            setJson.addProperty("key", "updateScore");
-            setJson.addProperty("userName", PlayerSession.getLogInUsername());
-            setJson.addProperty("score", -20);
+                String jsonString = gson.toJson(setJson);
+                NetworkConnection.getInstance().sendMessage(jsonString);
 
-            String jsonString = gson.toJson(setJson);
-            NetworkConnection.getInstance().sendMessage(jsonString);
-        }else{
-            String winnerName = (winnerValue == 1?GameBase.plyr1Name:GameBase.plyr2Name);
-             resultLabel.setText(winnerName + " Wins!");
-             setVideo("/winnerScreenPkg/win1.mp4");       
-             JsonObject setJson = new JsonObject();
-            Gson gson = new GsonBuilder().create();
+            } else if ((winnerValue == 2 && GameBase.playingMode == "LocalSingleEasy") || (winnerValue == 3 && GameBase.playingMode == "OnlineGame")) {
+                resultLabel.setText("You Lost!");
+                setVideo("/winnerScreenPkg/lose1.mp4");
+                JsonObject setJson = new JsonObject();
+                Gson gson = new GsonBuilder().create();
 
-            setJson.addProperty("key", "updateScore");
-            setJson.addProperty("userName", PlayerSession.getLogInUsername());
-            setJson.addProperty("score", 20);
+                setJson.addProperty("key", "updateScore");
+                setJson.addProperty("userName", PlayerSession.getLogInUsername());
+                setJson.addProperty("score", -20);
 
-            String jsonString = gson.toJson(setJson);
-            NetworkConnection.getInstance().sendMessage(jsonString);
+                String jsonString = gson.toJson(setJson);
+                NetworkConnection.getInstance().sendMessage(jsonString);
+            } else {
+                String winnerName = (winnerValue == 1 ? GameBase.plyr1Name : GameBase.plyr2Name);
+                resultLabel.setText(winnerName + " Wins!");
+                setVideo("/winnerScreenPkg/win1.mp4");
+                JsonObject setJson = new JsonObject();
+                Gson gson = new GsonBuilder().create();
+
+                setJson.addProperty("key", "updateScore");
+                setJson.addProperty("userName", PlayerSession.getLogInUsername());
+                setJson.addProperty("score", 20);
+
+                String jsonString = gson.toJson(setJson);
+                NetworkConnection.getInstance().sendMessage(jsonString);
+            }
+        } else {
+            if (winnerValue == 0) {
+                resultLabel.setText("It's a Draw!");
+                setVideo("/winnerScreenPkg/draw.mp4");
+//                JsonObject setJson = new JsonObject();
+//                Gson gson = new GsonBuilder().create();
+//
+//                setJson.addProperty("key", "updateScore");
+//                setJson.addProperty("userName", PlayerSession.getLogInUsername());
+//                setJson.addProperty("score", 10);
+//
+//                String jsonString = gson.toJson(setJson);
+//                NetworkConnection.getInstance().sendMessage(jsonString);
+
+            } else if ((winnerValue == 2 && GameBase.playingMode == "LocalSingleEasy") || (winnerValue == 3 && GameBase.playingMode == "OnlineGame")) {
+                resultLabel.setText("You Lost!");
+                setVideo("/winnerScreenPkg/lose1.mp4");
+//                JsonObject setJson = new JsonObject();
+//                Gson gson = new GsonBuilder().create();
+//
+//                setJson.addProperty("key", "updateScore");
+//                setJson.addProperty("userName", PlayerSession.getLogInUsername());
+//                setJson.addProperty("score", -20);
+//
+//                String jsonString = gson.toJson(setJson);
+//                NetworkConnection.getInstance().sendMessage(jsonString);
+            } else {
+                String winnerName = (winnerValue == 1 ? GameBase.plyr1Name : GameBase.plyr2Name);
+                resultLabel.setText(winnerName + " Wins!");
+                setVideo("/winnerScreenPkg/win1.mp4");
+//                JsonObject setJson = new JsonObject();
+//                Gson gson = new GsonBuilder().create();
+//
+//                setJson.addProperty("key", "updateScore");
+//                setJson.addProperty("userName", PlayerSession.getLogInUsername());
+//                setJson.addProperty("score", 20);
+//
+//                String jsonString = gson.toJson(setJson);
+//                NetworkConnection.getInstance().sendMessage(jsonString);
+            }
         }
-          
+
     }
-    private void setVideo(String pathVideo){
-        
+
+    private void setVideo(String pathVideo) {
+
         String resourcePath = "/winnerScreenPkg/WinnerScreen.fxml";
         URL location = getClass().getResource(resourcePath);
         FXMLLoader fxmlLoader = new FXMLLoader(location);
@@ -308,15 +350,16 @@ public class WinnerScreenBase extends BorderPane {
         } catch (IOException ex) {
             Logger.getLogger(WinnerScreenBase.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
+
         System.out.println("WinnerController class loaded.");
         String videoPath = pathVideo;
         Media media = new Media(winnerScreenPkg.WinnerController.class.getResource(videoPath).toExternalForm());
         MediaPlayer mediaPlayer = new MediaPlayer(media);
         mv.setMediaPlayer(mediaPlayer);
         mediaPlayer.play();
-        
+
     }
+
     private void stopVideo() {
         MediaPlayer mediaPlayer = mv.getMediaPlayer();
         if (mediaPlayer != null) {
