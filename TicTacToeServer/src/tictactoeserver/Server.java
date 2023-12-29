@@ -68,11 +68,18 @@ public class Server {
         for (int i = 0; i <clientsVector.size(); i++) {
             socket = clientsVector.get(i).socket;
             socket.close();
+            try {
+                dbLayer.serverClosed();
+            } catch (SQLException ex) {
+                Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
             System.out.println(" socket closed " + socket.isClosed());
         }
         serverSocket.close();
         try {
             dbLayer.getConnection().close();
+                    
         } catch (SQLException ex) {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -163,8 +163,8 @@ public class OnlineGame extends GameBase {
                         // Add specific fields to the payload
                         setJson.addProperty("key", "withdraw");
                         setJson.addProperty("UserName", player.getUserName());
-                        System.out.println("jjjjjjj"+ PlayerSession.getOpponentUserName());
-                        setJson.addProperty("UserName2", PlayerSession.getOpponentUserName());
+                        System.out.println("jjjjjjj"+ PlayerSession.getOpponentUsername());
+                        setJson.addProperty("UserName2", PlayerSession.getOpponentUsername());
                          String jsonString = gson.toJson(setJson);
                         network = NetworkConnection.getInstance();
                         network.sendMessage(jsonString);
