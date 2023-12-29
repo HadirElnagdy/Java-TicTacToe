@@ -17,18 +17,10 @@ public class PlayerSession {
     private static String opponentUsername;
     private static String symbol;
     private static boolean myTurn;
-    private static String opponentUserName;
 
     private static String ipAddress;
     private static OnlineGame game;
-    
-    public static String getOpponentUserName() {
-        return opponentUserName;
-    }
-
-    public static void setOpponentUserName(String opponentUserName) {
-        PlayerSession.opponentUserName = opponentUserName;
-    }
+   
    
     public static OnlineGame getGame() {
         return game;

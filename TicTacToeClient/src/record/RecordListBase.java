@@ -84,10 +84,15 @@ public class RecordListBase extends BorderPane {
         label.setFont(new Font("System Bold Italic", 36.0));
         label.setStyle("-fx-text-fill: white;");
         
-        
-        
+       backBtn.setLayoutX(10.0);
+        backBtn.setLayoutY(10.0);
         backBtn.setMnemonicParsing(false);
-        backBtn.setText("Back");
+        backBtn.setPrefHeight(30.0);
+        backBtn.setPrefWidth(30.0);
+        backBtn.setStyle("-fx-background-color:#232429; -fx-background-image: url('signInPkg/back.png');" +
+                  "-fx-background-size: cover; -fx-background-radius: 15; -fx-text-fill: #FFFFFF;");
+        backBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
+        backBtn.setFont(Font.font("System Bold", FontWeight.BOLD, 16.0));
         GridPane.setMargin(backBtn, new Insets(0.0, 0.0, 0.0, 14.0));
         backBtn.setOnAction((ActionEvent event) -> {
             Navigator.navigateTo(new FXMLHomeBase(), event);

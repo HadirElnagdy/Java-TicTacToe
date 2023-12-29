@@ -191,23 +191,22 @@ public class DataAccessLayer {
             ex.printStackTrace();
         }
     }
-          public void serverClosed() throws SQLException {
-         
-        try{
-                    String sqlStatment = "UPDATE  ROOT.PLAYER SET STATUS ='offline'";
-                    PreparedStatement pst = connection.prepareStatement(sqlStatment);
-                    int rs = pst.executeUpdate();
-                    if(rs==0){
-                        System.out.println("something wrong in SERVER Closed !!!");}
-                    else{
-                        System.out.println(" SERVER Closed successed");}
-                  
-        }catch(SQLException ex){
-                System.out.println("something wrong in SERVER CLOSED : " + ex.getMessage());
+        public void serverClosed() throws SQLException {
+            try {
+                String sqlStatement = "UPDATE ROOT.PLAYER SET STATUS = 'offline'";
+                try (PreparedStatement pst = connection.prepareStatement(sqlStatement)) {
+                    int rowsAffected = pst.executeUpdate();
+                    if (rowsAffected > 0) {
+                        System.out.println("Players' status updated to offline.");
+                    } else {
+                        System.out.println("No players found to update.");
+                    }
+                }
+            } catch (SQLException ex) {
+                System.out.println("Error updating players' status: " + ex.getMessage());
                 ex.printStackTrace();
+            }
         }
-      
-    }
       public void makePlayersBusy(String player1, String player2){
           
                 try {

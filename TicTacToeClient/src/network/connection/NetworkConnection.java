@@ -161,23 +161,26 @@ public class NetworkConnection {
                                     }   
                                     
                                     
-                                   else if ("withdraw".equals(keyValue)) {
+                                  else if ("withdraw".equals(keyValue)) {
                                        
                                         //System.out.println("bbbbbbbbbbbbbb in oponent ");
                                           //System.out.println(""+json.get("message").getAsString());
-
+                                            String str = json.get("message").getAsString();
+                                          
+                                            if ("did withdraw".equals(str)) {
+                                                System.out.println("withDrawed succeeded in client side");
                                                 // set value of UserName key in session to save it
                                                 String logInUsername = json.get("UserName2").getAsString();
           
+
                                                 Platform.runLater(() -> {
                                                     Alerts.showConfirmationAlert(logInUsername +" withDrawed");
                                                     Navigator.navigateTo(new WinnerScreenBase(1));//navigate to chooseOpponent
                                                 });
 //                                            } else if("not found".equals(str)) {
 //                                                Platform.runLater(() -> Alerts.showErrorAlert("something  Incorrect "));
-                                           
+                                           }
                                     }
-
                                     else if ("receivingRequest".equals(keyValue)) {
                                         String senderUserName = json.get("senderUserName").getAsString();
                                         Platform.runLater(() -> {

@@ -104,16 +104,22 @@ public abstract  class GameBase extends Pane {
         player2Name.setText(plyr2Name);
         player2Name.setStyle("-fx-text-fill: #FFFFFF;");
 
-        backBtn.setLayoutX(10.0);
-        backBtn.setLayoutY(10.0);
+        if(playingMode == "OnlineGame"){
+            if(PlayerSession.getLogInUsername() == plyr2Name){
+                player2Name.setStyle("-fx-text-fill: #1577FF;");
+            }else{
+                player1Name.setStyle("-fx-text-fill: #1577FF;");
+            }
+            
+        }
+         backBtn.setLayoutX(14.0);
+        backBtn.setLayoutY(14.0);
         backBtn.setMnemonicParsing(false);
         backBtn.setPrefHeight(30.0);
-        backBtn.setPrefWidth(30.0);
-        backBtn.setStyle("-fx-background-image: url('signInPkg/back.png');" +
+        backBtn.setPrefWidth(30.0);       
+       
+         backBtn.setStyle("-fx-background-color:#232429; -fx-background-image: url('signInPkg/back.png');" +
                   "-fx-background-size: cover; -fx-background-radius: 15; -fx-text-fill: #FFFFFF;");
-        backBtn.setTextAlignment(javafx.scene.text.TextAlignment.CENTER);
-        backBtn.setText("\u2190");
-        backBtn.setFont(Font.font("System Bold", FontWeight.BOLD, 16.0));
         GridPane.setMargin(backBtn, new Insets(10.0, 0.0, 0.0, 10.5));
         
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {

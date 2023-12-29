@@ -22,6 +22,7 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.Pane;
 import static javafx.scene.layout.Region.USE_PREF_SIZE;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.util.Duration;
 import utilis.Alerts;
 import utilis.Navigator;
@@ -69,6 +70,7 @@ public class DisplayRecords extends Pane {
         setMinWidth(USE_PREF_SIZE);
         setPrefHeight(400.0);
         setPrefWidth(600.0);
+        setStyle("-fx-background-color: #232429;");
 
         player1Name.setLayoutX(144.0);
         player1Name.setLayoutY(14.0);
@@ -79,28 +81,22 @@ public class DisplayRecords extends Pane {
         player2Name.setLayoutY(14.0);
         player2Name.setText("Player 2");
         player2Name.setFont(new Font("System Bold Italic", 23.0));
+        player2Name.setStyle("-fx-text-fill: #FFFFFF;");
+        player1Name.setStyle("-fx-text-fill: #FFFFFF;");
 
         backBtn.setLayoutX(14.0);
         backBtn.setLayoutY(14.0);
         backBtn.setMnemonicParsing(false);
-        backBtn.setText("Back");
+        backBtn.setPrefHeight(30.0);
+        backBtn.setPrefWidth(30.0);       
        
+         backBtn.setStyle("-fx-background-color:#232429; -fx-background-image: url('signInPkg/back.png');" +
+                  "-fx-background-size: cover; -fx-background-radius: 15; -fx-text-fill: #FFFFFF;");
         backBtn.addEventHandler(ActionEvent.ACTION, new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 if (Alerts.showConfirmationAlert("Are you sure you want to quit?")) {
                     Navigator.navigateTo(new RecordListBase(), event);
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.setTitle("Confirmation");
-                alert.setHeaderText(null);
-                alert.setContentText("Are you sure you want to quit?");
-                alert.getButtonTypes().setAll(
-                        javafx.scene.control.ButtonType.YES,
-                        javafx.scene.control.ButtonType.NO);
-                java.util.Optional<javafx.scene.control.ButtonType> result = alert.showAndWait();
-                    if (result.isPresent() && result.get() == javafx.scene.control.ButtonType.YES) {
-                        Navigator.navigateTo(new FXMLHomeBase(), event);
-                    }
                }
             }
         });
@@ -110,6 +106,8 @@ public class DisplayRecords extends Pane {
 
         scoreP2.setLayoutX(344.0);
         scoreP2.setLayoutY(48.0);
+        scoreP1.setStyle("-fx-text-fill: #FFFFFF;");
+        scoreP2.setStyle("-fx-text-fill: #FFFFFF;");
 
         
 
@@ -143,6 +141,11 @@ public class DisplayRecords extends Pane {
         cell.setMinSize(100, 100);
         cell.setAlignment(Pos.CENTER);
         cell.setFont(new Font(40.0));
+        cell.setStyle(
+              "-fx-background-color: #232429;"
+            + "-fx-border-color: #1B1E23;"
+            + "-fx-border-width: 5;"
+            + "-fx-border-radius: 10;");  
         return cell;
     }
 
@@ -208,7 +211,14 @@ private void displayMovesOnBoard() {
                 final String buttonText = Character.toString(move.charAt(0));
                 Button cell = createCell();
                 cell.setText(buttonText);
-
+                cell.setStyle(
+                    "-fx-background-color: #232429;"
+                  + "-fx-border-color: #1B1E23;"
+                  + "-fx-border-width: 5;"
+                  + "-fx-border-radius: 10;"
+                  + "-fx-text-fill: #FFFFFF;"
+                  + "-fx-font-size: 40px;" 
+                  + "-fx-font-weight: " + FontWeight.EXTRA_BOLD.getWeight() + ";"); 
                 final int finalRow = row;
                 final int finalCol = col;
 

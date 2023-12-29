@@ -5,9 +5,11 @@ import boardGamePkg.LocalMultiMode;
 import boardGamePkg.LocalSingleEasy;
 import boardGamePkg.LocalSingleMedium;
 import boardGamePkg.OnlineGame;
+import chooseopponent.ChooseOpponentBase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
+import dto.player.DTOPlayer;
 import dto.player.RequestDTO;
 import home.FXMLHomeBase;
 import java.io.IOException;
@@ -183,8 +185,29 @@ public class WinnerScreenBase extends BorderPane {
             public void handle(ActionEvent event) {
                 GameBase.resetAll();
                 stopVideo();
-                Navigator.navigateTo(new FXMLHomeBase(), event);
+ 
+                if(GameBase.playingMode == "OnlineGame"){
+                     
+                    Gson gson = new GsonBuilder().create();
+                    DTOPlayer player = new DTOPlayer();
+                    player.setUserName(PlayerSession.getLogInUsername());
+                        JsonObject setJson = new JsonObject();
+                        NetworkConnection network;
 
+                        // Add specific fields to the payload
+                        setJson.addProperty("key", "home");
+                        setJson.addProperty("UserName", player.getUserName());
+                        System.out.println("jjjjjjj"+ PlayerSession.getOpponentUsername());
+                        setJson.addProperty("UserName2", PlayerSession.getOpponentUsername());
+                         String jsonString = gson.toJson(setJson);
+                        network = NetworkConnection.getInstance();
+                        network.sendMessage(jsonString);
+                     
+                        Navigator.navigateTo(new ChooseOpponentBase(), event);
+                    
+                }else{
+                    Navigator.navigateTo(new FXMLHomeBase(), event);
+                }
             }
         });
         setBottom(gridPane);

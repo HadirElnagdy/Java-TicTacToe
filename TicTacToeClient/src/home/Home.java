@@ -5,6 +5,7 @@
  */
 package home;
 
+import boardGamePkg.GameBase;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -41,6 +42,7 @@ public class Home extends Application {
             ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
 
             if (result == ButtonType.OK) {
+               if(GameBase.playingMode == "OnlineGame"){
                 NetworkConnection network;
                   Gson gson = new GsonBuilder().create();
                     DTOPlayer player = new DTOPlayer();
@@ -50,13 +52,16 @@ public class Home extends Application {
                         // Add specific fields to the payload
                         setJson.addProperty("key", "logout");
                         setJson.addProperty("UserName", player.getUserName());
-                         String jsonString = gson.toJson(setJson);
+                        String jsonString = gson.toJson(setJson);
                         network = NetworkConnection.getInstance();
                         network.sendMessage(jsonString);
                         
                 System.out.println("Exiting application...");
                 primaryStage.close(); // Close the application  
                 NetworkConnection.getInstance().closeConnection();
+                }else{
+                   primaryStage.close();
+               }
             }
         });}
 //    @Override

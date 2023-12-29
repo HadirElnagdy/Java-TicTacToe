@@ -122,11 +122,12 @@ public class ChooseOpponentBase extends AnchorPane {
 
         logOutBtn.setLayoutX(14.0);
         logOutBtn.setLayoutY(14.0);
-        logOutBtn.setMnemonicParsing(false);
         logOutBtn.setPrefHeight(30.0);
         logOutBtn.setPrefWidth(30.0);
-        logOutBtn.setStyle("-fx-background-image: url('asset/logOut.png');" +
-                  "-fx-background-size: cover; -fx-background-radius: 15; -fx-text-fill: #FFFFFF;");
+        logOutBtn.setStyle("-fx-background-color:#232429; -fx-background-image: url('asset/logOutBtn.png');" +
+                  "-fx-background-size: cover; -fx-background-radius: 15; -fx-text-fill: #FFFFFF;"
+                    
+                    );
         
         logOutBtn.addEventHandler(ActionEvent.ACTION,new EventHandler<ActionEvent>() {
             @Override

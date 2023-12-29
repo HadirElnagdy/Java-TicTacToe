@@ -32,13 +32,14 @@ public class ClientrHandler {
     private String message; 
     private boolean isClientConnected = true;
     private String clientUserName;
-    
+    private DataAccessLayer db;
     String ip;
     int portNum;
     public Socket socket;
 
     public ClientrHandler(Socket socket) {
         this.socket = socket;
+        db = new DataAccessLayer();
         // ip client
         ip = socket.getInetAddress().getHostAddress();
         // port client
@@ -120,37 +121,46 @@ public class ClientrHandler {
                                 message = new Gson().toJson(map);
                                 sendMessage(message);
                          }
-                              else if (keyPrimitive != null && keyPrimitive.getAsString().equals("withdraw")) {
-                                    String operationValue = json.get("key").getAsString();
-                                    System.out.println("key value: " + operationValue);
+                            else if (keyPrimitive != null && keyPrimitive.getAsString().equals("withdraw")) {
+                               String operationValue = json.get("key").getAsString();
+                               System.out.println("key value: " + operationValue);
 
-                                  // boolean exist = accessNetwork.checkWithDraw(json);
-                                  // System.out.println("client exist= " + exist);
-                                   // String found = exist ? "did withdraw" : "can not did withdraw";
-                                    String username = json.get("UserName").getAsString();
-                                    String username2 = json.get("UserName2").getAsString();
+                              boolean exist = accessNetwork.checkWithDraw(json);
+                              System.out.println("client exist= " + exist);
+                             String found = exist ? "did withdraw" : "can not did withdraw";
+                               String username = json.get("UserName").getAsString();
+                               String username2 = json.get("UserName2").getAsString();
 
-                                   //if (found.equals("did withdraw")) {
-                                        //clientUserName = username2;
-                                        // Find the client with the specified username and send the message
-                                         Map<String, String> map = new HashMap<>();
-                                         map.put("key", "withdraw");
-                                        // map.put("message", found);
-                                         map.put("UserName2", username);
+                              if (found.equals("did withdraw")) {
+                                   //clientUserName = username2;
+                                   // Find the client with the specified username and send the message
+                                      Map<String, String> map = new HashMap<>();
+                                    map.put("key", "withdraw");
+                                    map.put("message",found);
+                                    //map.put("message", found);
+                                    map.put("UserName2", username);
 
-                                         message = new Gson().toJson(map);
-                                            for (int i = 0; i < Server.clientsVector.size(); i++) {
-                                            if (Server.clientsVector.get(i).getUsername().equals(username2)) {
-                                                Server.clientsVector.get(i).sendMessage(message);
-                                                break;
-                                            }
-                                       
-                                        System.out.println("hena Tmam el massege bttbe3t");
+                                message = new Gson().toJson(map);
+                                   for (int i = 0; i < Server.clientsVector.size(); i++) {
+                                       if (Server.clientsVector.get(i).getUsername().equals(username2)) {
+                                           Server.clientsVector.get(i).sendMessage(message);
+                                           break;
+                                       }
+                                  }System.out.println("withdraw message server"+message);
+                                   System.out.println("hena Tmam el massege bttbe3t");
                                }
 
                                // Rest of your code...
-                           }
-
+                           } else if (keyPrimitive != null && keyPrimitive.getAsString().equals("home")) {
+                                 String username = json.get("UserName").getAsString();
+                                 String username2 = json.get("UserName2").getAsString();
+                                try {
+                                    db.withDraw(username, username2);
+                                } catch (SQLException ex) {
+                                    Logger.getLogger(ClientrHandler.class.getName()).log(Level.SEVERE, null, ex);
+                                }
+                           }                            
+                            
                          //"sendingRequest"
                          else if(keyPrimitive != null && keyPrimitive.getAsString().equals("sendingRequest")){
                              String receiverUserName = json.get("receiverUserName").getAsString();
