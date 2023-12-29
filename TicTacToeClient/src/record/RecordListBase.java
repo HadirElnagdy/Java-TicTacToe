@@ -137,9 +137,9 @@ public class RecordListBase extends BorderPane {
                 while ((line = reader.readLine()) != null) {
                     if (line.equals("&")) {
                         rMoves.add(record.toString());
-                        System.out.println(rMoves);
+                        //System.out.println(rMoves);
                         String[] recordParts = record.toString().split("%");
-                        System.out.println(recordParts);
+                        //System.out.println(recordParts);
                         if (recordParts.length == 5) {
                             //String formattedRecord = String.format("%d\t\t%s\t\t%s", (++cnt), recordParts[0], recordParts[1]);
 
@@ -156,7 +156,6 @@ public class RecordListBase extends BorderPane {
                         record.append(line).append("\t\t\t");
                     }
                 }
-                System.out.println("Ay 7agaaaaaaaaaaaaaaaaaaaaa");
                 recordListView.setItems(recordCells);
             } catch (IOException e) {
                 e.printStackTrace();

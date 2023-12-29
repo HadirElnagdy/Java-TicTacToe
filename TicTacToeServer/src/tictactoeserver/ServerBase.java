@@ -16,6 +16,8 @@ import javafx.geometry.Insets;
 import javafx.geometry.NodeOrientation;
 import javafx.geometry.Pos;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
@@ -341,18 +343,36 @@ public class ServerBase extends BorderPane {
        
         
          stage.setOnCloseRequest((event) -> {
-            System.out.println("Closing Stage");
-            if ((server != null) && (server.isOpened)) {
+               // Show a confirmation dialog
+            event.consume(); // Consume the event to prevent automatic window closure
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Confirmation Dialog");
+            alert.setHeaderText("Do you really want to exit?");
+            alert.setContentText("Any unsaved changes may be lost.");
+
+            // Show the confirmation dialog and wait for the user's response
+            ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
+
+            if (result == ButtonType.OK) {
                 try {
-                    System.out.println("server on is close");
-                    server.closeConnection();
-                    System.exit(0);
+                    if ((server != null) && (server.isOpened)) {
+                        server.closeConnection();
+                        System.out.println("Exiting application...");
+                        System.exit(0); 
+                    }
+                    else{
+                            System.exit(0);
+                        }     // Close the application
                 } catch (IOException ex) {
                     Logger.getLogger(ServerBase.class.getName()).log(Level.SEVERE, null, ex);
                 }
-
+                
+             
             }
-
+             
+             
+             
         });
         
     }

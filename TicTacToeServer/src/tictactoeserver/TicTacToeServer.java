@@ -35,33 +35,8 @@ public class TicTacToeServer extends Application {
             Logger.getLogger(TicTacToeServer.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        DataAccessLayer dbLayer = new DataAccessLayer();
        
-        // Set the close request handler
-        stage.setOnCloseRequest(event -> {
-            // Show a confirmation dialog
-            event.consume(); // Consume the event to prevent automatic window closure
-
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.setTitle("Confirmation Dialog");
-            alert.setHeaderText("Do you really want to exit?");
-            alert.setContentText("Any unsaved changes may be lost.");
-
-            // Show the confirmation dialog and wait for the user's response
-            ButtonType result = alert.showAndWait().orElse(ButtonType.CANCEL);
-
-            if (result == ButtonType.OK) {
-                try {
-                    dbLayer.serverClosed();
-                } catch (SQLException ex) {
-                    Logger.getLogger(TicTacToeServer.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                System.out.println("Exiting application...");
-                stage.close(); // Close the application
-                
-             
-            }
-        });}
+    }
 //    @Override
 //    public void start(Stage stage) throws Exception {
 //        Parent root = new ServerBase(stage);
