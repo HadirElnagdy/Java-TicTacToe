@@ -15,10 +15,10 @@ The server application plays a crucial role by:
 - Facilitating data exchange between users.
 
 ## Team Members
-- Hadir Elnagdy
-- Marwa Mohamed
-- Michael Magdy
-- Mostafa Sobaih
+- [Hadir Elnagdy](https://github.com/HadirElnagdy)
+- [Marwa Mohamed](https://github.com/Marwaaboalata)
+- [Michael Magdy](https://github.com/michaelMagdy0)
+- [Mostafa Sobaih](https://github.com/sobaih12)
 
 ## Acknowledgments
 - Special thanks to Eng. Ahmed Mazen for his exemplary patience, unwavering support, and valuable guidance.
